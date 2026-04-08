@@ -204,18 +204,14 @@
                     <div class="absolute inset-0 border-2 border-dashed border-indigo-500/20 rounded-full animate-[spin_15s_linear_infinite]"></div>
                     <div class="absolute inset-4 glass rounded-full flex flex-col items-center justify-center text-center shadow-2xl">
                         <i data-lucide="piggy-bank" class="w-12 h-12 text-indigo-500 mb-2"></i>
-                        <span class="text-gray-500 text-[10px] uppercase tracking-widest">Épargne Cumulative</span>
+                        <span class="text-gray-500 text-[10px] uppercase tracking-widest">Épargne Totale</span>
                         <h3 class="text-4xl font-black text-white px-4" x-text="formatAr(calcTotalSavings())"></h3>
                     </div>
                 </div>
-                <div class="mt-12 grid grid-cols-2 gap-4 w-full max-w-lg">
+                <div class="mt-12 w-full max-w-lg">
                     <div class="glass p-6 rounded-3xl text-center">
-                        <p class="text-[10px] text-gray-500 uppercase mb-1">Somme Restes Portefeuille</p>
-                        <p class="font-bold text-indigo-400" x-text="formatAr(sumWallet())"></p>
-                    </div>
-                    <div class="glass p-6 rounded-3xl text-center">
-                        <p class="text-[10px] text-gray-500 uppercase mb-1">Total Gains Journaliers</p>
-                        <p class="font-bold text-green-400" x-text="formatAr(sumGains())"></p>
+                        <p class="text-[10px] text-gray-500 uppercase mb-1">Total Gains Journaliers (Objectifs)</p>
+                        <p class="font-bold text-green-400 text-2xl" x-text="formatAr(sumGains())"></p>
                     </div>
                 </div>
             </div>
@@ -308,7 +304,6 @@
                     }
                 },
 
-                // Total Jirama (une seule fois)
                 totalJirama() {
                     let kwh = Object.values(this.db.jirama).reduce((a, b) => a + (Number(b) || 0), 0);
                     return kwh * 130;
@@ -322,9 +317,9 @@
                     return false;
                 },
 
-                // Portefeuille par mois (Salaire - dépenses du mois SANS Jirama)
                 calcWallet(m) {
                     let cost = 0;
+                    if (m === 'avril') cost += this.totalJirama();
                     if (this.db.ecolage[m]) cost += 100000;
                     cost += (Number(this.db.shopping[m]) || 0);
                     cost += (Number(this.db.medical[m]) || 0);
@@ -332,38 +327,18 @@
                     return this.db.salary - cost;
                 },
 
-                // ✅ Total des portefeuilles (tous les mois)
                 sumWallet() {
                     return this.months.reduce((acc, m) => acc + this.calcWallet(m), 0);
                 },
 
-                // ✅ Total des gains journaliers (Objectif)
+                // ✅ Total des gains journaliers (Objectifs par jour)
                 sumGains() {
                     return Object.values(this.db.gains).reduce((a, b) => a + (Number(b) || 0), 0);
                 },
 
-                // ✅ FORMULE EXACTE: Épargne = (Portefeuille + Objectif) - Dépenses
+                // ✅ FORMULE SIMPLIFIÉE: Épargne = Somme des objectifs (gains journaliers)
                 calcTotalSavings() {
-                    const portefeuille = this.sumWallet();  // Somme des portefeuilles mensuels
-                    const objectif = this.sumGains();        // Total gains journaliers
-                    
-                    // Total des dépenses (Jirama + toutes les dépenses mensuelles)
-                    const depenses = this.totalJirama() + this.sumAllMonthlyExpenses();
-                    
-                    // Épargne = (Portefeuille + Objectif) - Dépenses
-                    return (portefeuille + objectif) - depenses;
-                },
-
-                // ✅ Somme de TOUTES les dépenses mensuelles (SANS Jirama)
-                sumAllMonthlyExpenses() {
-                    let total = 0;
-                    this.months.forEach(m => {
-                        if (this.db.ecolage[m]) total += 100000;
-                        total += (Number(this.db.shopping[m]) || 0);
-                        total += (Number(this.db.medical[m]) || 0);
-                        total += (Number(this.db.adidy[m]) || 0);
-                    });
-                    return total;
+                    return this.sumGains();
                 },
 
                 formatAr(v) {
