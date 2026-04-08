@@ -290,7 +290,6 @@
                 },
 
                 init() {
-                    // REMPLACÉ: localStorage par Firebase
                     fbRef.once('value').then((snapshot) => {
                         if (snapshot.exists()) {
                             this.db = snapshot.val();
@@ -298,7 +297,6 @@
                         lucide.createIcons();
                     });
 
-                    // REMPLACÉ: watch avec sauvegarde Firebase
                     this.$watch('db', val => {
                         fbRef.set(val);
                     }, { deep: true });
@@ -324,13 +322,18 @@
                     return false;
                 },
 
+                // ✅ FORMULE CORRIGÉE
                 calcWallet(m) {
                     let cost = 0;
-                    if (m === 'avril') cost += this.totalJirama();
+                    
+                    // Jirama déduit TOUS LES MOIS (pas seulement avril)
+                    cost += this.totalJirama();
+                    
                     if (this.db.ecolage[m]) cost += 100000;
                     cost += (Number(this.db.shopping[m]) || 0);
                     cost += (Number(this.db.medical[m]) || 0);
                     cost += (Number(this.db.adidy[m]) || 0);
+                    
                     return this.db.salary - cost;
                 },
 
