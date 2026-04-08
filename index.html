@@ -247,7 +247,6 @@
     </div>
 
     <script>
-        // Configuration Firebase
         var firebaseConfig = {
             apiKey: "AIzaSyBY_zHJAaNLtXDBlD1TYMzALlMlMHNBwWk",
             authDomain: "aiza-38b31.firebaseapp.com",
@@ -322,31 +321,45 @@
                     return false;
                 },
 
-                // ✅ FORMULE CORRIGÉE
+                // ✅ CALCUL CORRIGÉ - Jirama comptabilisé UNE SEULE FOIS
                 calcWallet(m) {
                     let cost = 0;
-                    
-                    // Jirama déduit TOUS LES MOIS (pas seulement avril)
-                    cost += this.totalJirama();
-                    
+                    // Jirama n'est plus ajouté ici pour chaque mois
                     if (this.db.ecolage[m]) cost += 100000;
                     cost += (Number(this.db.shopping[m]) || 0);
                     cost += (Number(this.db.medical[m]) || 0);
                     cost += (Number(this.db.adidy[m]) || 0);
-                    
                     return this.db.salary - cost;
                 },
 
+                // ✅ Somme des portefeuilles mensuels
                 sumWallet() {
                     return this.months.reduce((acc, m) => acc + this.calcWallet(m), 0);
                 },
 
+                // ✅ Total des gains journaliers
                 sumGains() {
                     return Object.values(this.db.gains).reduce((a, b) => a + (Number(b) || 0), 0);
                 },
 
+                // ✅ FORMULE FINALE CORRECTE
+                // Épargne = (Salaire × 12) + Gains - Jirama - Toutes dépenses
                 calcTotalSavings() {
-                    return this.sumWallet() + this.sumGains();
+                    const totalRevenu = (this.db.salary * 12) + this.sumGains();
+                    const totalDepenses = this.totalJirama() + this.sumAllExpenses();
+                    return totalRevenu - totalDepenses;
+                },
+
+                // ✅ NOUVELLE MÉTHODE : Somme de toutes les dépenses
+                sumAllExpenses() {
+                    let total = 0;
+                    this.months.forEach(m => {
+                        if (this.db.ecolage[m]) total += 100000;
+                        total += (Number(this.db.shopping[m]) || 0);
+                        total += (Number(this.db.medical[m]) || 0);
+                        total += (Number(this.db.adidy[m]) || 0);
+                    });
+                    return total;
                 },
 
                 formatAr(v) {
