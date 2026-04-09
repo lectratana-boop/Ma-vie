@@ -92,7 +92,7 @@
 
     <div class="flex h-screen w-full overflow-hidden" x-show="isLoggedIn">
         
-        <aside class="sidebar-compact glass h-full flex flex-col items-center lg:items-start py-8 border-r border-white/5">
+        <aside class="sidebar-compact glass h-full flex flex-col items-center lg:items-start py-8 border-r border-white/5 overflow-y-auto">
             <div class="px-6 mb-12 flex items-center gap-3">
                 <div class="min-w-[40px] h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
                     <i data-lucide="heart" class="text-white w-5 h-5"></i>
@@ -136,60 +136,56 @@
             </div>
 
             <!-- TAB JIRAMA -->
-            <div x-show="tab === 'jirama'" class="space-y-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass p-6 rounded-3xl">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="font-bold flex items-center gap-2">
-                                <i data-lucide="zap" class="text-yellow-500 w-4 h-4"></i> 
-                                Consommation d'électricité
-                            </h3>
-                            <div x-show="checkAlert()" class="alert-pulse bg-red-500/20 text-red-500 px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-500/50">
-                                Alerte Consommation +2.5kW
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-7 gap-2">
-                            <template x-for="day in 31">
-                                <div :class="(day >= 25 && day <= 30) ? 'glow-date' : 'bg-black/20'" 
-                                     class="p-2 rounded-xl border border-white/5 text-center">
-                                    <span class="text-[9px] text-gray-500 block mb-1" x-text="day"></span>
-                                    <input 
-                                        type="number" 
-                                        x-model.number="db.jirama[day]" 
-                                        class="bg-transparent w-full text-center text-xs font-bold focus:outline-none"
-                                    >
-                                </div>
-                            </template>
+            <div x-show="tab === 'jirama'" class="max-w-2xl mx-auto space-y-3">
+                <template x-for="m in months" :key="'jirama-' + m">
+                    <div class="glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-transparent hover:border-yellow-500 transition-all">
+                        <span class="capitalize font-medium text-gray-300" x-text="m"></span>
+                        <div class="flex items-center gap-3">
+                            <input 
+                                type="number" 
+                                x-model.number="db.jirama[m]" 
+                                placeholder="kW"
+                                class="bg-black/40 p-3 rounded-xl text-right w-32 focus:outline-none focus:border-yellow-500 border border-white/5"
+                            >
+                            <span class="text-xs text-gray-600 font-bold w-12">kW</span>
+                            <span class="text-sm font-bold text-yellow-400 w-32 text-right" x-text="formatAr((db.jirama[m] || 0) * 130)"></span>
                         </div>
                     </div>
-                    <div class="neo-card p-8 rounded-3xl flex flex-col justify-center items-center">
-                        <p class="text-gray-500 text-sm mb-2">Total Mois (130 Ar/kW)</p>
-                        <h4 class="text-4xl font-black text-white" x-text="formatAr(totalJirama())"></h4>
-                        <div class="mt-4 text-[10px] text-gray-600 bg-white/5 px-3 py-1 rounded-full">
-                            <span x-text="Object.keys(db.jirama).length + ' jours saisis'"></span>
-                        </div>
+                </template>
+                <div class="neo-card p-6 rounded-2xl mt-6">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">Total annuel Jirama</span>
+                        <span class="text-2xl font-black text-yellow-400" x-text="formatAr(totalJirama())"></span>
                     </div>
                 </div>
             </div>
 
             <!-- TAB ECOLAGE -->
-            <div x-show="tab === 'ecolage'" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <template x-for="m in months">
-                    <div class="glass p-6 rounded-3xl text-center">
-                        <span class="font-bold capitalize text-sm" x-text="m"></span>
-                        <div class="my-4 text-xs text-gray-500">100 000 Ar</div>
-                        <button 
-                            @click="toggleEcolage(m)" 
-                            :class="db.ecolage[m] ? 'bg-indigo-600 shadow-indigo-500/20' : 'bg-white/5 text-gray-500'"
-                            class="w-full py-2 rounded-xl text-[10px] font-bold uppercase transition-all shadow-lg">
-                            <span x-text="db.ecolage[m] ? 'Payé' : 'À payer'"></span>
-                        </button>
+            <div x-show="tab === 'ecolage'" class="max-w-2xl mx-auto space-y-3">
+                <template x-for="m in months" :key="'ecolage-' + m">
+                    <div class="glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-transparent hover:border-indigo-500 transition-all">
+                        <span class="capitalize font-medium text-gray-300" x-text="m"></span>
+                        <div class="flex items-center gap-3">
+                            <input 
+                                type="number" 
+                                x-model.number="db.ecolage[m]" 
+                                placeholder="0"
+                                class="bg-black/40 p-3 rounded-xl text-right w-40 focus:outline-none focus:border-indigo-500 border border-white/5"
+                            >
+                            <span class="text-xs text-gray-600 font-bold">Ar</span>
+                        </div>
                     </div>
                 </template>
+                <div class="neo-card p-6 rounded-2xl mt-6">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold">Total annuel Écolage</span>
+                        <span class="text-2xl font-black text-indigo-400" x-text="formatAr(totalCategory('ecolage'))"></span>
+                    </div>
+                </div>
             </div>
 
             <!-- TAB PORTEFEUILLE -->
-            <div x-show="tab === 'portefeuille'" class="max-w-2xl">
+            <div x-show="tab === 'portefeuille'" class="max-w-3xl mx-auto">
                 <div class="glass p-8 lg:p-12 rounded-[2.5rem] relative overflow-hidden border-t border-white/10">
                     <div class="absolute top-0 right-0 p-10 opacity-5">
                         <i data-lucide="wallet" class="w-40 h-40"></i>
@@ -205,29 +201,61 @@
                     </div>
                     
                     <div class="mt-12 space-y-4">
+                        <!-- Déductions mensuelles -->
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
-                            <span class="text-sm">Déduction Jirama</span>
-                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(totalJirama())"></span>
+                            <span class="text-sm">Jirama (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('jirama', 'avril'))"></span>
                         </div>
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
                             <span class="text-sm">Écolage (Avril)</span>
-                            <span class="text-red-400 font-bold" x-text="db.ecolage && db.ecolage['avril'] ? '- 100 000 Ar' : '0 Ar'"></span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('ecolage', 'avril'))"></span>
                         </div>
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
                             <span class="text-sm">Shopping (Avril)</span>
-                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(db.shopping && db.shopping['avril'] || 0)"></span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('shopping', 'avril'))"></span>
                         </div>
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
                             <span class="text-sm">Médical (Avril)</span>
-                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(db.medical && db.medical['avril'] || 0)"></span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('medical', 'avril'))"></span>
                         </div>
                         <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
                             <span class="text-sm">ADIDY (Avril)</span>
-                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(db.adidy && db.adidy['avril'] || 0)"></span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('adidy', 'avril'))"></span>
                         </div>
-                        <div class="flex justify-between items-center p-6 bg-indigo-500/10 rounded-2xl border border-indigo-500/30 mt-6">
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                            <span class="text-sm">Loyer (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('loyer', 'avril'))"></span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                            <span class="text-sm">Lessive (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('lessive', 'avril'))"></span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                            <span class="text-sm">Frais (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('frais', 'avril'))"></span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                            <span class="text-sm">Repas (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('repas', 'avril'))"></span>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
+                            <span class="text-sm">Autres (Avril)</span>
+                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense('autres', 'avril'))"></span>
+                        </div>
+
+                        <!-- Séparateur -->
+                        <div class="border-t border-white/10 my-6"></div>
+
+                        <!-- Total Dépenses -->
+                        <div class="flex justify-between items-center p-4 bg-red-500/10 rounded-2xl border border-red-500/20">
+                            <span class="text-sm font-semibold">Total Dépenses (Avril)</span>
+                            <span class="text-red-400 font-black text-xl" x-text="'- ' + formatAr(getTotalExpenses('avril'))"></span>
+                        </div>
+
+                        <!-- Portefeuille Final -->
+                        <div class="flex justify-between items-center p-6 bg-indigo-500/10 rounded-2xl border border-indigo-500/30">
                             <span class="text-lg font-bold">Reste Portefeuille (Avril)</span>
-                            <span class="text-indigo-400 font-black text-2xl" x-text="formatAr(calcWallet('avril'))"></span>
+                            <span class="text-indigo-400 font-black text-3xl" x-text="formatAr(calcWallet('avril'))"></span>
                         </div>
                     </div>
                 </div>
@@ -252,9 +280,9 @@
                 </div>
             </div>
 
-            <!-- TAB SHOPPING / MEDICAL / ADIDY -->
-            <div x-show="['shopping','medical','adidy'].includes(tab)" class="max-w-2xl mx-auto space-y-3">
-                <template x-for="m in months">
+            <!-- TAB SHOPPING / MEDICAL / ADIDY / LOYER / LESSIVE / FRAIS / REPAS / AUTRES -->
+            <div x-show="['shopping','medical','adidy','loyer','lessive','frais','repas','autres'].includes(tab)" class="max-w-2xl mx-auto space-y-3">
+                <template x-for="m in months" :key="tab + '-' + m">
                     <div class="glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-transparent hover:border-indigo-500 transition-all">
                         <span class="capitalize font-medium text-gray-300" x-text="m"></span>
                         <div class="flex items-center gap-3">
@@ -268,6 +296,12 @@
                         </div>
                     </div>
                 </template>
+                <div class="neo-card p-6 rounded-2xl mt-6">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold capitalize">Total annuel <span x-text="tab"></span></span>
+                        <span class="text-2xl font-black text-indigo-400" x-text="formatAr(totalCategory(tab))"></span>
+                    </div>
+                </div>
             </div>
 
             <!-- TAB OBJECTIF -->
@@ -277,7 +311,7 @@
                     <p class="text-3xl font-black text-green-400" x-text="formatAr(sumGains())"></p>
                 </div>
                 <div class="grid grid-cols-4 md:grid-cols-7 lg:grid-cols-10 gap-3">
-                    <template x-for="day in 31">
+                    <template x-for="day in 31" :key="'gain-' + day">
                         <div class="glass p-3 rounded-2xl text-center">
                             <span class="text-[9px] text-gray-500 block mb-1" x-text="'J'+day"></span>
                             <input 
@@ -323,6 +357,11 @@
                     { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
                     { id: 'medical', label: 'Médical', icon: 'heart-pulse' },
                     { id: 'adidy', label: 'ADIDY', icon: 'gift' },
+                    { id: 'loyer', label: 'Loyer', icon: 'home' },
+                    { id: 'lessive', label: 'Lessive', icon: 'droplet' },
+                    { id: 'frais', label: 'Frais', icon: 'file-text' },
+                    { id: 'repas', label: 'Repas', icon: 'utensils' },
+                    { id: 'autres', label: 'Autres', icon: 'more-horizontal' },
                     { id: 'epargne', label: 'Épargne', icon: 'landmark' },
                     { id: 'objectif', label: 'Objectifs', icon: 'target' },
                 ],
@@ -333,6 +372,11 @@
                     shopping: {},
                     medical: {},
                     adidy: {},
+                    loyer: {},
+                    lessive: {},
+                    frais: {},
+                    repas: {},
+                    autres: {},
                     gains: {}
                 },
 
@@ -356,64 +400,71 @@
                     }
                 },
 
-                // ✅ CORRIGÉ: Total Jirama
+                // ✅ Total Jirama annuel (tous les mois × 130)
                 totalJirama() {
                     if (!this.db.jirama) return 0;
-                    let kwh = Object.values(this.db.jirama).reduce((a, b) => a + (Number(b) || 0), 0);
-                    return kwh * 130;
+                    let total = 0;
+                    this.months.forEach(m => {
+                        const kwh = Number(this.db.jirama[m]) || 0;
+                        total += kwh * 130;
+                    });
+                    return total;
                 },
 
-                checkAlert() {
-                    if (!this.db.jirama) return false;
-                    const days = Object.values(this.db.jirama);
-                    for (let i = 1; i < days.length; i++) {
-                        if (Math.abs(days[i] - days[i-1]) > 2.5) return true;
+                // ✅ Récupérer dépense d'un mois spécifique
+                getMonthExpense(category, month) {
+                    if (category === 'jirama') {
+                        const kwh = Number(this.db.jirama[month]) || 0;
+                        return kwh * 130;
                     }
-                    return false;
+                    return Number(this.db[category]?.[month]) || 0;
                 },
 
-                // ✅ CORRIGÉ: Calcul portefeuille par mois
-                calcWallet(m) {
-                    let cost = 0;
-                    
-                    // Jirama (une seule fois, pas par mois)
-                    cost += this.totalJirama();
-                    
-                    // Écolage
-                    if (this.db.ecolage && this.db.ecolage[m]) cost += 100000;
-                    
-                    // Shopping
-                    cost += (this.db.shopping && Number(this.db.shopping[m])) || 0;
-                    
-                    // Médical
-                    cost += (this.db.medical && Number(this.db.medical[m])) || 0;
-                    
-                    // ADIDY
-                    cost += (this.db.adidy && Number(this.db.adidy[m])) || 0;
-                    
-                    return (this.db.salary || 0) - cost;
+                // ✅ Total d'une catégorie sur l'année
+                totalCategory(category) {
+                    if (!this.db[category]) return 0;
+                    let total = 0;
+                    this.months.forEach(m => {
+                        if (category === 'jirama') {
+                            const kwh = Number(this.db.jirama[m]) || 0;
+                            total += kwh * 130;
+                        } else {
+                            total += Number(this.db[category][m]) || 0;
+                        }
+                    });
+                    return total;
                 },
 
-                // ✅ Somme des portefeuilles de tous les mois
+                // ✅ Total des dépenses d'un mois
+                getTotalExpenses(month) {
+                    let total = 0;
+                    const categories = ['jirama', 'ecolage', 'shopping', 'medical', 'adidy', 'loyer', 'lessive', 'frais', 'repas', 'autres'];
+                    
+                    categories.forEach(cat => {
+                        total += this.getMonthExpense(cat, month);
+                    });
+                    
+                    return total;
+                },
+
+                // ✅ Portefeuille = Salaire - Toutes dépenses du mois
+                calcWallet(month) {
+                    const salary = Number(this.db.salary) || 0;
+                    const expenses = this.getTotalExpenses(month);
+                    return salary - expenses;
+                },
+
                 sumWallet() {
                     return this.months.reduce((acc, m) => acc + this.calcWallet(m), 0);
                 },
 
-                // ✅ Total des gains journaliers
                 sumGains() {
                     if (!this.db.gains) return 0;
                     return Object.values(this.db.gains).reduce((a, b) => a + (Number(b) || 0), 0);
                 },
 
-                // ✅ Épargne = Somme des objectifs
                 calcTotalSavings() {
                     return this.sumGains();
-                },
-
-                // ✅ NOUVELLE: Toggle Ecolage
-                toggleEcolage(month) {
-                    if (!this.db.ecolage) this.db.ecolage = {};
-                    this.db.ecolage[month] = !this.db.ecolage[month];
                 },
 
                 formatAr(v) {
