@@ -3,215 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>AI.MG - Gestion Personnelle 3D</title>
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>AI.MG - Gestion Mensuelle 3D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- FullCalendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background: radial-gradient(circle at 10% 30%, #1a1a2e, #16213e);
-            min-height: 100vh;
-            padding: 16px;
-        }
-
-        /* Conteneur principal avec effet 3D */
-        .app-container {
-            max-width: 550px;
-            margin: 0 auto;
-            background: rgba(255,255,255,0.08);
-            backdrop-filter: blur(10px);
-            border-radius: 56px;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.3), inset 0 1px 1px rgba(255,255,255,0.1);
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-            transform-style: preserve-3d;
-            transition: all 0.3s;
-        }
-
-        .page {
-            display: none;
-            padding: 20px 18px;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        .active-page {
-            display: block;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-
-        /* Cartes 3D glassmorphisme */
-        .card {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            border-radius: 40px;
-            padding: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .gradient-btn {
-            background: linear-gradient(135deg, #a06eff, #6c3eff);
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            border-radius: 60px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.2s;
-            box-shadow: 0 8px 20px rgba(108,62,255,0.3);
-            font-size: 0.9rem;
-        }
-
-        .gradient-btn:active {
-            transform: scale(0.96);
-        }
-
-        input, select {
-            background: rgba(255,255,255,0.9);
-            border: none;
-            border-radius: 60px;
-            padding: 14px 18px;
-            outline: none;
-            width: 100%;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        /* Grille des menus 2x2 style 3D */
-        .grid-2x2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-            margin: 20px 0;
-        }
-
-        .dashboard-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
-            backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 22px 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 20px 30px -12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
-            transform: translateY(0);
-        }
-
-        .dashboard-card:active {
-            transform: translateY(4px);
-            box-shadow: 0 10px 20px -8px black;
-        }
-
-        .dashboard-card i {
-            font-size: 48px;
-            background: linear-gradient(135deg, #ffd966, #ffb347);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            margin-bottom: 12px;
-        }
-
-        /* Centre financier 3D */
-        .finance-center {
-            display: flex;
-            gap: 14px;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        .finance-card {
-            flex: 1;
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .finance-amount {
-            font-size: 1.8rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #f9f3c1, #ffe6a3);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        /* Styles facturation - catégories enrichies */
-        .cat-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .cat-btn {
-            background: rgba(255,255,255,0.2);
-            border-radius: 60px;
-            padding: 8px 18px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            backdrop-filter: blur(4px);
-            transition: 0.2s;
-        }
-        .cat-active {
-            background: linear-gradient(135deg, #a06eff, #6c3eff);
-            color: white;
-            box-shadow: 0 4px 12px rgba(108,62,255,0.4);
-        }
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            background: rgba(255,255,245,0.9);
-            padding: 12px 16px;
-            border-radius: 50px;
-            margin-bottom: 8px;
-            color: #1e1e2a;
-            font-weight: 500;
-        }
-        .inline-badge {
-            background: #6c3eff20;
-            border-radius: 30px;
-            padding: 4px 12px;
-            font-size: 0.7rem;
-        }
-        .header-app {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            font-weight: 800;
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, #f0e6ff, #c7b9ff);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        @media (max-width: 500px) {
-            .page { padding: 16px; }
-            .finance-amount { font-size: 1.4rem; }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background: radial-gradient(circle at 10% 30%, #1a1a2e, #0f0f1a); min-height: 100vh; padding: 16px; }
+        .app-container { max-width: 550px; margin: 0 auto; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 48px; box-shadow: 0 30px 50px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        .page { display: none; padding: 20px 18px; animation: fadeInUp 0.3s ease; }
+        .active-page { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px);} to { opacity: 1; transform: translateY(0);} }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
+        .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 12px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 14px rgba(108,62,255,0.3); }
+        .gradient-btn:active { transform: scale(0.96); }
+        input, select, textarea { background: rgba(255,255,255,0.9); border: none; border-radius: 60px; padding: 12px 18px; width: 100%; margin-bottom: 12px; font-size: 0.9rem; }
+        textarea { border-radius: 24px; resize: vertical; }
+        .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+        .dashboard-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); backdrop-filter: blur(8px); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 15px 25px -10px rgba(0,0,0,0.3); transform: translateY(0); transition: 0.1s; }
+        .dashboard-card:active { transform: translateY(3px); }
+        .dashboard-card i { font-size: 44px; background: linear-gradient(135deg, #ffd966, #ffb347); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .finance-center { display: flex; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
+        .finance-card { flex: 1; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border-radius: 28px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+        .finance-amount { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #f9f3c1, #ffe6a3); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .month-selector { background: rgba(255,255,255,0.15); border-radius: 60px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .cat-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .cat-btn { background: rgba(255,255,255,0.2); border-radius: 60px; padding: 6px 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; }
+        .cat-active { background: linear-gradient(135deg, #a06eff, #6c3eff); color: white; }
+        .expense-item { display: flex; justify-content: space-between; background: rgba(255,255,245,0.9); padding: 10px 16px; border-radius: 40px; margin-bottom: 8px; color: #1e1e2a; font-weight: 500; }
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, #f0e6ff, #c7b9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .search-box { background: white; border-radius: 60px; padding: 8px 16px; display: flex; gap: 8px; margin-bottom: 16px; }
+        .search-box input { margin: 0; padding: 8px; }
+        .object-card { background: rgba(255,255,255,0.9); border-radius: 24px; padding: 14px; margin-bottom: 12px; color: #1a1a2e; }
+        .photo-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 16px; margin: 4px; cursor: pointer; }
+        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
     </style>
 </head>
 <body>
@@ -223,85 +50,76 @@
             <h2 style="text-align: center; margin: 20px 0; color:white;">Bienvenue</h2>
             <input type="email" id="email" placeholder="Email *">
             <input type="password" id="password" placeholder="Mot de passe *">
-            <input type="tel" id="phone" placeholder="Téléphone (optionnel)">
+            <input type="tel" id="phone" placeholder="Téléphone">
             <div style="display: flex; gap: 12px;">
                 <button id="signupBtn" class="gradient-btn">S'inscrire</button>
-                <button id="signinBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Se connecter</button>
+                <button id="signinBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Connexion</button>
             </div>
-            <div style="text-align:center; margin-top:15px;"><a href="#" id="forgotPwd" style="color:#c7b9ff;">Mot de passe oublié ?</a></div>
-            <div id="authMessage" style="margin-top: 15px; text-align: center; color:#ffb4a2;"></div>
+            <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
+    <!-- DASHBOARD AVEC SELECTEUR MENSUEL -->
     <div id="dashboardPage" class="page">
-        <div class="header-app">
-            <span class="logo">AI.MG</span>
-            <button id="logoutBtn" class="gradient-btn" style="padding: 8px 18px; background:#d9534f;">Déconnexion</button>
+        <div class="header-app"><span class="logo">AI.MG</span><button id="logoutBtn" class="gradient-btn" style="padding: 6px 16px; background:#d9534f;">Déco</button></div>
+        <div class="month-selector" style="justify-content: center;">
+            <i class="fas fa-calendar-alt" style="color:white;"></i>
+            <select id="monthSelector" style="width: auto; background: rgba(0,0,0,0.6); color:white; margin:0;">
+                <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
+                <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
+                <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
+            </select>
         </div>
-        <!-- Portefeuille + épargne 3D -->
         <div class="finance-center">
-            <div class="finance-card">
-                <i class="fas fa-wallet" style="color:#ffd966;"></i>
-                <h3 style="color:#eee;">Salaire mensuel</h3>
-                <div class="finance-amount" id="salaryDisplay">0 Ar</div>
-                <input type="number" id="monthlySalaryInput" placeholder="Montant" style="background:white; margin-top:6px;">
-                <button id="saveSalaryBtn" class="gradient-btn" style="padding: 8px; margin-top: 8px;">Enregistrer</button>
-            </div>
-            <div class="finance-card">
-                <i class="fas fa-piggy-bank" style="color:#b0f7b0;"></i>
-                <h3 style="color:#eee;">Épargne</h3>
-                <div class="finance-amount" id="savingDisplay">0 Ar</div>
-                <div style="font-size:11px; color:#ccc;" id="savingDetail"></div>
-            </div>
+            <div class="finance-card"><i class="fas fa-wallet"></i><h3 style="color:#eee;">Salaire</h3><div class="finance-amount" id="salaryDisplay">0 Ar</div><input type="number" id="monthlySalaryInput" placeholder="Montant" style="margin:8px 0;"><button id="saveSalaryBtn" class="gradient-btn" style="padding:6px;">💾</button></div>
+            <div class="finance-card"><i class="fas fa-piggy-bank"></i><h3 style="color:#eee;">Épargne</h3><div class="finance-amount" id="savingDisplay">0 Ar</div><div style="font-size:11px;" id="savingDetail"></div></div>
         </div>
-
         <div class="grid-2x2">
-            <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Facturation</h3><p>Dépenses</p></div>
-            <div class="dashboard-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3><p>Événements</p></div>
-            <div class="dashboard-card" data-nav="localisation"><i class="fas fa-map-marker-alt"></i><h3>Localisation</h3><p>Objets</p></div>
-            <div class="dashboard-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projet</h3><p>Suivi</p></div>
+            <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Factures</h3></div>
+            <div class="dashboard-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3></div>
+            <div class="dashboard-card" data-nav="localisation"><i class="fas fa-map-marker-alt"></i><h3>Localisation</h3></div>
+            <div class="dashboard-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projets</h3></div>
         </div>
-        <div style="text-align:center; color:#ddd; margin-top: 12px;">✨ Gestion intelligente 3D ✨</div>
     </div>
 
-    <!-- FACTURATION MENSUELLE AVEC CATÉGORIES ENRICHIES -->
+    <!-- FACTURATION MENSUELLE -->
     <div id="facturationPage" class="page">
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Factures</span><div></div></div>
         <div class="card">
+            <div class="month-selector" style="justify-content: space-between;"><span>Mois</span><select id="factMonthSelect"></select></div>
             <div class="cat-grid" id="catContainer"></div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px;">
-                <input type="text" id="expenseName" placeholder="Nom dépense" style="flex:2">
-                <input type="number" id="expenseAmount" placeholder="Montant" style="flex:1">
-                <button id="addExpenseBtn" class="gradient-btn">+ Ajout</button>
-            </div>
-            <div id="expenseList"></div>
-            <div style="margin-top: 20px; font-weight: bold; font-size: 1.2rem; text-align:center; background:#fff2; border-radius: 40px; padding: 10px;" id="totalMonthly">💰 Total mensuel: 0 Ar</div>
-            <button id="monthlyResetBtn" class="gradient-btn" style="margin-top: 15px; background:#ff8c42;">📆 Réinitialiser mensuel</button>
+            <div style="display: flex; gap: 8px;"><input type="text" id="expenseName" placeholder="Nom"><input type="number" id="expenseAmount" placeholder="Montant"><button id="addExpenseBtn" class="gradient-btn">+</button></div>
+            <div id="expenseList" style="margin-top: 16px;"></div>
+            <div style="margin-top: 16px; text-align:center; font-weight:bold;" id="totalMonthly"></div>
+            <button id="monthlyResetBtn" class="gradient-btn" style="margin-top:12px; background:#ff8c42;">Réinitialiser le mois</button>
         </div>
     </div>
 
-    <!-- CALENDRIER -->
+    <!-- CALENDRIER AVEC DESCRIPTION -->
     <div id="calendrierPage" class="page">
-        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Calendrier</span><div></div></div>
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Agenda</span><div></div></div>
         <div class="card" id="calendarContainer" style="padding: 8px;"></div>
         <div class="card" style="margin-top: 16px;">
-            <input type="text" id="eventTitle" placeholder="Titre événement">
+            <h3 style="color:white;">➕ Nouvel événement</h3>
+            <input type="text" id="eventTitle" placeholder="Titre">
             <input type="datetime-local" id="eventDate">
-            <button id="addEventBtn" class="gradient-btn">Ajouter + Notif</button>
+            <textarea id="eventDesc" rows="3" placeholder="Description (max 250 mots)" maxlength="1500"></textarea>
+            <button id="addEventBtn" class="gradient-btn">Ajouter + Notifier</button>
         </div>
+        <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 
-    <!-- LOCALISATION -->
+    <!-- LOCALISATION AVEC CHAMPS CUSTOM + RECHERCHE -->
     <div id="localisationPage" class="page">
-        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Objets</span><div></div></div>
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Objets & lieux</span><div></div></div>
         <div class="card">
-            <input type="text" id="objectName" placeholder="Nom objet (clés, sac)">
-            <input type="text" id="objectCategory" placeholder="Catégorie (maison/magasin)">
-            <div id="customAttrsContainer" style="margin: 10px 0;"></div>
-            <button id="addAttrBtn" class="gradient-btn" style="background:#9c27b0;">+ Attribut</button>
-            <input type="file" id="objectPhotos" accept="image/*" multiple style="margin:10px 0;">
-            <button id="saveObjectBtn" class="gradient-btn">💾 Sauvegarder objet</button>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchObjectInput" placeholder="Rechercher (nom, style, couleur, description...)"></div>
+            <h3 style="color:white;">➕ Ajouter un objet / lieu</h3>
+            <input type="text" id="objName" placeholder="Nom (ex: Clés, Sac, Téléphone)">
+            <div id="dynamicFieldsContainer"></div>
+            <button id="addCustomFieldBtn" class="gradient-btn" style="background:#9c27b0; margin-bottom:8px;">+ Ajouter champ personnalisé</button>
+            <input type="file" id="objPhotos" accept="image/*" multiple>
+            <button id="saveObjectBtn" class="gradient-btn" style="margin-top:12px;">💾 Sauvegarder</button>
             <div id="objectsList" style="margin-top: 20px;"></div>
         </div>
     </div>
@@ -320,56 +138,63 @@
 </div>
 
 <script>
-    // ---------- STOCKAGE ----------
+    // Structure données : tout est mensualisé (salaire, dépenses, events, projects, objects)
     let currentUser = null;
     let users = JSON.parse(localStorage.getItem('aiMg_users')) || {};
-    let expenses = {};      // {user: { categorie: [{name, amount}] }}
-    let events = {};
-    let objects = {};
-    let projects = {};
-    let userSalaries = {};
+    // Données mensuelles: { user: { "2025_3": { salary, expenses:{cat:[]}, events:[], projects:[], objects:[] } } }
+    let monthlyData = JSON.parse(localStorage.getItem('aiMg_monthly')) || {};
+    let currentDisplayMonth = new Date().getMonth(); // 0-11
 
-    function saveAllData() {
-        if(!currentUser) return;
-        localStorage.setItem('aiMg_users', JSON.stringify(users));
-        localStorage.setItem(`expenses_${currentUser}`, JSON.stringify(expenses[currentUser] || {}));
-        localStorage.setItem(`events_${currentUser}`, JSON.stringify(events[currentUser] || []));
-        localStorage.setItem(`objects_${currentUser}`, JSON.stringify(objects[currentUser] || []));
-        localStorage.setItem(`projects_${currentUser}`, JSON.stringify(projects[currentUser] || []));
-        localStorage.setItem(`salary_${currentUser}`, userSalaries[currentUser] || 0);
+    function getMonthKey(year=2025, month) { return `${year}_${month}`; }
+    function getCurrentMonthKey() { return getMonthKey(2025, currentDisplayMonth); }
+    function getUserMonthData() {
+        if(!currentUser) return null;
+        let key = getCurrentMonthKey();
+        if(!monthlyData[currentUser]) monthlyData[currentUser] = {};
+        if(!monthlyData[currentUser][key]) {
+            monthlyData[currentUser][key] = { salary: 0, expenses: {}, events: [], projects: [], objects: [] };
+        }
+        return monthlyData[currentUser][key];
     }
-
-    function loadUserData() {
-        if(!currentUser) return;
-        expenses[currentUser] = JSON.parse(localStorage.getItem(`expenses_${currentUser}`)) || {};
-        events[currentUser] = JSON.parse(localStorage.getItem(`events_${currentUser}`)) || [];
-        objects[currentUser] = JSON.parse(localStorage.getItem(`objects_${currentUser}`)) || [];
-        projects[currentUser] = JSON.parse(localStorage.getItem(`projects_${currentUser}`)) || [];
-        userSalaries[currentUser] = parseFloat(localStorage.getItem(`salary_${currentUser}`)) || 0;
-    }
-
-    function getTotalExpenses() {
+    function saveMonthly() { localStorage.setItem('aiMg_monthly', JSON.stringify(monthlyData)); }
+    
+    function getTotalExpensesForMonth(monthData) {
         let total = 0;
-        if(!expenses[currentUser]) return 0;
-        for(let cat in expenses[currentUser]) {
-            (expenses[currentUser][cat] || []).forEach(e => total += Number(e.amount) || 0);
+        for(let cat in monthData.expenses) {
+            (monthData.expenses[cat] || []).forEach(e => total += Number(e.amount) || 0);
         }
         return total;
     }
-
-    function updateFinanceDisplay() {
-        let salary = userSalaries[currentUser] || 0;
-        let depenses = getTotalExpenses();
+    function updateDashboardUI() {
+        let monthData = getUserMonthData();
+        if(!monthData) return;
+        let salary = monthData.salary || 0;
+        let depenses = getTotalExpensesForMonth(monthData);
         let epargne = salary - depenses;
         document.getElementById('salaryDisplay').innerHTML = salary.toLocaleString() + ' Ar';
         document.getElementById('savingDisplay').innerHTML = epargne.toLocaleString() + ' Ar';
         document.getElementById('savingDetail').innerHTML = `Salaire: ${salary.toLocaleString()} Ar | Dépenses: ${depenses.toLocaleString()} Ar`;
-        if(document.getElementById('totalMonthly')) document.getElementById('totalMonthly').innerHTML = `💰 Total mensuel: ${depenses.toLocaleString()} Ar`;
         let salaryInput = document.getElementById('monthlySalaryInput');
         if(salaryInput) salaryInput.value = salary;
     }
+    function saveSalaryForMonth() {
+        let newSalary = parseFloat(document.getElementById('monthlySalaryInput').value);
+        if(isNaN(newSalary)) newSalary = 0;
+        let monthData = getUserMonthData();
+        monthData.salary = newSalary;
+        saveMonthly();
+        updateDashboardUI();
+        if(document.getElementById('totalMonthly')) updateFacturationUI();
+    }
+    function changeMonth(month) {
+        currentDisplayMonth = parseInt(month);
+        updateDashboardUI();
+        if(document.getElementById('factMonthSelect')) document.getElementById('factMonthSelect').value = month;
+        if(document.getElementById('expenseList')) renderExpenses();
+        if(document.getElementById('totalMonthly')) updateFacturationUI();
+    }
 
-    // Catégories enrichies avec sous-éléments fixes + bouton "Autre"
+    // FACTURATION (catégories enrichies)
     const categoryItems = {
         "Charges fixes": ["JIRAMA", "Loyer", "WIFI", "Crédit téléphone"],
         "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine", "Gouter"],
@@ -379,198 +204,138 @@
         "Shopping": ["Vêtements"],
         "Imprévus": []
     };
-    // Ajouter "Autre" dynamiquement pour chaque catégorie (sauf Imprevus qui a déjà bouton ajout)
-    for(let cat in categoryItems) {
-        if(cat !== "Imprévus") categoryItems[cat].push("Autre");
-        else categoryItems[cat] = ["Autre"]; // Imprévus seulement autre
-    }
+    for(let cat in categoryItems) { if(cat !== "Imprévus") categoryItems[cat].push("Autre"); else categoryItems[cat] = ["Autre"]; }
     let activeCat = "Charges fixes";
-
     function renderCategories() {
-        const container = document.getElementById('catContainer');
+        let container = document.getElementById('catContainer');
         if(!container) return;
         container.innerHTML = Object.keys(categoryItems).map(cat => `<div class="cat-btn ${activeCat===cat?'cat-active':''}" data-cat="${cat}">${cat}</div>`).join('');
-        document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                activeCat = btn.dataset.cat;
-                renderCategories();
-                renderExpenses();
-            });
-        });
+        document.querySelectorAll('.cat-btn').forEach(btn => btn.addEventListener('click', () => { activeCat = btn.dataset.cat; renderCategories(); renderExpenses(); }));
     }
-
     function renderExpenses() {
-        const listDiv = document.getElementById('expenseList');
-        if(!listDiv) return;
-        let catExpenses = expenses[currentUser]?.[activeCat] || [];
-        // Affichage liste
-        listDiv.innerHTML = catExpenses.map((exp, idx) => `
-            <div class="expense-item">
-                <span><strong>${escapeHtml(exp.name)}</strong> : ${Number(exp.amount).toLocaleString()} Ar</span>
-                <div>
-                    <button class="editExpense" data-idx="${idx}" style="background:#ffb74d; border:none; border-radius:40px; padding:6px 12px;"><i class="fas fa-edit"></i></button>
-                    <button class="delExpense" data-idx="${idx}" style="background:#ef5350; border:none; border-radius:40px; padding:6px 12px;"><i class="fas fa-trash"></i></button>
-                </div>
-            </div>
-        `).join('');
-        // Boutons pour édition/suppression
-        document.querySelectorAll('.editExpense').forEach(btn => {
-            btn.addEventListener('click', () => {
-                let idx = btn.dataset.idx;
-                let newName = prompt("Nouveau nom", catExpenses[idx].name);
-                let newAmount = prompt("Nouveau montant", catExpenses[idx].amount);
-                if(newName && newAmount && !isNaN(newAmount)) {
-                    catExpenses[idx] = {name: newName, amount: Number(newAmount)};
-                    expenses[currentUser][activeCat] = catExpenses;
-                    saveAllData();
-                    renderExpenses();
-                    updateFinanceDisplay();
-                }
-            });
-        });
-        document.querySelectorAll('.delExpense').forEach(btn => {
-            btn.addEventListener('click', () => {
-                let idx = btn.dataset.idx;
-                catExpenses.splice(idx,1);
-                expenses[currentUser][activeCat] = catExpenses;
-                saveAllData();
-                renderExpenses();
-                updateFinanceDisplay();
-            });
-        });
-        updateFinanceDisplay();
+        let monthData = getUserMonthData();
+        if(!monthData) return;
+        let catExpenses = monthData.expenses[activeCat] || [];
+        let listDiv = document.getElementById('expenseList');
+        listDiv.innerHTML = catExpenses.map((exp, idx) => `<div class="expense-item"><span><strong>${escapeHtml(exp.name)}</strong> : ${Number(exp.amount).toLocaleString()} Ar</span><div><button class="editExpense" data-idx="${idx}"><i class="fas fa-edit"></i></button><button class="delExpense" data-idx="${idx}"><i class="fas fa-trash"></i></button></div></div>`).join('');
+        document.querySelectorAll('.editExpense').forEach(btn => btn.addEventListener('click', () => { let idx = btn.dataset.idx; let newName = prompt("Nouveau nom", catExpenses[idx].name); let newAmount = prompt("Montant", catExpenses[idx].amount); if(newName && newAmount && !isNaN(newAmount)) { catExpenses[idx] = {name: newName, amount: Number(newAmount)}; monthData.expenses[activeCat] = catExpenses; saveMonthly(); renderExpenses(); updateDashboardUI(); } }));
+        document.querySelectorAll('.delExpense').forEach(btn => btn.addEventListener('click', () => { let idx = btn.dataset.idx; catExpenses.splice(idx,1); monthData.expenses[activeCat] = catExpenses; saveMonthly(); renderExpenses(); updateDashboardUI(); }));
+        updateFacturationUI();
     }
-
+    function updateFacturationUI() { let total = getTotalExpensesForMonth(getUserMonthData()); document.getElementById('totalMonthly').innerHTML = `💰 Total mensuel: ${total.toLocaleString()} Ar`; }
     function initFacturation() {
-        renderCategories();
-        renderExpenses();
-        const addBtn = document.getElementById('addExpenseBtn');
-        addBtn.onclick = () => {
-            let name = document.getElementById('expenseName').value.trim();
-            let amount = parseFloat(document.getElementById('expenseAmount').value);
-            if(!name || isNaN(amount)) { alert("Nom et montant valide"); return; }
-            if(!expenses[currentUser]) expenses[currentUser] = {};
-            if(!expenses[currentUser][activeCat]) expenses[currentUser][activeCat] = [];
-            expenses[currentUser][activeCat].push({name, amount});
-            saveAllData();
-            renderExpenses();
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseAmount').value = '';
+        renderCategories(); renderExpenses();
+        document.getElementById('addExpenseBtn').onclick = () => {
+            let name = document.getElementById('expenseName').value.trim(); let amount = parseFloat(document.getElementById('expenseAmount').value);
+            if(!name || isNaN(amount)) return alert("Nom et montant valide");
+            let monthData = getUserMonthData();
+            if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = [];
+            monthData.expenses[activeCat].push({name, amount});
+            saveMonthly(); renderExpenses(); updateDashboardUI();
+            document.getElementById('expenseName').value = ''; document.getElementById('expenseAmount').value = '';
         };
-        // Bouton réinitialisation mensuelle (remet toutes dépenses à zéro)
-        const resetBtn = document.getElementById('monthlyResetBtn');
-        if(resetBtn) resetBtn.onclick = () => {
-            if(confirm("⚠️ Réinitialiser toutes les dépenses du mois ?")) {
-                expenses[currentUser] = {};
-                saveAllData();
-                renderExpenses();
-                updateFinanceDisplay();
-            }
-        };
-        // Préremplissage rapide via les éléments de catégorie (cliquer sur les noms)
+        document.getElementById('monthlyResetBtn').onclick = () => { if(confirm("Reset toutes dépenses du mois ?")) { getUserMonthData().expenses = {}; saveMonthly(); renderExpenses(); updateDashboardUI(); } };
+        // Suggestions rapides
         setTimeout(() => {
-            document.querySelectorAll('.expense-suggestion').forEach(el => el.remove());
-            // Ajout de suggestions sous forme de chips pour chaque catégorie
-            const suggestionDiv = document.createElement('div');
-            suggestionDiv.className = 'cat-grid';
-            suggestionDiv.style.marginTop = '10px';
-            suggestionDiv.id = 'suggestionChips';
-            const container = document.querySelector('#facturationPage .card');
-            let existing = document.getElementById('suggestionChips');
-            if(existing) existing.remove();
+            let suggestionDiv = document.createElement('div'); suggestionDiv.className = 'cat-grid'; suggestionDiv.id = 'suggestionChips';
+            let container = document.querySelector('#facturationPage .card'); let old = document.getElementById('suggestionChips'); if(old) old.remove();
             container.insertBefore(suggestionDiv, document.getElementById('expenseList'));
-            const items = categoryItems[activeCat] || [];
+            let items = categoryItems[activeCat] || [];
             suggestionDiv.innerHTML = items.map(item => `<div class="cat-btn" data-suggest="${item}">➕ ${item}</div>`).join('');
-            document.querySelectorAll('[data-suggest]').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    let suggestName = btn.dataset.suggest;
-                    if(suggestName === "Autre") {
-                        let custom = prompt("Nom de la dépense (ex: Achat divers)");
-                        if(custom) suggestName = custom;
-                        else return;
-                    }
-                    let amount = prompt(`Montant pour ${suggestName} (Ar) :`);
-                    if(amount && !isNaN(parseFloat(amount))) {
-                        if(!expenses[currentUser][activeCat]) expenses[currentUser][activeCat] = [];
-                        expenses[currentUser][activeCat].push({name: suggestName, amount: parseFloat(amount)});
-                        saveAllData();
-                        renderExpenses();
-                        updateFinanceDisplay();
-                    } else if(amount) alert("Montant invalide");
-                });
-            });
-        }, 50);
+            document.querySelectorAll('[data-suggest]').forEach(btn => btn.addEventListener('click', () => {
+                let suggest = btn.dataset.suggest; let finalName = suggest === "Autre" ? prompt("Nom de la dépense:") : suggest;
+                if(finalName) { let montant = prompt(`Montant pour ${finalName} (Ar):`); if(montant && !isNaN(parseFloat(montant))) { let monthData = getUserMonthData(); if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = []; monthData.expenses[activeCat].push({name: finalName, amount: parseFloat(montant)}); saveMonthly(); renderExpenses(); updateDashboardUI(); } }
+            }));
+        }, 100);
     }
 
-    // CALENDRIER
+    // CALENDRIER AVEC DESCRIPTION
     let calendar = null;
     function initCalendar() {
+        let monthData = getUserMonthData();
+        let evts = (monthData.events || []).map(ev => ({ title: ev.title, start: ev.date, description: ev.desc, allDay: false }));
         const calEl = document.getElementById('calendarContainer');
         if(calendar) calendar.destroy();
-        let evts = (events[currentUser] || []).map(ev => ({ title: ev.title, start: ev.date, allDay: false }));
-        calendar = new FullCalendar.Calendar(calEl, { initialView: 'dayGridMonth', events: evts, headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' }, height: 'auto' });
+        calendar = new FullCalendar.Calendar(calEl, { initialView: 'dayGridMonth', events: evts, headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' }, height: 'auto', eventClick: (info) => { alert(`📌 ${info.event.title}\n📅 ${info.event.start}\n📝 Description: ${info.event.extendedProps.description || 'Aucune'}`); } });
         calendar.render();
         document.getElementById('addEventBtn').onclick = () => {
             let title = document.getElementById('eventTitle').value.trim();
             let date = document.getElementById('eventDate').value;
-            if(!title || !date) return alert("Remplissez titre et date");
-            events[currentUser].push({ title, date });
-            saveAllData();
-            initCalendar();
+            let desc = document.getElementById('eventDesc').value.trim().slice(0, 1500);
+            if(!title || !date) return alert("Titre et date requis");
+            monthData.events.push({ title, date, desc: desc || "" });
+            saveMonthly(); initCalendar();
             if(Notification.permission === "granted") new Notification("AI.MG", { body: title });
             else alert(`🔔 Événement: ${title}`);
-            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventTitle').value = ''; document.getElementById('eventDate').value = ''; document.getElementById('eventDesc').value = '';
+            displayEventList();
         };
+        displayEventList();
+    }
+    function displayEventList() {
+        let monthData = getUserMonthData();
+        let listDiv = document.getElementById('eventListPreview');
+        if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}${ev.desc?.length>80?'...':''}</small></div>`).join(''));
     }
 
-    // LOCALISATION simplifiée mais fonctionnelle
-    let customAttrs = [];
-    function renderAttrsFields() {
-        const container = document.getElementById('customAttrsContainer');
-        if(!container) return;
-        container.innerHTML = customAttrs.map((attr, idx) => `<div style="display:flex; gap:8px;"><input type="text" value="${attr}" id="attr_${idx}" placeholder="attribut"><button class="removeAttr" data-idx="${idx}">❌</button></div>`).join('');
-        document.querySelectorAll('.removeAttr').forEach(btn => btn.addEventListener('click', (e) => { let idx = btn.dataset.idx; customAttrs.splice(idx,1); renderAttrsFields(); }));
+    // LOCALISATION : champs dynamiques + recherche
+    let customFields = []; // stockage [{label, value}] pour le formulaire
+    function renderDynamicFields() {
+        let container = document.getElementById('dynamicFieldsContainer');
+        container.innerHTML = customFields.map((field, idx) => `<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" placeholder="Nom du champ (ex: Customer)" value="${escapeHtml(field.label)}" id="fieldLabel_${idx}"><input type="text" placeholder="Valeur (ex: JCREW)" value="${escapeHtml(field.value)}" id="fieldValue_${idx}"><button class="removeFieldBtn" data-idx="${idx}">❌</button></div>`).join('');
+        document.querySelectorAll('.removeFieldBtn').forEach(btn => btn.addEventListener('click', (e) => { let idx = btn.dataset.idx; customFields.splice(idx,1); renderDynamicFields(); }));
     }
     function initLocalisation() {
-        customAttrs = []; renderAttrsFields();
-        document.getElementById('addAttrBtn').onclick = () => { if(customAttrs.length<10){ customAttrs.push(""); renderAttrsFields(); } else alert("Max 10"); };
+        customFields = []; renderDynamicFields();
+        document.getElementById('addCustomFieldBtn').onclick = () => { if(customFields.length < 8) { customFields.push({label:"", value:""}); renderDynamicFields(); } else alert("Max 8 champs"); };
         document.getElementById('saveObjectBtn').onclick = () => {
-            let name = document.getElementById('objectName').value.trim();
-            if(!name) return alert("Nom objet");
-            let category = document.getElementById('objectCategory').value.trim();
-            let finalAttrs = {};
-            customAttrs.forEach((_,idx)=>{ let val=document.getElementById(`attr_${idx}`)?.value; if(val) finalAttrs[`attr_${idx+1}`]=val; });
-            let photos=[];
-            let files = document.getElementById('objectPhotos').files;
+            let name = document.getElementById('objName').value.trim();
+            if(!name) return alert("Nom requis");
+            let fields = [];
+            for(let i=0;i<customFields.length;i++) {
+                let lbl = document.getElementById(`fieldLabel_${i}`)?.value || "";
+                let val = document.getElementById(`fieldValue_${i}`)?.value || "";
+                if(lbl) fields.push({label: lbl, value: val});
+            }
+            let photos = [];
+            let files = document.getElementById('objPhotos').files;
             for(let i=0;i<Math.min(files.length,5);i++) photos.push(URL.createObjectURL(files[i]));
-            objects[currentUser].push({ id:Date.now(), name, category:category||"général", custom:finalAttrs, photos });
-            saveAllData(); renderObjectsList();
-            document.getElementById('objectName').value=''; document.getElementById('objectCategory').value=''; customAttrs=[]; renderAttrsFields(); document.getElementById('objectPhotos').value='';
+            let monthData = getUserMonthData();
+            monthData.objects.push({ id: Date.now(), name, customFields: fields, photos, timestamp: Date.now() });
+            saveMonthly();
+            renderObjectsList();
+            document.getElementById('objName').value = ''; customFields = []; renderDynamicFields(); document.getElementById('objPhotos').value = '';
         };
         renderObjectsList();
+        document.getElementById('searchObjectInput').addEventListener('input', () => renderObjectsList());
     }
     function renderObjectsList() {
-        const container = document.getElementById('objectsList');
-        let arr = objects[currentUser] || [];
-        container.innerHTML = arr.map(obj => `<div class="expense-item" style="flex-direction:column; align-items:start;"><div><strong>${escapeHtml(obj.name)}</strong> (${obj.category})</div><div>Attributs: ${Object.values(obj.custom).join(', ')}</div><div>${obj.photos.map(p=>`<img src="${p}" width="40" height="40" style="border-radius:12px;">`).join('')}</div><button class="delObj" data-id="${obj.id}">Supprimer</button></div>`).join('');
-        document.querySelectorAll('.delObj').forEach(btn => btn.addEventListener('click',()=>{ let id=Number(btn.dataset.id); objects[currentUser]=objects[currentUser].filter(o=>o.id!==id); saveAllData(); renderObjectsList(); }));
+        let monthData = getUserMonthData();
+        let searchTerm = document.getElementById('searchObjectInput')?.value.toLowerCase() || "";
+        let filtered = (monthData.objects || []).filter(obj => {
+            let searchText = `${obj.name} ${obj.customFields.map(f=>f.label+":"+f.value).join(' ')}`.toLowerCase();
+            return searchText.includes(searchTerm);
+        });
+        let container = document.getElementById('objectsList');
+        container.innerHTML = filtered.map(obj => `<div class="object-card"><div><strong>${escapeHtml(obj.name)}</strong></div>${obj.customFields.map(f=>`<div>📌 ${escapeHtml(f.label)}: ${escapeHtml(f.value)}</div>`).join('')}<div>🖼️ ${obj.photos.map(p=>`<img src="${p}" class="photo-thumb" onclick="window.open('${p}','_blank')">`).join('') || 'aucune photo'}</div><button class="deleteObj" data-id="${obj.id}">🗑️ Supprimer</button></div>`).join('');
+        document.querySelectorAll('.deleteObj').forEach(btn => btn.addEventListener('click', (e) => { let id = Number(btn.dataset.id); let monthData = getUserMonthData(); monthData.objects = monthData.objects.filter(o=>o.id!==id); saveMonthly(); renderObjectsList(); }));
     }
 
-    // PROJETS
+    // PROJETS (mensualisés)
     function renderProjects() {
-        let projs = projects[currentUser] || [];
+        let monthData = getUserMonthData();
+        let projs = monthData.projects || [];
         let groups = Array(12).fill().map(()=>[]);
         projs.forEach(p=>groups[p.month].push(p));
         let html='';
-        for(let m=0;m<12;m++){
-            let monthName=["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"][m];
-            html+=`<div><h4>${monthName} (${groups[m].length}/10)</h4>`;
-            groups[m].forEach(p=>{ html+=`<div class="expense-item" style="margin:6px 0;"><span>📌 ${p.name} - ${p.status}</span><div><button class="toggleStatus" data-id="${p.id}">🔄</button><button class="delProj" data-id="${p.id}">🗑️</button></div></div>`; });
+        for(let m=0;m<12;m++){ let monthName=["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"][m];
+            html+=`<div><h4 style="color:white;">${monthName} (${groups[m].length}/10)</h4>`;
+            groups[m].forEach(p=>{ html+=`<div class="expense-item"><span>📌 ${escapeHtml(p.name)} - ${p.status}</span><div><button class="toggleStatus" data-id="${p.id}">🔄</button><button class="delProj" data-id="${p.id}">🗑️</button></div></div>`; });
             html+=`</div>`;
         }
         document.getElementById('projectsList').innerHTML = html;
-        document.querySelectorAll('.toggleStatus').forEach(btn=>btn.addEventListener('click',()=>{ let id=Number(btn.dataset.id); let p=projects[currentUser].find(pr=>pr.id===id); if(p){ p.status=p.status==="en cours"?"terminé":"en cours"; saveAllData(); renderProjects(); } }));
-        document.querySelectorAll('.delProj').forEach(btn=>btn.addEventListener('click',()=>{ let id=Number(btn.dataset.id); projects[currentUser]=projects[currentUser].filter(p=>p.id!==id); saveAllData(); renderProjects(); }));
+        document.querySelectorAll('.toggleStatus').forEach(btn=>btn.addEventListener('click',()=>{ let id=Number(btn.dataset.id); let p=monthData.projects.find(pr=>pr.id===id); if(p){ p.status=p.status==="en cours"?"terminé":"en cours"; saveMonthly(); renderProjects(); } }));
+        document.querySelectorAll('.delProj').forEach(btn=>btn.addEventListener('click',()=>{ let id=Number(btn.dataset.id); monthData.projects=monthData.projects.filter(p=>p.id!==id); saveMonthly(); renderProjects(); }));
     }
     function initProjets() {
         renderProjects();
@@ -579,15 +344,16 @@
             let month = parseInt(document.getElementById('projectMonth').value);
             let status = document.getElementById('projectStatus').value;
             if(!name) return alert("Nom projet");
-            let count = (projects[currentUser]||[]).filter(p=>p.month===month).length;
+            let monthData = getUserMonthData();
+            let count = monthData.projects.filter(p=>p.month===month).length;
             if(count>=10){ alert("Max 10 projets ce mois"); return; }
-            projects[currentUser].push({ id:Date.now(), name, month, status });
-            saveAllData(); renderProjects();
+            monthData.projects.push({ id: Date.now(), name, month, status });
+            saveMonthly(); renderProjects();
             document.getElementById('projectName').value='';
         };
     }
 
-    function escapeHtml(str){ if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
 
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p=>p.classList.remove('active-page'));
@@ -596,37 +362,32 @@
         if(pageId === 'calendrierPage') initCalendar();
         if(pageId === 'localisationPage') initLocalisation();
         if(pageId === 'projetPage') initProjets();
-        if(pageId === 'dashboardPage') { updateFinanceDisplay(); document.getElementById('saveSalaryBtn').onclick = () => { let val=parseFloat(document.getElementById('monthlySalaryInput').value); if(!isNaN(val)){ userSalaries[currentUser]=val; saveAllData(); updateFinanceDisplay(); } }; }
+        if(pageId === 'dashboardPage') { updateDashboardUI(); document.getElementById('saveSalaryBtn').onclick = saveSalaryForMonth; document.getElementById('monthSelector').onchange = (e) => changeMonth(e.target.value); document.getElementById('monthSelector').value = currentDisplayMonth; }
     }
-
     // AUTH
     function register() {
-        let email = document.getElementById('email').value.trim();
-        let pwd = document.getElementById('password').value;
-        if(!email || !pwd) return document.getElementById('authMessage').innerText="Email et mot de passe requis";
+        let email = document.getElementById('email').value.trim(); let pwd = document.getElementById('password').value;
+        if(!email || !pwd) return document.getElementById('authMessage').innerText="Email & mot de passe";
         if(users[email]) return document.getElementById('authMessage').innerText="Déjà inscrit";
         users[email] = { email, password:pwd, phone:document.getElementById('phone').value };
-        currentUser = email;
-        expenses[currentUser] = {};
-        events[currentUser]=[]; objects[currentUser]=[]; projects[currentUser]=[]; userSalaries[currentUser]=0;
-        saveAllData();
-        loadUserData();
+        currentUser = email; monthlyData[currentUser] = {};
+        saveMonthly(); saveMonthly(); 
         showPage('dashboardPage');
     }
     function login() {
-        let email = document.getElementById('email').value.trim();
-        let pwd = document.getElementById('password').value;
-        if(users[email] && users[email].password === pwd) { currentUser=email; loadUserData(); showPage('dashboardPage'); }
+        let email = document.getElementById('email').value.trim(); let pwd = document.getElementById('password').value;
+        if(users[email] && users[email].password === pwd) { currentUser = email; showPage('dashboardPage'); }
         else document.getElementById('authMessage').innerText="Identifiants incorrects";
     }
     document.getElementById('signupBtn').onclick = register;
     document.getElementById('signinBtn').onclick = login;
-    document.getElementById('forgotPwd').onclick = ()=> alert("Contactez support@ai.mg");
     document.getElementById('logoutBtn')?.addEventListener('click', ()=>{ currentUser=null; showPage('loginPage'); });
     document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>showPage('dashboardPage')));
     document.querySelectorAll('.dashboard-card').forEach(card=>card.addEventListener('click',()=>showPage(card.dataset.nav+'Page')));
     if(Notification.permission!=="granted") Notification.requestPermission();
     if(currentUser) showPage('dashboardPage'); else showPage('loginPage');
+    // synchronisation facturation selecteur mois
+    setInterval(()=>{ if(document.getElementById('factMonthSelect')) { document.getElementById('factMonthSelect').innerHTML = [...Array(12)].map((_,i)=>`<option value="${i}" ${currentDisplayMonth==i?'selected':''}>${["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"][i]}</option>`).join(''); document.getElementById('factMonthSelect').onchange = (e)=>{ currentDisplayMonth=parseInt(e.target.value); if(document.getElementById('monthSelector')) document.getElementById('monthSelector').value=currentDisplayMonth; updateDashboardUI(); renderExpenses(); }; } }, 500);
 </script>
 </body>
 </html>
