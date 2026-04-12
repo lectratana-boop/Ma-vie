@@ -3,216 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Vie 3D - Gestion Privée</title>
+    <title>AI.MG - Gestion Personnelle</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #08080a; color: #f1f5f9; overflow: hidden; }
-        .glass { background: rgba(18, 18, 22, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .sidebar-compact { width: 70px; transition: width 0.3s ease; }
-        @media (min-width: 1024px) { .sidebar-compact { width: 240px; } }
-        .nav-btn.active { background: rgba(99, 102, 241, 0.1); color: #818cf8; border-right: 3px solid #6366f1; }
-        [x-cloak] { display: none !important; }
+        body { background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%); min-height: 100vh; font-family: 'Segoe UI', sans-serif; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-radius: 24px; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.05); }
+        .btn-gradient { background: linear-gradient(90deg, #6366f1, #a855f7); color: white; transition: all 0.3s; }
+        .btn-gradient:hover { opacity: 0.9; transform: translateY(-1px); }
+        .nav-item:hover { color: #6366f1; }
     </style>
 </head>
-<body x-data="app()" x-init="init()">
+<body class="p-4 md:p-8">
 
-    <template x-if="showSplash">
-        <div class="fixed inset-0 z-[100] bg-[#08080a] flex items-center justify-center">
-            <video autoplay muted playsinline class="w-full h-full object-cover" @ended="showSplash = false">
-                <source src="splash.mp4.mp4" type="video/mp4">
-            </video>
+    <header class="max-w-5xl mx-auto flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-800">AI.MG</h1>
+            <p class="text-gray-500">Votre dashboard personnel</p>
         </div>
-    </template>
-
-    <template x-if="!showSplash && !isLoggedIn">
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-[#08080a] p-6" x-cloak>
-            <div class="glass p-8 rounded-[2rem] w-full max-w-[380px] border border-white/10 shadow-2xl text-center">
-                <div class="w-16 h-16 bg-indigo-600 rounded-2xl mx-auto mb-6 flex items-center justify-center shadow-lg shadow-indigo-600/30">
-                    <i data-lucide="shield-check" class="text-white w-8 h-8"></i>
-                </div>
-                <h1 class="text-2xl font-bold mb-8">Ma Vie 3D</h1>
-                <div class="space-y-4 text-left">
-                    <input type="email" x-model="loginData.email" placeholder="Email" 
-                           class="w-full bg-black/40 border border-white/10 p-4 rounded-xl focus:outline-none focus:border-indigo-500 text-sm">
-                    <input type="password" x-model="loginData.pass" placeholder="Mot de passe" 
-                           class="w-full bg-black/40 border border-white/10 p-4 rounded-xl focus:outline-none focus:border-indigo-500 text-sm">
-                    <button @click="handleLogin" 
-                            class="w-full bg-indigo-600 hover:bg-indigo-500 py-4 rounded-xl font-bold transition-all active:scale-95">
-                        Entrer dans l'interface
-                    </button>
-                    <p x-show="errorMessage" x-text="errorMessage" class="text-red-400 text-xs text-center mt-2" x-cloak></p>
-                </div>
-            </div>
-        </div>
-    </template>
-
-    <div class="flex h-screen w-full overflow-hidden" x-show="isLoggedIn" x-cloak>
-        <aside class="sidebar-compact glass h-full flex flex-col items-center lg:items-start py-8 border-r border-white/5 overflow-y-auto">
-            <div class="px-6 mb-12 flex items-center gap-3">
-                <div class="min-w-[40px] h-10 bg-indigo-600 rounded-xl flex items-center justify-center">
-                    <i data-lucide="heart" class="text-white w-5 h-5"></i>
-                </div>
-                <span class="hidden lg:block font-bold text-lg tracking-tight">MA VIE</span>
-            </div>
-            <nav class="w-full flex-1 space-y-1">
-                <template x-for="item in menu">
-                    <button @click="tab = item.id" :class="tab === item.id ? 'active' : ''"
-                            class="nav-btn w-full flex items-center px-6 py-4 hover:text-white group">
-                        <i :data-lucide="item.icon" class="w-5 h-5"></i>
-                        <span class="hidden lg:block ml-4 text-sm font-medium" x-text="item.label"></span>
-                    </button>
-                </template>
-            </nav>
-            <button @click="handleLogout" class="px-6 py-4 text-gray-500 hover:text-red-400 w-full flex items-center mt-auto">
-                <i data-lucide="log-out" class="w-5 h-5"></i>
-                <span class="hidden lg:block ml-4 text-sm font-medium">Déconnexion</span>
+        <div class="flex items-center space-x-4">
+            <button class="relative p-2 bg-white rounded-full shadow-sm">
+                <i class="fa-regular fa-bell text-xl text-gray-600"></i>
+                <span class="absolute top-0 right-0 w-3 h-3 bg-red-500 border-2 border-white rounded-full"></span>
             </button>
-        </aside>
+            <img src="https://ui-avatars.com/api/?name=User&background=6366f1&color=fff" class="w-10 h-10 rounded-full border-2 border-white shadow-md">
+        </div>
+    </header>
 
-        <main class="flex-1 h-full overflow-y-auto bg-gradient-to-br from-[#08080a] to-[#0c0c10] p-4 lg:p-10">
-            <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-12">
-                <div>
-                    <h2 class="text-3xl lg:text-4xl font-bold" x-text="menu.find(m => m.id === tab).label"></h2>
-                    <p class="text-gray-500 text-sm mt-1">Session : <span class="text-indigo-400 font-mono" x-text="loginData.email"></span></p>
+    <main class="max-w-5xl mx-auto">
+        
+        <section id="dashboard" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div class="glass-card p-6 text-center cursor-pointer hover:scale-105 transition-transform">
+                <div class="bg-blue-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-file-invoice-dollar text-2xl text-blue-600"></i>
                 </div>
-                <div class="flex items-center gap-4">
-                    <select x-model="currentMonth" class="bg-indigo-600 text-white p-3 rounded-xl font-bold outline-none">
-                        <template x-for="m in months"><option :value="m" x-text="m" class="capitalize"></option></template>
-                    </select>
-                    <div class="glass p-4 rounded-2xl flex items-center gap-4 px-6 border border-indigo-500/20">
-                        <div class="text-right">
-                            <p class="text-[10px] text-gray-500 uppercase font-semibold">Net Mensuel</p>
-                            <p class="text-xl font-bold text-indigo-400" x-text="formatAr(calcWallet(currentMonth))"></p>
+                <span class="font-bold text-gray-700">FACTURATION</span>
+            </div>
+            <div class="glass-card p-6 text-center cursor-pointer hover:scale-105 transition-transform">
+                <div class="bg-purple-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-calendar-days text-2xl text-purple-600"></i>
+                </div>
+                <span class="font-bold text-gray-700">CALENDRIER</span>
+            </div>
+            <div class="glass-card p-6 text-center cursor-pointer hover:scale-105 transition-transform">
+                <div class="bg-red-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-location-dot text-2xl text-red-600"></i>
+                </div>
+                <span class="font-bold text-gray-700">LOCALISATION</span>
+            </div>
+            <div class="glass-card p-6 text-center cursor-pointer hover:scale-105 transition-transform">
+                <div class="bg-orange-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-rocket text-2xl text-orange-600"></i>
+                </div>
+                <span class="font-bold text-gray-700">PROJET</span>
+            </div>
+        </section>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            
+            <div class="md:col-span-2 space-y-6">
+                <div class="glass-card p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-xl font-bold text-gray-800">Dépenses Mensuelles</h3>
+                        <button class="btn-gradient px-4 py-2 rounded-xl text-sm font-semibold">+ Ajouter</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-white/50 rounded-2xl">
+                            <div class="flex items-center space-x-4">
+                                <div class="p-3 bg-yellow-100 rounded-xl text-yellow-600"><i class="fa-solid fa-bolt"></i></div>
+                                <div>
+                                    <p class="font-bold text-gray-700">JIRAMA</p>
+                                    <p class="text-xs text-gray-400">Charges fixes</p>
+                                </div>
+                            </div>
+                            <p class="font-bold text-gray-800">150,000 MGA</p>
                         </div>
-                        <i data-lucide="wallet" class="text-indigo-500"></i>
+
+                        <div class="flex items-center justify-between p-4 bg-white/50 rounded-2xl">
+                            <div class="flex items-center space-x-4">
+                                <div class="p-3 bg-blue-100 rounded-xl text-blue-600"><i class="fa-solid fa-car"></i></div>
+                                <div>
+                                    <p class="font-bold text-gray-700">Carburant</p>
+                                    <p class="text-xs text-gray-400">Transport</p>
+                                </div>
+                            </div>
+                            <p class="font-bold text-gray-800">80,000 MGA</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-100 flex justify-between items-center">
+                        <span class="text-gray-500 font-medium">TOTAL MENSUEL AUTOMATIQUE</span>
+                        <span class="text-2xl font-black text-indigo-600 uppercase">1,500,000 MGA</span>
                     </div>
                 </div>
             </div>
 
-            <div x-show="tab === 'portefeuille'" class="max-w-3xl mx-auto glass p-8 lg:p-12 rounded-[2.5rem]">
-                <label class="text-xs uppercase tracking-widest text-gray-500">Mon Salaire</label>
-                <div class="flex items-center gap-4 mt-2 mb-10">
-                    <input type="number" x-model.number="db.salary" class="bg-transparent text-5xl lg:text-7xl font-black text-white focus:outline-none w-full">
-                    <span class="text-2xl font-bold text-gray-700">Ar</span>
-                </div>
-                <div class="space-y-3">
-                    <template x-for="cat in expenseCategories">
-                        <div class="flex justify-between items-center p-4 bg-white/5 rounded-2xl">
-                            <span class="text-sm capitalize" x-text="cat"></span>
-                            <span class="text-red-400 font-bold" x-text="'- ' + formatAr(getMonthExpense(cat, currentMonth))"></span>
+            <div class="space-y-6">
+                <div class="glass-card p-6">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">Projets en cours</h3>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Terrasse</span>
+                                <span class="text-indigo-600 font-bold">60%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-indigo-500 h-2 rounded-full" style="width: 60%"></div>
+                            </div>
                         </div>
-                    </template>
-                </div>
-            </div>
-
-            <div x-show="expenseCategories.concat(['epargne']).includes(tab)" class="max-w-2xl mx-auto space-y-3">
-                <template x-for="m in months">
-                    <div class="glass p-4 rounded-2xl flex items-center justify-between border-l-4 border-transparent hover:border-indigo-500">
-                        <span class="capitalize font-medium text-gray-300" x-text="m"></span>
-                        <div class="flex items-center gap-3">
-                            <input type="number" x-model.number="tab === 'epargne' ? db.gains[m] : db[tab][m]" 
-                                   class="bg-black/40 p-3 rounded-xl text-right w-40 focus:border-indigo-500 border border-white/5 outline-none">
-                            <span class="text-xs text-gray-600 font-bold" x-text="tab === 'jirama' ? 'kW' : 'Ar'"></span>
+                        
+                        <div class="p-3 bg-green-50 border border-green-100 rounded-xl flex justify-between items-center">
+                            <span class="text-sm font-medium text-green-700">Projet Clôture</span>
+                            <span class="text-xs bg-green-200 text-green-800 px-2 py-1 rounded-lg">Terminé</span>
                         </div>
                     </div>
-                </template>
+                    
+                    <button class="w-full mt-6 py-3 border-2 border-dashed border-indigo-200 text-indigo-500 rounded-2xl font-semibold hover:bg-indigo-50 transition-colors">
+                        + Nouveau Projet
+                    </button>
+                </div>
             </div>
-        </main>
-    </div>
 
-    <script>
-        // CONFIGURATION FIREBASE PROJET AIZA
-        var firebaseConfig = {
-            apiKey: "AIzaSyBY_zHJAaNLtXDBlD1TYMzALlMlMHNBwWk",
-            authDomain: "aiza-38b31.firebaseapp.com",
-            databaseURL: "https://aiza-38b31-default-rtdb.europe-west1.firebasedatabase.app/",
-            projectId: "aiza-38b31",
-            storageBucket: "aiza-38b31.firebasestorage.app",
-            messagingSenderId: "850157491678",
-            appId: "1:850157491678:web:614b2b70b934cf09fcb94f"
-        };
-        firebase.initializeApp(firebaseConfig);
+        </div>
+    </main>
 
-        function app() {
-            return {
-                showSplash: true,
-                isLoggedIn: false,
-                errorMessage: '',
-                tab: 'portefeuille',
-                currentMonth: 'avril',
-                loginData: { email: '', pass: '' },
-                months: ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'],
-                expenseCategories: ['jirama', 'ecolage', 'shopping', 'medical', 'adidy', 'loyer', 'lessive', 'frais', 'repas', 'autres'],
-                menu: [
-                    { id: 'portefeuille', label: 'Portefeuille', icon: 'wallet' },
-                    { id: 'jirama', label: 'Jirama', icon: 'zap' },
-                    { id: 'ecolage', label: 'Écolage', icon: 'graduation-cap' },
-                    { id: 'shopping', label: 'Shopping', icon: 'shopping-cart' },
-                    { id: 'medical', label: 'Médical', icon: 'heart-pulse' },
-                    { id: 'adidy', label: 'ADIDY', icon: 'gift' },
-                    { id: 'loyer', label: 'Loyer', icon: 'home' },
-                    { id: 'lessive', label: 'Lessive', icon: 'droplet' },
-                    { id: 'frais', label: 'Frais', icon: 'file-text' },
-                    { id: 'repas', label: 'Repas', icon: 'utensils' },
-                    { id: 'autres', label: 'Autres', icon: 'more-horizontal' },
-                    { id: 'epargne', label: 'Épargne', icon: 'landmark' }
-                ],
-                db: { salary: 0, jirama: {}, ecolage: {}, shopping: {}, medical: {}, adidy: {}, loyer: {}, lessive: {}, frais: {}, repas: {}, autres: {}, gains: {} },
-                
-                init() {
-                    // La vidéo se ferme d'elle-même grâce à @ended="showSplash = false"
-                    // On ajoute un délai de sécurité si la vidéo ne charge pas
-                    setTimeout(() => { if(this.showSplash) this.showSplash = false; lucide.createIcons(); }, 10000);
-                },
+    <nav class="md:hidden fixed bottom-6 left-6 right-6 glass-card px-6 py-4 flex justify-between items-center">
+        <i class="fa-solid fa-house text-indigo-600 text-xl"></i>
+        <i class="fa-solid fa-calendar-alt text-gray-400 text-xl nav-item"></i>
+        <i class="fa-solid fa-plus-circle text-indigo-500 text-3xl"></i>
+        <i class="fa-solid fa-search-location text-gray-400 text-xl nav-item"></i>
+        <i class="fa-solid fa-user text-gray-400 text-xl nav-item"></i>
+    </nav>
 
-                syncData(uid) {
-                    // CLOISONNEMENT : On stocke tout sous 'mavie_data' pour ne pas toucher à 'aiza_data'
-                    const userRef = firebase.database().ref('mavie_data/users/' + uid);
-                    userRef.on('value', (snapshot) => {
-                        if (snapshot.exists()) { this.db = snapshot.val(); }
-                        setTimeout(() => lucide.createIcons(), 100);
-                    });
-                    this.$watch('db', val => { if(this.isLoggedIn) userRef.set(JSON.parse(JSON.stringify(val))); }, { deep: true });
-                },
-
-                handleLogin() {
-                    this.errorMessage = '';
-                    firebase.auth().signInWithEmailAndPassword(this.loginData.email, this.loginData.pass)
-                        .then((user) => {
-                            this.isLoggedIn = true;
-                            this.syncData(user.user.uid);
-                            setTimeout(() => lucide.createIcons(), 150);
-                        })
-                        .catch((err) => {
-                            this.errorMessage = "Email ou mot de passe incorrect.";
-                        });
-                },
-
-                handleLogout() {
-                    firebase.auth().signOut().then(() => { location.reload(); });
-                },
-
-                getMonthExpense(cat, m) {
-                    if (cat === 'jirama') return (Number(this.db.jirama?.[m]) || 0) * 130;
-                    return Number(this.db[cat]?.[m]) || 0;
-                },
-
-                getTotalExpenses(m) {
-                    return this.expenseCategories.reduce((t, c) => t + this.getMonthExpense(c, m), 0);
-                },
-
-                calcWallet(m) { return (Number(this.db.salary) || 0) - this.getTotalExpenses(m); },
-                formatAr(v) { return new Intl.NumberFormat('fr-FR').format(v || 0) + ' Ar'; }
-            }
-        }
-    </script>
 </body>
 </html>
