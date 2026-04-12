@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>AI.MG - Gestion Personnelle</title>
-    <!-- Google Fonts & Icons -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>AI.MG - Gestion Personnelle Complète</title>
+    <!-- Google Fonts & Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- FullCalendar (pour le calendrier moderne) -->
+    <!-- FullCalendar (vue calendrier moderne) -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
     <style>
@@ -52,12 +52,12 @@
             to { opacity: 1; transform: translateY(0);}
         }
 
-        /* Cartes + design doux */
+        /* Cartes modernes avec effet glassmorphisme */
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border-radius: 32px;
-            padding: 20px;
+            padding: 24px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03), 0 2px 6px rgba(0,0,0,0.05);
             border: 1px solid rgba(255,255,255,0.7);
             transition: transform 0.2s;
@@ -73,6 +73,7 @@
             cursor: pointer;
             transition: 0.2s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: none;
         }
 
         .gradient-btn:hover {
@@ -88,6 +89,12 @@
             outline: none;
             width: 100%;
             font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #7c4dff;
+            box-shadow: 0 0 0 3px rgba(124,77,255,0.1);
         }
 
         .grid-2x2 {
@@ -106,6 +113,11 @@
             transition: all 0.2s;
             box-shadow: 0 15px 35px rgba(98, 0, 234, 0.1);
             border: 1px solid rgba(123, 77, 255, 0.2);
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            background: linear-gradient(135deg, #fff, #f8f6ff);
         }
 
         .dashboard-card i {
@@ -151,23 +163,22 @@
         }
 
         /* localisation tags */
-        .object-tag {
+        .object-card {
             background: white;
-            border-radius: 60px;
-            padding: 8px 16px;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin: 6px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        /* Responsive */
-        @media (max-width: 780px) {
-            .page { padding: 16px; }
+        .photo-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 16px;
+            margin: 4px;
         }
 
-        /* header simple */
         .header-app {
             display: flex;
             justify-content: space-between;
@@ -178,26 +189,31 @@
 
         .logo {
             font-weight: 800;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             background: linear-gradient(135deg, #5f2eea, #a46eff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
+
+        @media (max-width: 780px) {
+            .page { padding: 16px; }
+            .grid-2x2 { gap: 16px; }
+        }
     </style>
 </head>
 <body>
 <div class="app-container">
-    <!-- PAGE LOGIN / INSCRIPTION -->
+    <!-- PAGE LOGIN / INSCRIPTION (sans validation stricte du téléphone) -->
     <div id="loginPage" class="page active-page">
         <div class="card" style="max-width: 500px; margin: 60px auto;">
-            <div class="logo" style="text-align: center; font-size: 2rem;">AI.MG</div>
+            <div class="logo" style="text-align: center; font-size: 2.2rem;">AI.MG</div>
             <h2 style="text-align: center; margin: 20px 0;">Bienvenue</h2>
             <form id="authForm">
-                <input type="email" id="email" placeholder="Email" required style="margin-bottom: 14px;">
-                <input type="password" id="password" placeholder="Mot de passe" required style="margin-bottom: 14px;">
-                <input type="tel" id="phone" placeholder="Numéro (+261 ...)" pattern="\+261[0-9]{9}" style="margin-bottom: 14px;">
-                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <input type="email" id="email" placeholder="Email *" required style="margin-bottom: 14px;">
+                <input type="password" id="password" placeholder="Mot de passe *" required style="margin-bottom: 14px;">
+                <input type="tel" id="phone" placeholder="Numéro téléphone (optionnel)" style="margin-bottom: 14px;">
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
                     <button type="button" id="signupBtn" class="gradient-btn">S'inscrire</button>
                     <button type="button" id="signinBtn" class="gradient-btn" style="background: linear-gradient(135deg, #42a5f5, #1976d2);">Se connecter</button>
                 </div>
@@ -205,7 +221,7 @@
                     <a href="#" id="forgotPwd" style="color:#7c4dff;">Mot de passe oublié ?</a>
                 </div>
             </form>
-            <div id="authMessage" style="margin-top: 20px; text-align: center; font-size: 0.9rem;"></div>
+            <div id="authMessage" style="margin-top: 20px; text-align: center; font-size: 0.9rem; color: #d32f2f;"></div>
         </div>
     </div>
 
@@ -213,7 +229,10 @@
     <div id="dashboardPage" class="page">
         <div class="header-app">
             <span class="logo">AI.MG</span>
-            <button id="logoutBtn" class="gradient-btn" style="padding: 8px 20px; background:#ef5350;">Déconnexion</button>
+            <div style="display: flex; gap: 12px;">
+                <span id="userEmailDisplay" style="background:rgba(124,77,255,0.15); padding: 8px 16px; border-radius: 40px;"></span>
+                <button id="logoutBtn" class="gradient-btn" style="padding: 8px 20px; background:#ef5350;">Déconnexion</button>
+            </div>
         </div>
         <div class="grid-2x2">
             <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Facturation</h3><p>Dépenses & charges</p></div>
@@ -231,9 +250,9 @@
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Facturation</span><div></div></div>
         <div class="card">
             <div class="cat-grid" id="catContainer"></div>
-            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                <input type="text" id="expenseName" placeholder="Nom dépense (ex: Loyer)">
-                <input type="number" id="expenseAmount" placeholder="Montant (Ar)">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+                <input type="text" id="expenseName" placeholder="Nom dépense (ex: Loyer)" style="flex:2">
+                <input type="number" id="expenseAmount" placeholder="Montant (Ar)" style="flex:1">
                 <button id="addExpenseBtn" class="gradient-btn">+ Ajouter</button>
             </div>
             <div id="expenseList"></div>
@@ -246,10 +265,11 @@
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Calendrier</span><div></div></div>
         <div class="card" id="calendarContainer" style="padding: 10px;"></div>
         <div style="margin-top: 20px;" class="card">
-            <h3>Ajouter événement</h3>
-            <input type="text" id="eventTitle" placeholder="Titre">
+            <h3>➕ Ajouter événement</h3>
+            <input type="text" id="eventTitle" placeholder="Titre de l'événement">
             <input type="datetime-local" id="eventDate">
-            <button id="addEventBtn" class="gradient-btn" style="margin-top: 10px;">Ajouter + Notification (simulée)</button>
+            <button id="addEventBtn" class="gradient-btn" style="margin-top: 10px;">Ajouter + Notifier</button>
+            <p style="font-size:12px; margin-top:8px;">🔔 Notification simulée (si permissions accordées)</p>
         </div>
     </div>
 
@@ -258,11 +278,11 @@
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Localisation objets</span><div></div></div>
         <div class="card">
             <h3><i class="fas fa-box"></i> Enregistrer un objet</h3>
-            <input type="text" id="objectName" placeholder="Nom (ex: Clés, Sac, téléphone)">
-            <div style="margin: 15px 0;"><label>Catégorie / sous-catégorie :</label><input type="text" id="objectCategory" placeholder="Ex: Maison, Magasin, Électronique"></div>
-            <div><label>Ajouter des attributs personnalisés (max 10) :</label></div>
+            <input type="text" id="objectName" placeholder="Nom (ex: Clés, Sac, Téléphone)" style="margin-bottom:12px;">
+            <input type="text" id="objectCategory" placeholder="Catégorie / sous-catégorie (Maison, Magasin...)" style="margin-bottom:12px;">
+            <div><label>Attributs personnalisés (max 10) :</label></div>
             <div id="customAttrsContainer" style="margin: 10px 0;"></div>
-            <button id="addAttrBtn" class="gradient-btn" style="background:#9c27b0; padding: 6px 12px; font-size:0.8rem;">+ Ajouter attribut</button>
+            <button id="addAttrBtn" class="gradient-btn" style="background:#9c27b0; padding: 8px 16px; font-size:0.8rem;">+ Ajouter attribut</button>
             <div style="margin: 20px 0;">
                 <label>Photos (max 5) :</label>
                 <input type="file" id="objectPhotos" accept="image/*" multiple>
@@ -270,7 +290,7 @@
             </div>
             <button id="saveObjectBtn" class="gradient-btn">💾 Sauvegarder objet</button>
             <hr style="margin: 20px 0;">
-            <h3>Mes objets enregistrés</h3>
+            <h3>📦 Mes objets enregistrés</h3>
             <div id="objectsList"></div>
         </div>
     </div>
@@ -279,10 +299,17 @@
     <div id="projetPage" class="page">
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Projets</span><div></div></div>
         <div class="card">
-            <h3>Ajouter un projet (max 10 par mois sur 12 mois)</h3>
-            <input type="text" id="projectName" placeholder="Nom du projet">
-            <select id="projectMonth"><option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
-            <select id="projectStatus"><option value="en cours">En cours</option><option value="terminé">Terminé</option></select>
+            <h3>🚀 Ajouter un projet (max 10 par mois sur 12 mois)</h3>
+            <input type="text" id="projectName" placeholder="Nom du projet" style="margin-bottom:12px;">
+            <select id="projectMonth" style="margin-bottom:12px;">
+                <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
+                <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
+                <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
+            </select>
+            <select id="projectStatus" style="margin-bottom:12px;">
+                <option value="en cours">En cours</option>
+                <option value="terminé">Terminé</option>
+            </select>
             <button id="addProjectBtn" class="gradient-btn">Ajouter projet</button>
             <div id="projectMessage" style="margin: 10px 0; color:#7c4dff;"></div>
         </div>
@@ -294,17 +321,17 @@
 </div>
 
 <script>
-    // ---------- STORAGE SIMULATION (localStorage) ----------
+    // ---------- STOCKAGE LOCAL (localStorage) ----------
     let currentUser = null;
     let users = JSON.parse(localStorage.getItem('aiMg_users')) || {};
-    let expenses = {}; // par user: { "nomCat": [ {name, amount} ] }
-    let events = {};   // événements calendrier
-    let objects = {};   // localisation objets
-    let projects = {};  // projets par user: [{id, name, month, status}]
+    let expenses = {};     // par user: { "categorie": [{name, amount}] }
+    let events = {};       // événements calendrier
+    let objects = {};      // localisation objets
+    let projects = {};     // projets par user
 
     function saveAllData() {
         if(!currentUser) return;
-        users[currentUser] = users[currentUser] || { email: currentUser, phone: '' };
+        if(!users[currentUser]) users[currentUser] = { email: currentUser, phone: '' };
         localStorage.setItem('aiMg_users', JSON.stringify(users));
         localStorage.setItem(`expenses_${currentUser}`, JSON.stringify(expenses[currentUser] || {}));
         localStorage.setItem(`events_${currentUser}`, JSON.stringify(events[currentUser] || []));
@@ -320,7 +347,7 @@
         projects[currentUser] = JSON.parse(localStorage.getItem(`projects_${currentUser}`)) || [];
     }
 
-    // catégories facturation
+    // CATÉGORIES FACTURATION (complet)
     const categories = {
         "Charges fixes": ["JIRAMA", "Loyer", "Internet/WiFi", "Crédit téléphone"],
         "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine"],
@@ -353,25 +380,25 @@
             <div class="expense-item">
                 <span><strong>${exp.name}</strong> : ${exp.amount} Ar</span>
                 <div>
-                    <button class="editExpense" data-idx="${idx}" style="background:#ffb74d; border:none; border-radius:30px; padding:6px 12px;"><i class="fas fa-edit"></i></button>
+                    <button class="editExpense" data-idx="${idx}" style="background:#ffb74d; border:none; border-radius:30px; padding:6px 12px; margin:0 4px;"><i class="fas fa-edit"></i></button>
                     <button class="delExpense" data-idx="${idx}" style="background:#ef5350; border:none; border-radius:30px; padding:6px 12px;"><i class="fas fa-trash"></i></button>
                 </div>
             </div>
         `).join('');
-        // total mensuel (toutes catégories)
+        // Total mensuel (toutes catégories)
         let total = 0;
         for(let cat in categories) {
             let arr = expenses[currentUser]?.[cat] || [];
             total += arr.reduce((s, e) => s + Number(e.amount), 0);
         }
-        document.getElementById('totalMonthly').innerText = `Total mensuel: ${total} Ar`;
-        // events edit/suppr
+        document.getElementById('totalMonthly').innerText = `💰 Total mensuel: ${total} Ar`;
+        
         document.querySelectorAll('.editExpense').forEach(btn => {
             btn.addEventListener('click', () => {
                 let idx = btn.dataset.idx;
                 let newName = prompt("Nouveau nom", catExpenses[idx].name);
                 let newAmount = prompt("Nouveau montant", catExpenses[idx].amount);
-                if(newName && newAmount) {
+                if(newName && newAmount && !isNaN(newAmount)) {
                     catExpenses[idx] = {name: newName, amount: Number(newAmount)};
                     expenses[currentUser][activeCat] = catExpenses;
                     saveAllData();
@@ -394,9 +421,9 @@
         renderCategories();
         renderExpenses();
         document.getElementById('addExpenseBtn').onclick = () => {
-            let name = document.getElementById('expenseName').value;
+            let name = document.getElementById('expenseName').value.trim();
             let amount = parseFloat(document.getElementById('expenseAmount').value);
-            if(!name || isNaN(amount)) { alert("Nom et montant valide"); return; }
+            if(!name || isNaN(amount)) { alert("Veuillez entrer un nom et un montant valide"); return; }
             if(!expenses[currentUser]) expenses[currentUser] = {};
             if(!expenses[currentUser][activeCat]) expenses[currentUser][activeCat] = [];
             expenses[currentUser][activeCat].push({name, amount});
@@ -407,7 +434,7 @@
         };
     }
 
-    // Calendrier FullCalendar
+    // CALENDRIER FULLCALENDAR
     let calendar = null;
     function initCalendar() {
         const calEl = document.getElementById('calendarContainer');
@@ -416,28 +443,30 @@
         calendar = new FullCalendar.Calendar(calEl, {
             initialView: 'dayGridMonth',
             events: evts,
-            headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' }
+            headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' },
+            height: 'auto'
         });
         calendar.render();
         document.getElementById('addEventBtn').onclick = () => {
-            let title = document.getElementById('eventTitle').value;
+            let title = document.getElementById('eventTitle').value.trim();
             let date = document.getElementById('eventDate').value;
             if(!title || !date) { alert("Titre et date requis"); return; }
             events[currentUser].push({ title, date });
             saveAllData();
-            initCalendar(); // refresh
-            // simulation notification
-            if(Notification.permission === "granted") new Notification("AI.MG", { body: `Événement: ${title}` });
+            initCalendar();
+            if(Notification.permission === "granted") new Notification("AI.MG", { body: `📅 Événement: ${title}` });
             else alert(`🔔 Événement "${title}" ajouté (notification simulée)`);
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
         };
     }
 
-    // Localisation objets avec attributs dynamiques et photos
-    let customAttrs = []; // stockage temporaire
+    // LOCALISATION + ATTRIBUTS + PHOTOS
+    let customAttrs = [];
     function renderAttrsFields() {
         const container = document.getElementById('customAttrsContainer');
         if(!container) return;
-        container.innerHTML = customAttrs.map((attr, idx) => `<div style="display:flex; gap:8px; margin-bottom:6px;"><input type="text" value="${attr}" placeholder="Attribut" id="attr_${idx}"><button class="removeAttr" data-idx="${idx}">❌</button></div>`).join('');
+        container.innerHTML = customAttrs.map((attr, idx) => `<div style="display:flex; gap:8px; margin-bottom:8px;"><input type="text" value="${attr}" placeholder="ex: couleur, marque..." id="attr_${idx}" style="flex:1"><button class="removeAttr" data-idx="${idx}" style="background:#ff8a65; border:none; border-radius:30px; padding:4px 12px;">❌</button></div>`).join('');
         document.querySelectorAll('.removeAttr').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 let idx = btn.dataset.idx;
@@ -446,6 +475,7 @@
             });
         });
     }
+
     function initLocalisation() {
         customAttrs = [];
         renderAttrsFields();
@@ -455,12 +485,12 @@
             renderAttrsFields();
         };
         document.getElementById('saveObjectBtn').onclick = () => {
-            let objName = document.getElementById('objectName').value;
-            let category = document.getElementById('objectCategory').value;
+            let objName = document.getElementById('objectName').value.trim();
+            let category = document.getElementById('objectCategory').value.trim();
             if(!objName) { alert("Nom de l'objet requis"); return; }
             let finalAttrs = {};
             customAttrs.forEach((_, idx) => {
-                let val = document.getElementById(`attr_${idx}`)?.value || "";
+                let val = document.getElementById(`attr_${idx}`)?.value.trim();
                 if(val) finalAttrs[`attribut_${idx+1}`] = val;
             });
             let photos = [];
@@ -468,7 +498,7 @@
             for(let i=0; i<Math.min(files.length,5); i++) {
                 photos.push(URL.createObjectURL(files[i]));
             }
-            let newObj = { id: Date.now(), name: objName, category, custom: finalAttrs, photos };
+            let newObj = { id: Date.now(), name: objName, category: category || "général", custom: finalAttrs, photos };
             objects[currentUser].push(newObj);
             saveAllData();
             renderObjectsList();
@@ -481,17 +511,20 @@
         };
         renderObjectsList();
     }
+
     function renderObjectsList() {
         const container = document.getElementById('objectsList');
         if(!container) return;
         let objArr = objects[currentUser] || [];
         container.innerHTML = objArr.map(obj => `
-            <div class="object-tag" style="flex-direction:column; align-items:start; width:100%; margin-bottom:12px;">
-                <div><i class="fas fa-tag"></i> <strong>${obj.name}</strong> (${obj.category || 'sans catégorie'})</div>
-                <div>Attributs: ${Object.entries(obj.custom).map(([k,v])=>`${k}:${v}`).join(', ') || 'aucun'}</div>
-                <div>Photos: ${obj.photos.map((p,i)=>`<img src="${p}" width="50" height="50" style="border-radius:12px; margin:4px;">`).join('') || 'aucune'}</div>
-                <button class="deleteObject" data-id="${obj.id}" style="background:#f44336; border-radius:30px; padding:4px 12px; margin-top:6px;">Supprimer</button>
-                <button class="renameObject" data-id="${obj.id}" style="background:#42a5f5; border-radius:30px; padding:4px 12px;">Renommer</button>
+            <div class="object-card">
+                <div><i class="fas fa-cube"></i> <strong>${escapeHtml(obj.name)}</strong> <span style="background:#e0e0ff; border-radius:40px; padding:2px 12px;">${escapeHtml(obj.category)}</span></div>
+                <div style="font-size:0.85rem; margin:8px 0;">🔖 Attributs: ${Object.entries(obj.custom).map(([k,v])=>`${k}:${v}`).join(', ') || 'aucun'}</div>
+                <div>🖼️ Photos: ${obj.photos.map((p,i)=>`<img src="${p}" class="photo-thumb" />`).join('') || 'aucune'}</div>
+                <div style="margin-top:10px;">
+                    <button class="deleteObject" data-id="${obj.id}" style="background:#f44336; border-radius:30px; padding:6px 14px; margin-right:8px;">🗑️ Supprimer</button>
+                    <button class="renameObject" data-id="${obj.id}" style="background:#42a5f5; border-radius:30px; padding:6px 14px;">✏️ Renommer</button>
+                </div>
             </div>
         `).join('');
         document.querySelectorAll('.deleteObject').forEach(btn => {
@@ -512,19 +545,24 @@
         });
     }
 
-    // Projets: max 10 par mois sur 12 mois
+    // PROJETS (max 10 par mois)
     function renderProjects() {
         const container = document.getElementById('projectsList');
         let projs = projects[currentUser] || [];
-        let monthsGroup = {};
-        for(let i=0;i<12;i++) monthsGroup[i] = [];
-        projs.forEach(p => { monthsGroup[p.month].push(p); });
+        let monthsGroup = Array(12).fill().map(() => []);
+        projs.forEach(p => { if(p.month!==undefined) monthsGroup[p.month].push(p); });
         let html = '';
         for(let m=0;m<12;m++) {
-            let monthName = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"][m];
-            html += `<div style="margin-bottom:20px;"><h4>${monthName} (${monthsGroup[m].length}/10)</h4>`;
+            let monthName = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][m];
+            html += `<div style="margin-bottom:24px;"><h4>📅 ${monthName} (${monthsGroup[m].length}/10)</h4>`;
             monthsGroup[m].forEach(pr => {
-                html += `<div style="background:#f9f7ff; border-radius: 28px; padding: 8px 16px; margin:5px;">📌 ${pr.name} - ${pr.status} <button class="toggleProjStatus" data-id="${pr.id}">Changer statut</button> <button class="delProj" data-id="${pr.id}">🗑️</button></div>`;
+                html += `<div style="background:#f5f3ff; border-radius: 28px; padding: 12px 16px; margin:8px 0; display:flex; justify-content:space-between; align-items:center;">
+                            <span><strong>${escapeHtml(pr.name)}</strong> - ${pr.status === "en cours" ? "🟢 En cours" : "✅ Terminé"}</span>
+                            <div>
+                                <button class="toggleProjStatus" data-id="${pr.id}" style="background:#ffb74d; border:none; border-radius:30px; padding:6px 12px;">🔄 Statut</button>
+                                <button class="delProj" data-id="${pr.id}" style="background:#ef5350; border:none; border-radius:30px; padding:6px 12px; margin-left:8px;">🗑️</button>
+                            </div>
+                         </div>`;
             });
             html += `</div>`;
         }
@@ -545,13 +583,14 @@
             });
         });
     }
+
     function initProjets() {
         renderProjects();
         document.getElementById('addProjectBtn').onclick = () => {
             let name = document.getElementById('projectName').value.trim();
             let month = parseInt(document.getElementById('projectMonth').value);
             let status = document.getElementById('projectStatus').value;
-            if(!name) { alert("Nom du projet"); return; }
+            if(!name) { alert("Nom du projet requis"); return; }
             let projs = projects[currentUser] || [];
             let countMonth = projs.filter(p => p.month === month).length;
             if(countMonth >= 10) { document.getElementById('projectMessage').innerText = "❌ Limite de 10 projets pour ce mois atteinte."; return; }
@@ -566,7 +605,10 @@
         };
     }
 
-    // Navigation générique
+    // Helper échappement
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+    // NAVIGATION
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
         document.getElementById(pageId).classList.add('active-page');
@@ -574,41 +616,42 @@
         if(pageId === 'calendrierPage') initCalendar();
         if(pageId === 'localisationPage') initLocalisation();
         if(pageId === 'projetPage') initProjets();
-        if(pageId === 'dashboardPage') { /* rien */ }
+        if(pageId === 'dashboardPage' && currentUser) document.getElementById('userEmailDisplay').innerText = currentUser;
     }
 
-    // Auth
+    // AUTHENTIFICATION (email + password, téléphone optionnel)
     function register() {
-        let email = document.getElementById('email').value;
+        let email = document.getElementById('email').value.trim();
         let pwd = document.getElementById('password').value;
-        let phone = document.getElementById('phone').value;
-        if(!email || !pwd || !phone.match(/\+261/)) { document.getElementById('authMessage').innerText = "Veuillez email + mot de passe + téléphone (+261...)"; return; }
-        if(users[email]) { document.getElementById('authMessage').innerText = "Utilisateur existe déjà"; return; }
-        users[email] = { email, password: pwd, phone };
+        let phone = document.getElementById('phone').value.trim();
+        if(!email || !pwd) { document.getElementById('authMessage').innerText = "❌ Email et mot de passe requis"; return; }
+        if(users[email]) { document.getElementById('authMessage').innerText = "⚠️ Utilisateur existe déjà"; return; }
+        users[email] = { email, password: pwd, phone: phone || "" };
         currentUser = email;
         saveAllData();
         loadUserData();
         showPage('dashboardPage');
+        document.getElementById('authMessage').innerText = "";
     }
     function login() {
-        let email = document.getElementById('email').value;
+        let email = document.getElementById('email').value.trim();
         let pwd = document.getElementById('password').value;
         if(users[email] && users[email].password === pwd) {
             currentUser = email;
             loadUserData();
             showPage('dashboardPage');
-        } else { document.getElementById('authMessage').innerText = "Email ou mot de passe incorrect"; }
+            document.getElementById('authMessage').innerText = "";
+        } else { document.getElementById('authMessage').innerText = "❌ Email ou mot de passe incorrect"; }
     }
     document.getElementById('signupBtn').onclick = register;
     document.getElementById('signinBtn').onclick = login;
-    document.getElementById('forgotPwd').onclick = () => alert("Fonction réinitialisation: contactez support@ai.mg");
+    document.getElementById('forgotPwd').onclick = () => alert("📧 Réinitialisation : contactez support@ai.mg");
     document.getElementById('logoutBtn')?.addEventListener('click', () => { currentUser=null; showPage('loginPage'); });
     document.querySelectorAll('[data-back]').forEach(btn => btn.addEventListener('click', () => showPage('dashboardPage')));
     document.querySelectorAll('.dashboard-card').forEach(card => {
         card.addEventListener('click', () => showPage(card.dataset.nav+'Page'));
     });
     if(Notification.permission !== "granted") Notification.requestPermission();
-    // initialisation
     if(currentUser) showPage('dashboardPage');
     else showPage('loginPage');
 </script>
