@@ -26,6 +26,7 @@
         .link-btn { background: none; border: none; color: #c7b9ff; cursor: pointer; margin-top: 10px; font-size: 14px; text-align: center; width: 100%; }
         h2 { color: white; text-align: center; margin-bottom: 25px; font-size: 24px; }
         p { color: #ccc; text-align: center; margin: 15px 0; }
+        .loading { text-align: center; color: white; padding: 20px; }
     </style>
 </head>
 <body>
@@ -72,7 +73,7 @@
 <script>
     // ==================== FIREBASE CONFIGURATION ====================
     const firebaseConfig = {
-        apiKey: "AIzaSyBgjkrFJjhgt3zFJg90j1NymbG6s2AQRC0",  // ← REMPLACEZ PAR VOTRE NOUVELLE CLÉ
+        apiKey: "AIzaSyB7z1EVN3jHsBZezDlXTXXq3Vz5QytB7Gk",  // ← REMPLACEZ PAR VOTRE NOUVELLE CLÉ
         authDomain: "aimg-app.firebaseapp.com",
         projectId: "aimg-app",
         storageBucket: "aimg-app.firebasestorage.app",
@@ -99,7 +100,30 @@
         document.getElementById(pageId).classList.add('active-page');
     }
     
-    // INSCRIPTION (sans vérification email)
+    // Fonction pour créer/mettre à jour le document utilisateur
+    async function ensureUserDocument(user, phone = null) {
+        const userRef = db.collection('users').doc(user.uid);
+        const doc = await userRef.get();
+        
+        if (!doc.exists) {
+            // Créer le document s'il n'existe pas
+            await userRef.set({
+                email: user.email,
+                phoneNumber: phone || user.phoneNumber || '',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log("Document utilisateur créé");
+        } else {
+            // Mettre à jour lastLogin
+            await userRef.update({
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log("Document utilisateur mis à jour");
+        }
+    }
+    
+    // INSCRIPTION
     async function register() {
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
@@ -123,20 +147,14 @@
             const userCred = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCred.user;
             
-            if (phone) {
-                await user.updateProfile({ phoneNumber: phone });
-            }
-            
-            await db.collection('users').doc(user.uid).set({
-                email: email,
-                phoneNumber: phone,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            // Créer le document Firestore
+            await ensureUserDocument(user, phone);
             
             msgDiv.innerHTML = "✅ Compte créé avec succès !";
             showToast("Compte créé ! Vous pouvez vous connecter");
             
-            // Rediriger vers la page de connexion
+            // Déconnecter et rediriger vers login
+            await auth.signOut();
             setTimeout(() => {
                 showPage('loginPage');
                 document.getElementById('loginEmail').value = email;
@@ -172,10 +190,8 @@
             const userCred = await auth.signInWithEmailAndPassword(email, password);
             const user = userCred.user;
             
-            // Mise à jour Firestore
-            await db.collection('users').doc(user.uid).update({
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            // S'assurer que le document Firestore existe
+            await ensureUserDocument(user);
             
             document.getElementById('userEmailDisplay').textContent = user.email;
             showToast("Connexion réussie !");
@@ -216,12 +232,19 @@
     }
     
     // ==================== ÉTAT AUTHENTIFICATION ====================
-    auth.onAuthStateChanged((user) => {
+    auth.onAuthStateChanged(async (user) => {
         console.log("Auth state changed:", user ? user.email : "null");
         if (user) {
-            // Si utilisateur connecté, aller au dashboard
-            showPage('dashboardPage');
-            document.getElementById('userEmailDisplay').textContent = user.email;
+            // Vérifier/créer le document Firestore
+            try {
+                await ensureUserDocument(user);
+                showPage('dashboardPage');
+                document.getElementById('userEmailDisplay').textContent = user.email;
+            } catch(e) {
+                console.error("Erreur Firestore:", e);
+                showToast("Erreur de base de données", true);
+                showPage('loginPage');
+            }
         } else {
             showPage('loginPage');
         }
@@ -235,7 +258,7 @@
     document.getElementById('forgotPwdBtn').onclick = resetPassword;
     document.getElementById('logoutBtn').onclick = logout;
     
-    console.log("Application chargée - Firebase configuré (sans vérification email)");
+    console.log("Application chargée - Firebase configuré");
 </script>
 </body>
 </html>
