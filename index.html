@@ -2,195 +2,155 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>AI.MG - Gestion Personnelle</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>AI.MG - Gestion Mensuelle 3D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: radial-gradient(circle at 10% 30%, #1a1a2e, #0f0f1a); min-height: 100vh; padding: 16px; }
-        .app-container { max-width: 550px; margin: 0 auto; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 48px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
-        .page { display: none; padding: 20px 18px; animation: fadeIn 0.3s ease; }
+        .app-container { max-width: 550px; margin: 0 auto; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 48px; box-shadow: 0 30px 50px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        .page { display: none; padding: 20px 18px; animation: fadeInUp 0.3s ease; }
         .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); margin-bottom: 16px; }
-        .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 14px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; font-size: 16px; width: 100%; margin-bottom: 12px; }
-        .gradient-btn-secondary { background: linear-gradient(135deg, #3a86ff, #2666cc); }
-        .gradient-btn-danger { background: #d9534f; }
-        .gradient-btn-small { padding: 8px 16px; font-size: 14px; width: auto; margin: 0; }
-        input, select, textarea { background: rgba(255,255,255,0.9); border: none; border-radius: 60px; padding: 12px 16px; width: 100%; margin-bottom: 12px; font-size: 14px; }
-        .logo { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, #f0e6ff, #c7b9ff); -webkit-background-clip: text; background-clip: text; color: transparent; text-align: center; margin-bottom: 15px; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px);} to { opacity: 1; transform: translateY(0);} }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
+        .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 12px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 14px rgba(108,62,255,0.3); }
+        .gradient-btn:active { transform: scale(0.96); }
+        input, select, textarea { background: rgba(255,255,255,0.9); border: none; border-radius: 60px; padding: 12px 18px; width: 100%; margin-bottom: 12px; font-size: 0.9rem; }
+        textarea { border-radius: 24px; resize: vertical; }
+        .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
+        .dashboard-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); backdrop-filter: blur(8px); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 15px 25px -10px rgba(0,0,0,0.3); transform: translateY(0); transition: 0.1s; }
+        .dashboard-card:active { transform: translateY(3px); }
+        .dashboard-card i { font-size: 44px; background: linear-gradient(135deg, #ffd966, #ffb347); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .finance-center { display: flex; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
+        .finance-card { flex: 1; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border-radius: 28px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+        .finance-amount { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #f9f3c1, #ffe6a3); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .month-selector { background: rgba(255,255,255,0.15); border-radius: 60px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .cat-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
+        .cat-btn { background: rgba(255,255,255,0.2); border-radius: 60px; padding: 6px 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .cat-active { background: linear-gradient(135deg, #a06eff, #6c3eff); color: white; }
+        .expense-item { display: flex; justify-content: space-between; background: rgba(255,255,245,0.9); padding: 10px 16px; border-radius: 40px; margin-bottom: 8px; color: #1e1e2a; font-weight: 500; }
+        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, #f0e6ff, #c7b9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .search-box { background: white; border-radius: 60px; padding: 8px 16px; display: flex; gap: 8px; margin-bottom: 16px; }
+        .search-box input { margin: 0; padding: 8px; }
+        .object-card { background: rgba(255,255,255,0.9); border-radius: 24px; padding: 14px; margin-bottom: 12px; color: #1a1a2e; }
+        .photo-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 16px; margin: 4px; cursor: pointer; }
+        .suggestion-chip { background: rgba(108,62,255,0.3); border-radius: 40px; padding: 5px 12px; font-size: 0.7rem; cursor: pointer; transition: 0.1s; }
+        .suggestion-chip:active { background: #6c3eff; color:white; }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 10px 20px; border-radius: 40px; z-index: 1000; animation: fadeOut 3s ease forwards; font-size: 14px; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
-        .menu-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); }
-        .menu-card i { font-size: 40px; background: linear-gradient(135deg, #ffd966, #ffb347); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .menu-card h3 { color: white; font-size: 16px; margin-top: 8px; }
-        .finance-row { display: flex; gap: 12px; margin-bottom: 20px; }
-        .finance-card { flex: 1; background: rgba(0,0,0,0.4); border-radius: 28px; padding: 15px; text-align: center; }
-        .finance-card h4 { color: #ccc; font-size: 12px; margin-bottom: 5px; }
-        .finance-amount { font-size: 1.5rem; font-weight: 800; background: linear-gradient(135deg, #f9f3c1, #ffe6a3); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .cat-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .cat-btn { background: rgba(255,255,255,0.2); border-radius: 40px; padding: 6px 14px; font-size: 12px; cursor: pointer; }
-        .cat-active { background: #6c3eff; color: white; }
-        .expense-item { display: flex; justify-content: space-between; background: rgba(255,255,245,0.9); padding: 10px 15px; border-radius: 30px; margin-bottom: 8px; font-size: 14px; }
-        .object-card { background: rgba(255,255,255,0.9); border-radius: 24px; padding: 12px; margin-bottom: 10px; }
-        .photo-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 12px; margin: 4px; cursor: pointer; }
-        .search-box { background: white; border-radius: 60px; padding: 6px 12px; display: flex; gap: 8px; margin-bottom: 15px; }
-        .search-box input { margin: 0; padding: 8px; }
-        h2 { color: white; font-size: 20px; margin-bottom: 15px; }
-        h3 { color: white; font-size: 16px; margin-bottom: 10px; }
-        .flex-between { display: flex; justify-content: space-between; align-items: center; }
-        .mt-2 { margin-top: 10px; }
-        .mb-2 { margin-bottom: 10px; }
-        .text-center { text-align: center; }
+        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
     </style>
 </head>
 <body>
 <div class="app-container">
     <!-- LOGIN -->
     <div id="loginPage" class="page active-page">
-        <div class="card">
-            <div class="logo">AI.MG</div>
-            <h2 class="text-center">Connexion</h2>
-            <input type="email" id="loginEmail" placeholder="Email">
-            <input type="password" id="loginPassword" placeholder="Mot de passe">
-            <button id="signinBtn" class="gradient-btn">Se connecter</button>
-            <button id="showRegisterBtn" class="gradient-btn gradient-btn-secondary">Créer un compte</button>
-            <div id="loginMessage" class="text-center" style="color:#ffb4a2; font-size:13px;"></div>
+        <div class="card" style="margin-top: 40px;">
+            <div class="logo" style="text-align: center;">AI.MG</div>
+            <h2 style="text-align: center; margin: 20px 0; color:white;">Bienvenue</h2>
+            <input type="email" id="email" placeholder="Email *">
+            <input type="password" id="password" placeholder="Mot de passe *">
+            <input type="tel" id="phone" placeholder="Téléphone">
+            <div style="display: flex; gap: 12px;">
+                <button id="signupBtn" class="gradient-btn">S'inscrire</button>
+                <button id="signinBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Connexion</button>
+            </div>
+            <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
         </div>
     </div>
 
-    <!-- REGISTER -->
-    <div id="registerPage" class="page">
-        <div class="card">
-            <div class="logo">AI.MG</div>
-            <h2 class="text-center">Inscription</h2>
-            <input type="email" id="regEmail" placeholder="Email">
-            <input type="password" id="regPassword" placeholder="Mot de passe (min 6)">
-            <input type="tel" id="regPhone" placeholder="Téléphone (+261...)">
-            <button id="registerBtn" class="gradient-btn">S'inscrire</button>
-            <button id="showLoginBtn" class="gradient-btn gradient-btn-secondary">Retour</button>
-            <div id="registerMessage" class="text-center" style="color:#ffb4a2; font-size:13px;"></div>
-        </div>
-    </div>
-
-    <!-- DASHBOARD ACCUEIL -->
+    <!-- DASHBOARD -->
     <div id="dashboardPage" class="page">
-        <div class="flex-between">
-            <div class="logo">AI.MG</div>
-            <button id="logoutBtn" class="gradient-btn-danger" style="padding: 8px 16px; border-radius: 40px; border: none; color: white; cursor: pointer;">Déco</button>
+        <div class="header-app"><span class="logo">AI.MG</span><button id="logoutBtn" class="gradient-btn" style="padding: 6px 16px; background:#d9534f;">Déco</button></div>
+        <div class="month-selector" style="justify-content: center;">
+            <i class="fas fa-calendar-alt" style="color:white;"></i>
+            <select id="monthSelector" style="width: auto; background: rgba(0,0,0,0.6); color:white; margin:0;">
+                <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
+                <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
+                <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
+            </select>
         </div>
-
-        <!-- Portefeuille mensuel -->
-        <div class="finance-row">
-            <div class="finance-card">
-                <h4>Salaire mensuel</h4>
-                <div class="finance-amount" id="salaryDisplay">0 Ar</div>
-                <input type="number" id="salaryInput" placeholder="Montant" style="margin-top: 8px; padding: 8px;">
-                <button id="saveSalaryBtn" class="gradient-btn-small" style="margin-top: 5px;">Enregistrer</button>
-            </div>
-            <div class="finance-card">
-                <h4>Épargne</h4>
-                <div class="finance-amount" id="savingDisplay">0 Ar</div>
-                <div style="font-size: 10px; color:#aaa;" id="savingDetail"></div>
-            </div>
+        <div class="finance-center">
+            <div class="finance-card"><i class="fas fa-wallet"></i><h3 style="color:#eee;">Salaire</h3><div class="finance-amount" id="salaryDisplay">0 Ar</div><input type="number" id="monthlySalaryInput" placeholder="Montant" style="margin:8px 0;"><button id="saveSalaryBtn" class="gradient-btn" style="padding:6px;">💾</button></div>
+            <div class="finance-card"><i class="fas fa-piggy-bank"></i><h3 style="color:#eee;">Épargne</h3><div class="finance-amount" id="savingDisplay">0 Ar</div><div style="font-size:11px;" id="savingDetail"></div></div>
         </div>
-
-        <!-- Menu 4 modules -->
         <div class="grid-2x2">
-            <div class="menu-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Facturation</h3></div>
-            <div class="menu-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3></div>
-            <div class="menu-card" data-nav="localisation"><i class="fas fa-map-marker-alt"></i><h3>Localisation</h3></div>
-            <div class="menu-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projets</h3></div>
+            <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Factures</h3></div>
+            <div class="dashboard-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3></div>
+            <div class="dashboard-card" data-nav="localisation"><i class="fas fa-map-marker-alt"></i><h3>Localisation</h3></div>
+            <div class="dashboard-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projets</h3></div>
         </div>
     </div>
 
     <!-- FACTURATION -->
     <div id="facturationPage" class="page">
-        <div class="flex-between">
-            <button id="backFacturation" class="gradient-btn-small" style="background:#6c3eff;">← Retour</button>
-            <div class="logo" style="font-size:1.2rem;">Factures</div>
-            <div style="width:50px;"></div>
-        </div>
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Factures</span><div></div></div>
         <div class="card">
-            <select id="monthSelect" style="margin-bottom: 10px;">
-                <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
-                <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
-                <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
-            </select>
+            <div class="month-selector" style="justify-content: space-between;"><span>Mois</span><select id="factMonthSelect"></select></div>
             <div class="cat-grid" id="catContainer"></div>
-            <div class="flex-between" style="gap: 8px;">
-                <input type="text" id="expenseName" placeholder="Nom" style="flex:2">
-                <input type="number" id="expenseAmount" placeholder="Montant" style="flex:1">
-                <button id="addExpenseBtn" class="gradient-btn-small">+</button>
-            </div>
-            <div id="expenseList" style="margin-top: 15px;"></div>
-            <div class="text-center" style="margin-top: 10px; font-weight: bold; color: white;" id="totalMonthly"></div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;"><input type="text" id="expenseName" placeholder="Nom dépense" style="flex:2"><input type="number" id="expenseAmount" placeholder="Montant" style="flex:1"><button id="addExpenseBtn" class="gradient-btn">+</button></div>
+            <div id="suggestionsBar" class="cat-grid" style="margin-top: 5px;"></div>
+            <div id="expenseList" style="margin-top: 16px;"></div>
+            <div style="margin-top: 16px; text-align:center; font-weight:bold;" id="totalMonthly"></div>
+            <button id="monthlyResetBtn" class="gradient-btn" style="margin-top:12px; background:#ff8c42;">Réinitialiser le mois</button>
         </div>
     </div>
 
     <!-- CALENDRIER -->
     <div id="calendrierPage" class="page">
-        <div class="flex-between">
-            <button id="backCalendrier" class="gradient-btn-small" style="background:#6c3eff;">← Retour</button>
-            <div class="logo" style="font-size:1.2rem;">Agenda</div>
-            <div style="width:50px;"></div>
-        </div>
-        <div class="card">
-            <input type="text" id="eventTitle" placeholder="Titre événement">
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Agenda</span><div></div></div>
+        <div class="card" id="calendarContainer" style="padding: 8px;"></div>
+        <div class="card" style="margin-top: 16px;">
+            <h3 style="color:white;">➕ Nouvel événement</h3>
+            <input type="text" id="eventTitle" placeholder="Titre">
             <input type="datetime-local" id="eventDate">
-            <textarea id="eventDesc" rows="2" placeholder="Description"></textarea>
-            <button id="addEventBtn" class="gradient-btn">Ajouter</button>
+            <textarea id="eventDesc" rows="3" placeholder="Description (max 250 mots)" maxlength="1500"></textarea>
+            <button id="addEventBtn" class="gradient-btn">Ajouter + Notifier</button>
         </div>
-        <div class="card" id="eventsList"></div>
+        <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 
     <!-- LOCALISATION -->
     <div id="localisationPage" class="page">
-        <div class="flex-between">
-            <button id="backLocalisation" class="gradient-btn-small" style="background:#6c3eff;">← Retour</button>
-            <div class="logo" style="font-size:1.2rem;">Objets</div>
-            <div style="width:50px;"></div>
-        </div>
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Objets & lieux</span><div></div></div>
         <div class="card">
-            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchObject" placeholder="Rechercher..."></div>
-            <input type="text" id="objName" placeholder="Nom objet">
-            <div id="customFieldsContainer"></div>
-            <button id="addFieldBtn" class="gradient-btn-small" style="background:#9c27b0;">+ Ajouter champ</button>
-            <button id="saveObjectBtn" class="gradient-btn mt-2">Sauvegarder</button>
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchObjectInput" placeholder="Rechercher (nom, champ, valeur...)"></div>
+            <h3 style="color:white;">➕ Ajouter un objet / lieu</h3>
+            <input type="text" id="objName" placeholder="Nom (ex: Clés, Sac, Portefeuille)">
+            <div id="dynamicFieldsContainer"></div>
+            <button id="addCustomFieldBtn" class="gradient-btn" style="background:#9c27b0; margin-bottom:8px;">+ Ajouter champ personnalisé</button>
+            <input type="file" id="objPhotos" accept="image/*" multiple>
+            <button id="saveObjectBtn" class="gradient-btn" style="margin-top:12px;">💾 Sauvegarder</button>
+            <div id="objectsList" style="margin-top: 20px;"></div>
         </div>
-        <div class="card" id="objectsList"></div>
     </div>
 
-    <!-- PROJETS -->
+    <!-- PROJET -->
     <div id="projetPage" class="page">
-        <div class="flex-between">
-            <button id="backProjet" class="gradient-btn-small" style="background:#6c3eff;">← Retour</button>
-            <div class="logo" style="font-size:1.2rem;">Projets</div>
-            <div style="width:50px;"></div>
-        </div>
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Projets</span><div></div></div>
         <div class="card">
             <input type="text" id="projectName" placeholder="Nom du projet">
-            <select id="projectMonthSelect">
-                <option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
-                <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
-                <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option>
-            </select>
-            <select id="projectStatusSelect"><option value="en cours">En cours</option><option value="terminé">Terminé</option></select>
+            <select id="projectMonth"><option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
+            <select id="projectStatus"><option value="en cours">En cours</option><option value="terminé">Terminé</option></select>
             <button id="addProjectBtn" class="gradient-btn">Ajouter projet</button>
+            <div id="projectsList" style="margin-top: 20px;"></div>
         </div>
-        <div class="card" id="projectsList"></div>
     </div>
 </div>
 
 <script>
+    // ==================== FIREBASE CONFIGURATION ====================
+    // METTEZ VOS VALEURS FIREBASE ICI
     const firebaseConfig = {
-        apiKey: "AIzaSyDL-POFKpcu9JNwdbW_czpAraeFPNaC9Bc",
+        apiKey: "AIzaSyB7z1EVN3jHsBZezDlXTXXq3Vz5QytB7Gk",
         authDomain: "aimg-app.firebaseapp.com",
         projectId: "aimg-app",
         storageBucket: "aimg-app.firebasestorage.app",
@@ -201,287 +161,441 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
+    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     
     let currentUser = null;
-    let currentMonth = new Date().getMonth();
-    let activeCat = "Charges fixes";
+    let currentDisplayMonth = new Date().getMonth();
+    let calendar = null;
     let customFields = [];
     
-    const categories = {
-        "Charges fixes": ["JIRAMA", "Loyer", "WIFI", "Crédit téléphone", "Autre"],
-        "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine", "Gouter", "Autre"],
-        "Alimentation/repas": ["Courses", "Repas quotidien", "Autre"],
-        "Transport": ["Carburant", "Taxi/taxi-be", "Entretien véhicule", "Autre"],
-        "Santé": ["Médicaments", "Consultation", "Autre"],
-        "Shopping": ["Vêtements", "Autre"],
-        "Imprévus": ["Autre"]
-    };
-    
-    function showToast(msg, isErr) {
-        const t = document.createElement('div');
-        t.className = 'toast';
-        t.style.background = isErr ? '#d9534f' : 'rgba(0,0,0,0.9)';
-        t.textContent = msg;
-        document.body.appendChild(t);
-        setTimeout(() => t.remove(), 3000);
+    function showToast(message, isError = false) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.style.background = isError ? '#d9534f' : 'rgba(0,0,0,0.9)';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
     }
     
-    function showPage(id) {
+    function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(id).classList.add('active-page');
-        if (id === 'dashboardPage') loadDashboard();
-        if (id === 'facturationPage') loadFacturation();
-        if (id === 'calendrierPage') loadCalendrier();
-        if (id === 'localisationPage') loadLocalisation();
-        if (id === 'projetPage') loadProjets();
+        document.getElementById(pageId).classList.add('active-page');
+        if(pageId === 'facturationPage') initFacturation();
+        if(pageId === 'calendrierPage') initCalendar();
+        if(pageId === 'localisationPage') initLocalisation();
+        if(pageId === 'projetPage') initProjets();
+        if(pageId === 'dashboardPage') { updateDashboardUI(); document.getElementById('saveSalaryBtn').onclick = saveSalaryForMonth; document.getElementById('monthSelector').onchange = (e) => changeMonth(e.target.value); document.getElementById('monthSelector').value = currentDisplayMonth; }
     }
     
-    async function ensureUserDoc() {
-        const docRef = db.collection('users').doc(currentUser.uid);
+    // ==================== FIRESTORE FUNCTIONS ====================
+    function getMonthKey() { return `2025_${currentDisplayMonth}`; }
+    
+    async function getUserMonthData() {
+        if(!currentUser) return null;
+        const docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
         const doc = await docRef.get();
-        if (!doc.exists) {
-            await docRef.set({ email: currentUser.email, createdAt: new Date() });
-        }
-        return docRef;
+        if(doc.exists) return doc.data();
+        return { salary: 0, expenses: {}, events: [], projects: [], objects: [] };
     }
     
-    function getMonthKey() { return `2025_${currentMonth}`; }
+    async function saveUserMonthData(data) {
+        if(!currentUser) return;
+        const docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
+        await docRef.set(data, { merge: true });
+    }
     
-    async function loadDashboard() {
-        const docRef = await ensureUserDoc();
-        const monthData = await docRef.collection('months').doc(getMonthKey()).get();
-        const salary = monthData.exists ? (monthData.data().salary || 0) : 0;
-        const expenses = monthData.exists ? (monthData.data().expenses || {}) : {};
+    async function getTotalExpensesForMonth() {
+        const monthData = await getUserMonthData();
         let total = 0;
-        for (let cat in expenses) {
-            (expenses[cat] || []).forEach(e => total += e.amount || 0);
+        for(let cat in monthData.expenses) {
+            (monthData.expenses[cat] || []).forEach(e => total += Number(e.amount) || 0);
         }
+        return total;
+    }
+    
+    async function updateDashboardUI() {
+        if(!currentUser) return;
+        const monthData = await getUserMonthData();
+        let salary = monthData.salary || 0;
+        let depenses = await getTotalExpensesForMonth();
+        let epargne = salary - depenses;
         document.getElementById('salaryDisplay').innerHTML = salary.toLocaleString() + ' Ar';
-        document.getElementById('savingDisplay').innerHTML = (salary - total).toLocaleString() + ' Ar';
-        document.getElementById('savingDetail').innerHTML = `Salaire: ${salary.toLocaleString()} Ar | Dépenses: ${total.toLocaleString()} Ar`;
-        document.getElementById('salaryInput').value = salary;
+        document.getElementById('savingDisplay').innerHTML = epargne.toLocaleString() + ' Ar';
+        document.getElementById('savingDetail').innerHTML = `Salaire: ${salary.toLocaleString()} Ar | Dépenses: ${depenses.toLocaleString()} Ar`;
+        let salaryInput = document.getElementById('monthlySalaryInput');
+        if(salaryInput) salaryInput.value = salary;
     }
     
-    async function saveSalary() {
-        const salary = parseFloat(document.getElementById('salaryInput').value) || 0;
-        const docRef = await ensureUserDoc();
-        await docRef.collection('months').doc(getMonthKey()).set({ salary }, { merge: true });
+    async function saveSalaryForMonth() {
+        let newSalary = parseFloat(document.getElementById('monthlySalaryInput').value);
+        if(isNaN(newSalary)) newSalary = 0;
+        const monthData = await getUserMonthData();
+        monthData.salary = newSalary;
+        await saveUserMonthData(monthData);
+        await updateDashboardUI();
         showToast("Salaire enregistré");
-        loadDashboard();
     }
     
-    async function loadFacturation() {
-        renderCategories();
-        await renderExpenses();
-        document.getElementById('addExpenseBtn').onclick = addExpense;
-        document.getElementById('monthSelect').onchange = (e) => { currentMonth = parseInt(e.target.value); renderExpenses(); loadDashboard(); };
+    async function changeMonth(month) {
+        currentDisplayMonth = parseInt(month);
+        await updateDashboardUI();
+        if(document.getElementById('factMonthSelect')) document.getElementById('factMonthSelect').value = month;
+        if(document.getElementById('expenseList')) await renderExpenses();
+        if(document.getElementById('totalMonthly')) await updateFacturationUI();
+        if(document.getElementById('suggestionsBar')) await updateSuggestions();
     }
+    
+    // ==================== FACTURATION ====================
+    const categorySpecificItems = {
+        "Charges fixes": ["JIRAMA", "Loyer", "WIFI", "Crédit téléphone"],
+        "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine", "Gouter"],
+        "Alimentation/repas": ["Courses", "Repas quotidien"],
+        "Transport": ["Carburant", "Taxi / taxi-be", "Entretien véhicule"],
+        "Santé": ["Médicaments", "Consultation"],
+        "Shopping": ["Vêtements"],
+        "Imprévus": []
+    };
+    for(let cat in categorySpecificItems) {
+        if(cat !== "Imprévus") categorySpecificItems[cat].push("Autre");
+        else categorySpecificItems[cat] = ["Autre"];
+    }
+    let activeCat = "Charges fixes";
     
     function renderCategories() {
-        const container = document.getElementById('catContainer');
-        container.innerHTML = Object.keys(categories).map(cat => `<div class="cat-btn ${activeCat===cat?'cat-active':''}" data-cat="${cat}">${cat}</div>`).join('');
-        document.querySelectorAll('.cat-btn').forEach(btn => btn.onclick = () => { activeCat = btn.dataset.cat; renderCategories(); renderExpenses(); });
+        let container = document.getElementById('catContainer');
+        if(!container) return;
+        container.innerHTML = Object.keys(categorySpecificItems).map(cat => `<div class="cat-btn ${activeCat===cat?'cat-active':''}" data-cat="${cat}">${cat}</div>`).join('');
+        document.querySelectorAll('.cat-btn').forEach(btn => btn.addEventListener('click', () => {
+            activeCat = btn.dataset.cat;
+            renderCategories();
+            renderExpenses();
+            updateSuggestions();
+        }));
+    }
+    
+    async function updateSuggestions() {
+        let suggestionsDiv = document.getElementById('suggestionsBar');
+        if(!suggestionsDiv) return;
+        let items = categorySpecificItems[activeCat] || [];
+        suggestionsDiv.innerHTML = items.map(item => `<div class="suggestion-chip" data-suggest="${item}">➕ ${item}</div>`).join('');
+        document.querySelectorAll('.suggestion-chip').forEach(chip => {
+            chip.addEventListener('click', async () => {
+                let suggest = chip.dataset.suggest;
+                let finalName = suggest;
+                if(suggest === "Autre") {
+                    finalName = prompt("Nom de la dépense (ex: Achat divers) :");
+                    if(!finalName) return;
+                }
+                let montant = prompt(`Montant pour ${finalName} (Ar) :`);
+                if(montant && !isNaN(parseFloat(montant))) {
+                    let monthData = await getUserMonthData();
+                    if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = [];
+                    monthData.expenses[activeCat].push({ name: finalName, amount: parseFloat(montant) });
+                    await saveUserMonthData(monthData);
+                    await renderExpenses();
+                    await updateDashboardUI();
+                    showToast("Dépense ajoutée");
+                }
+            });
+        });
     }
     
     async function renderExpenses() {
-        const docRef = await ensureUserDoc();
-        const monthData = await docRef.collection('months').doc(getMonthKey()).get();
-        const expenses = monthData.exists ? (monthData.data().expenses || {}) : {};
-        const list = expenses[activeCat] || [];
-        const container = document.getElementById('expenseList');
-        container.innerHTML = list.map((e, i) => `<div class="expense-item"><span>${e.name}: ${e.amount} Ar</span><div><button class="editExpense" data-idx="${i}">✏️</button><button class="delExpense" data-idx="${i}">🗑️</button></div></div>`).join('');
-        let total = 0;
-        for (let cat in expenses) (expenses[cat] || []).forEach(e => total += e.amount);
-        document.getElementById('totalMonthly').innerHTML = `💰 Total: ${total.toLocaleString()} Ar`;
+        let monthData = await getUserMonthData();
+        if(!monthData) return;
+        let catExpenses = monthData.expenses[activeCat] || [];
+        let listDiv = document.getElementById('expenseList');
+        if(!listDiv) return;
+        listDiv.innerHTML = catExpenses.map((exp, idx) => `<div class="expense-item"><span><strong>${escapeHtml(exp.name)}</strong> : ${Number(exp.amount).toLocaleString()} Ar</span><div><button class="editExpense" data-idx="${idx}"><i class="fas fa-edit"></i></button><button class="delExpense" data-idx="${idx}"><i class="fas fa-trash"></i></button></div></div>`).join('');
         
-        document.querySelectorAll('.editExpense').forEach(btn => btn.onclick = async () => {
-            const idx = btn.dataset.idx;
-            const newName = prompt("Nouveau nom", list[idx].name);
-            const newAmount = prompt("Nouveau montant", list[idx].amount);
-            if (newName && newAmount) {
-                list[idx] = { name: newName, amount: parseFloat(newAmount) };
-                await docRef.collection('months').doc(getMonthKey()).set({ expenses: { ...expenses, [activeCat]: list } }, { merge: true });
-                renderExpenses();
-                loadDashboard();
+        document.querySelectorAll('.editExpense').forEach(btn => btn.addEventListener('click', async () => {
+            let idx = btn.dataset.idx;
+            let newName = prompt("Nouveau nom", catExpenses[idx].name);
+            let newAmount = prompt("Montant", catExpenses[idx].amount);
+            if(newName && newAmount && !isNaN(newAmount)) {
+                catExpenses[idx] = { name: newName, amount: Number(newAmount) };
+                monthData.expenses[activeCat] = catExpenses;
+                await saveUserMonthData(monthData);
+                await renderExpenses();
+                await updateDashboardUI();
             }
-        });
-        document.querySelectorAll('.delExpense').forEach(btn => btn.onclick = async () => {
-            list.splice(btn.dataset.idx, 1);
-            await docRef.collection('months').doc(getMonthKey()).set({ expenses: { ...expenses, [activeCat]: list } }, { merge: true });
-            renderExpenses();
-            loadDashboard();
-        });
+        }));
+        
+        document.querySelectorAll('.delExpense').forEach(btn => btn.addEventListener('click', async () => {
+            let idx = btn.dataset.idx;
+            catExpenses.splice(idx,1);
+            monthData.expenses[activeCat] = catExpenses;
+            await saveUserMonthData(monthData);
+            await renderExpenses();
+            await updateDashboardUI();
+        }));
+        await updateFacturationUI();
     }
     
-    async function addExpense() {
-        const name = document.getElementById('expenseName').value.trim();
-        const amount = parseFloat(document.getElementById('expenseAmount').value);
-        if (!name || isNaN(amount)) return showToast("Nom et montant valides", true);
-        const docRef = await ensureUserDoc();
-        const monthData = await docRef.collection('months').doc(getMonthKey()).get();
-        const expenses = monthData.exists ? (monthData.data().expenses || {}) : {};
-        if (!expenses[activeCat]) expenses[activeCat] = [];
-        expenses[activeCat].push({ name, amount });
-        await docRef.collection('months').doc(getMonthKey()).set({ expenses }, { merge: true });
-        document.getElementById('expenseName').value = '';
-        document.getElementById('expenseAmount').value = '';
-        renderExpenses();
-        loadDashboard();
-        showToast("Dépense ajoutée");
+    async function updateFacturationUI() {
+        let total = await getTotalExpensesForMonth();
+        let totalDiv = document.getElementById('totalMonthly');
+        if(totalDiv) totalDiv.innerHTML = `💰 Total mensuel: ${total.toLocaleString()} Ar`;
     }
     
-    async function loadCalendrier() {
-        const docRef = await ensureUserDoc();
-        const monthData = await docRef.collection('months').doc(getMonthKey()).get();
-        const events = monthData.exists ? (monthData.data().events || []) : [];
-        const container = document.getElementById('eventsList');
-        container.innerHTML = `<h3>Événements</h3>` + events.map((e, i) => `<div class="expense-item"><div><strong>${e.title}</strong><br><small>${e.date} - ${e.desc || ''}</small></div><button class="delEvent" data-idx="${i}">🗑️</button></div>`).join('');
-        document.querySelectorAll('.delEvent').forEach(btn => btn.onclick = async () => {
-            events.splice(btn.dataset.idx, 1);
-            await docRef.collection('months').doc(getMonthKey()).set({ events }, { merge: true });
-            loadCalendrier();
+    async function initFacturation() {
+        renderCategories();
+        await renderExpenses();
+        await updateSuggestions();
+        document.getElementById('addExpenseBtn').onclick = async () => {
+            let name = document.getElementById('expenseName').value.trim();
+            let amount = parseFloat(document.getElementById('expenseAmount').value);
+            if(!name || isNaN(amount)) return showToast("Nom et montant valides", true);
+            let monthData = await getUserMonthData();
+            if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = [];
+            monthData.expenses[activeCat].push({ name, amount });
+            await saveUserMonthData(monthData);
+            await renderExpenses();
+            await updateDashboardUI();
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+            showToast("Dépense ajoutée");
+        };
+        document.getElementById('monthlyResetBtn').onclick = async () => {
+            if(confirm("⚠️ Réinitialiser toutes les dépenses du mois ?")) {
+                let monthData = await getUserMonthData();
+                monthData.expenses = {};
+                await saveUserMonthData(monthData);
+                await renderExpenses();
+                await updateDashboardUI();
+                showToast("Mois réinitialisé");
+            }
+        };
+    }
+    
+    // ==================== CALENDRIER ====================
+    async function initCalendar() {
+        let monthData = await getUserMonthData();
+        let evts = (monthData.events || []).map(ev => ({ title: ev.title, start: ev.date, description: ev.desc, allDay: false }));
+        const calEl = document.getElementById('calendarContainer');
+        if(calendar) calendar.destroy();
+        calendar = new FullCalendar.Calendar(calEl, {
+            initialView: 'dayGridMonth',
+            events: evts,
+            headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' },
+            height: 'auto',
+            eventClick: (info) => { alert(`📌 ${info.event.title}\n📅 ${info.event.start}\n📝 Description: ${info.event.extendedProps.description || 'Aucune'}`); }
         });
+        calendar.render();
         document.getElementById('addEventBtn').onclick = async () => {
-            const title = document.getElementById('eventTitle').value.trim();
-            const date = document.getElementById('eventDate').value;
-            const desc = document.getElementById('eventDesc').value;
-            if (!title || !date) return showToast("Titre et date requis", true);
-            events.push({ title, date, desc });
-            await docRef.collection('months').doc(getMonthKey()).set({ events }, { merge: true });
+            let title = document.getElementById('eventTitle').value.trim();
+            let date = document.getElementById('eventDate').value;
+            let desc = document.getElementById('eventDesc').value.trim().slice(0, 1500);
+            if(!title || !date) return showToast("Titre et date requis", true);
+            let monthData = await getUserMonthData();
+            monthData.events.push({ title, date, desc: desc || "" });
+            await saveUserMonthData(monthData);
+            await initCalendar();
+            if(Notification.permission === "granted") new Notification("AI.MG", { body: title });
+            showToast(`Événement: ${title}`);
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventDate').value = '';
             document.getElementById('eventDesc').value = '';
-            loadCalendrier();
-            showToast("Événement ajouté");
+            await displayEventList();
         };
+        await displayEventList();
     }
     
-    function renderCustomFields() {
-        const container = document.getElementById('customFieldsContainer');
-        container.innerHTML = customFields.map((f, i) => `<div class="flex-between" style="gap:8px; margin-bottom:8px;"><input type="text" placeholder="Nom champ" value="${f.label}" id="fieldLabel_${i}" style="flex:1"><input type="text" placeholder="Valeur" value="${f.value}" id="fieldValue_${i}" style="flex:1"><button class="removeField" data-idx="${i}">❌</button></div>`).join('');
-        document.querySelectorAll('.removeField').forEach(btn => btn.onclick = () => { customFields.splice(btn.dataset.idx, 1); renderCustomFields(); });
+    async function displayEventList() {
+        let monthData = await getUserMonthData();
+        let listDiv = document.getElementById('eventListPreview');
+        if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}${ev.desc?.length>80?'...':''}</small></div>`).join(''));
     }
     
-    async function loadLocalisation() {
-        customFields = [];
-        renderCustomFields();
-        document.getElementById('addFieldBtn').onclick = () => { customFields.push({ label: "", value: "" }); renderCustomFields(); };
-        document.getElementById('saveObjectBtn').onclick = async () => {
-            const name = document.getElementById('objName').value.trim();
-            if (!name) return showToast("Nom requis", true);
-            const fields = [];
-            for (let i = 0; i < customFields.length; i++) {
-                const lbl = document.getElementById(`fieldLabel_${i}`)?.value || "";
-                const val = document.getElementById(`fieldValue_${i}`)?.value || "";
-                if (lbl) fields.push({ label: lbl, value: val });
-            }
-            const docRef = await ensureUserDoc();
-            const objectsData = await docRef.collection('objects').get();
-            const objects = objectsData.docs.map(d => d.data());
-            await docRef.collection('objects').doc(Date.now().toString()).set({ name, fields, createdAt: new Date() });
-            document.getElementById('objName').value = '';
-            customFields = [];
-            renderCustomFields();
-            renderObjectsList();
-            showToast("Objet sauvegardé");
-        };
-        document.getElementById('searchObject').oninput = () => renderObjectsList();
-        await renderObjectsList();
+    // ==================== LOCALISATION ====================
+    function renderDynamicFields() {
+        let container = document.getElementById('dynamicFieldsContainer');
+        if(!container) return;
+        container.innerHTML = customFields.map((field, idx) => `<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" placeholder="Nom champ (ex: Customer)" value="${escapeHtml(field.label)}" id="fieldLabel_${idx}"><input type="text" placeholder="Valeur (ex: JCREW)" value="${escapeHtml(field.value)}" id="fieldValue_${idx}"><button class="removeFieldBtn" data-idx="${idx}">❌</button></div>`).join('');
+        document.querySelectorAll('.removeFieldBtn').forEach(btn => btn.addEventListener('click', (e) => { let idx = btn.dataset.idx; customFields.splice(idx,1); renderDynamicFields(); }));
     }
     
     async function renderObjectsList() {
-        const docRef = await ensureUserDoc();
-        const objectsData = await docRef.collection('objects').get();
-        let objects = objectsData.docs.map(d => ({ id: d.id, ...d.data() }));
-        const search = document.getElementById('searchObject')?.value.toLowerCase() || "";
-        objects = objects.filter(o => o.name.toLowerCase().includes(search) || o.fields.some(f => f.label.toLowerCase().includes(search) || f.value.toLowerCase().includes(search)));
-        const container = document.getElementById('objectsList');
-        container.innerHTML = objects.map(obj => `<div class="object-card"><strong>${obj.name}</strong>${obj.fields.map(f => `<div>📌 ${f.label}: ${f.value}</div>`).join('')}<button class="deleteObj" data-id="${obj.id}">🗑️ Supprimer</button></div>`).join('');
-        document.querySelectorAll('.deleteObj').forEach(btn => btn.onclick = async () => { await docRef.collection('objects').doc(btn.dataset.id).delete(); renderObjectsList(); showToast("Objet supprimé"); });
+        let monthData = await getUserMonthData();
+        let searchTerm = document.getElementById('searchObjectInput')?.value.toLowerCase() || "";
+        let filtered = (monthData.objects || []).filter(obj => {
+            let searchText = `${obj.name} ${obj.customFields.map(f=>f.label+":"+f.value).join(' ')}`.toLowerCase();
+            return searchText.includes(searchTerm);
+        });
+        let container = document.getElementById('objectsList');
+        container.innerHTML = filtered.map(obj => `<div class="object-card"><div><strong>${escapeHtml(obj.name)}</strong></div>${obj.customFields.map(f=>`<div>📌 ${escapeHtml(f.label)}: ${escapeHtml(f.value)}</div>`).join('')}<div>🖼️ ${obj.photos.map(p=>`<img src="${p}" class="photo-thumb" onclick="window.open('${p}','_blank')">`).join('') || 'aucune photo'}</div><button class="deleteObj" data-id="${obj.id}">🗑️ Supprimer</button></div>`).join('');
+        document.querySelectorAll('.deleteObj').forEach(btn => btn.addEventListener('click', async (e) => { let id = Number(btn.dataset.id); let monthData = await getUserMonthData(); monthData.objects = monthData.objects.filter(o=>o.id!==id); await saveUserMonthData(monthData); await renderObjectsList(); showToast("Objet supprimé"); }));
     }
     
-    async function loadProjets() {
-        const docRef = await ensureUserDoc();
-        const projectsData = await docRef.collection('projects').get();
-        const projects = projectsData.docs.map(d => ({ id: d.id, ...d.data() }));
-        const groups = Array(12).fill().map(() => []);
-        projects.forEach(p => groups[p.month].push(p));
-        let html = '';
-        for (let m = 0; m < 12; m++) {
-            const monthName = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][m];
-            html += `<h4>${monthName} (${groups[m].length}/10)</h4>`;
-            groups[m].forEach(p => { html += `<div class="expense-item"><span>📌 ${p.name} - ${p.status}</span><div><button class="toggleStatus" data-id="${p.id}">🔄</button><button class="delProject" data-id="${p.id}">🗑️</button></div></div>`; });
+    function initLocalisation() {
+        customFields = []; renderDynamicFields();
+        document.getElementById('addCustomFieldBtn').onclick = () => { if(customFields.length < 8) { customFields.push({label:"", value:""}); renderDynamicFields(); } else showToast("Max 8 champs", true); };
+        document.getElementById('saveObjectBtn').onclick = async () => {
+            let name = document.getElementById('objName').value.trim();
+            if(!name) return showToast("Nom requis", true);
+            let fields = [];
+            for(let i=0;i<customFields.length;i++) {
+                let lbl = document.getElementById(`fieldLabel_${i}`)?.value || "";
+                let val = document.getElementById(`fieldValue_${i}`)?.value || "";
+                if(lbl) fields.push({label: lbl, value: val});
+            }
+            let photos = [];
+            let files = document.getElementById('objPhotos').files;
+            for(let i=0;i<Math.min(files.length,5);i++) photos.push(URL.createObjectURL(files[i]));
+            let monthData = await getUserMonthData();
+            if(!monthData.objects) monthData.objects = [];
+            monthData.objects.push({ id: Date.now(), name, customFields: fields, photos, timestamp: Date.now() });
+            await saveUserMonthData(monthData);
+            await renderObjectsList();
+            document.getElementById('objName').value = ''; customFields = []; renderDynamicFields(); document.getElementById('objPhotos').value = '';
+            showToast("Objet sauvegardé");
+        };
+        renderObjectsList();
+        document.getElementById('searchObjectInput').addEventListener('input', () => renderObjectsList());
+    }
+    
+    // ==================== PROJETS ====================
+    async function renderProjects() {
+        let monthData = await getUserMonthData();
+        let projs = monthData.projects || [];
+        let groups = Array(12).fill().map(()=>[]);
+        projs.forEach(p=>groups[p.month].push(p));
+        let html='';
+        for(let m=0;m<12;m++){ let monthName=["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"][m];
+            html+=`<div><h4 style="color:white;">${monthName} (${groups[m].length}/10)</h4>`;
+            groups[m].forEach(p=>{ html+=`<div class="expense-item"><span>📌 ${escapeHtml(p.name)} - ${p.status}</span><div><button class="toggleStatus" data-id="${p.id}">🔄</button><button class="delProj" data-id="${p.id}">🗑️</button></div></div>`; });
+            html+=`</div>`;
         }
         document.getElementById('projectsList').innerHTML = html;
-        document.querySelectorAll('.toggleStatus').forEach(btn => btn.onclick = async () => {
-            const project = projects.find(p => p.id === btn.dataset.id);
-            if (project) {
-                project.status = project.status === "en cours" ? "terminé" : "en cours";
-                await docRef.collection('projects').doc(project.id).set(project);
-                loadProjets();
-            }
-        });
-        document.querySelectorAll('.delProject').forEach(btn => btn.onclick = async () => { await docRef.collection('projects').doc(btn.dataset.id).delete(); loadProjets(); showToast("Projet supprimé"); });
+        document.querySelectorAll('.toggleStatus').forEach(btn=>btn.addEventListener('click', async ()=>{ let id=Number(btn.dataset.id); let monthData = await getUserMonthData(); let p=monthData.projects.find(pr=>pr.id===id); if(p){ p.status=p.status==="en cours"?"terminé":"en cours"; await saveUserMonthData(monthData); await renderProjects(); showToast("Statut mis à jour"); } }));
+        document.querySelectorAll('.delProj').forEach(btn=>btn.addEventListener('click', async ()=>{ let id=Number(btn.dataset.id); let monthData = await getUserMonthData(); monthData.projects=monthData.projects.filter(p=>p.id!==id); await saveUserMonthData(monthData); await renderProjects(); showToast("Projet supprimé"); }));
+    }
+    
+    async function initProjets() {
+        await renderProjects();
         document.getElementById('addProjectBtn').onclick = async () => {
-            const name = document.getElementById('projectName').value.trim();
-            const month = parseInt(document.getElementById('projectMonthSelect').value);
-            const status = document.getElementById('projectStatusSelect').value;
-            if (!name) return showToast("Nom requis", true);
-            const existing = await docRef.collection('projects').get();
-            const monthCount = existing.docs.filter(d => d.data().month === month).length;
-            if (monthCount >= 10) return showToast("Max 10 projets ce mois", true);
-            await docRef.collection('projects').doc(Date.now().toString()).set({ name, month, status });
-            document.getElementById('projectName').value = '';
-            loadProjets();
+            let name = document.getElementById('projectName').value.trim();
+            let month = parseInt(document.getElementById('projectMonth').value);
+            let status = document.getElementById('projectStatus').value;
+            if(!name) return showToast("Nom projet requis", true);
+            let monthData = await getUserMonthData();
+            let count = (monthData.projects || []).filter(p=>p.month===month).length;
+            if(count>=10){ showToast("Max 10 projets ce mois", true); return; }
+            if(!monthData.projects) monthData.projects = [];
+            monthData.projects.push({ id: Date.now(), name, month, status });
+            await saveUserMonthData(monthData);
+            await renderProjects();
+            document.getElementById('projectName').value='';
             showToast("Projet ajouté");
         };
     }
     
-    // AUTH
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    
+    // ==================== AUTHENTIFICATION FIREBASE ====================
     async function register() {
-        const email = document.getElementById('regEmail').value.trim();
-        const pwd = document.getElementById('regPassword').value;
-        if (!email || !pwd || pwd.length < 6) return showToast("Email et mot de passe (min 6)", true);
+        let email = document.getElementById('email').value.trim();
+        let pwd = document.getElementById('password').value;
+        let phone = document.getElementById('phone').value.trim();
+        
+        if(!email || !pwd) {
+            document.getElementById('authMessage').innerText = "Email & mot de passe requis";
+            return;
+        }
+        if(pwd.length < 6) {
+            document.getElementById('authMessage').innerText = "Mot de passe minimum 6 caractères";
+            return;
+        }
+        
         try {
             const userCred = await auth.createUserWithEmailAndPassword(email, pwd);
-            currentUser = userCred.user;
-            await ensureUserDoc();
-            showToast("Compte créé !");
+            const user = userCred.user;
+            
+            // Créer le document utilisateur dans Firestore
+            await db.collection('users').doc(user.uid).set({
+                email: email,
+                phoneNumber: phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            
+            showToast("Compte créé avec succès !");
+            document.getElementById('authMessage').innerText = "";
+            // Connexion automatique
+            currentUser = user;
+            await updateDashboardUI();
             showPage('dashboardPage');
-        } catch(e) { showToast(e.message, true); }
+        } catch(e) {
+            let msg = e.message;
+            if(msg.includes('email-already-in-use')) msg = "Cet email est déjà utilisé";
+            if(msg.includes('invalid-email')) msg = "Email invalide";
+            document.getElementById('authMessage').innerText = msg;
+            showToast(msg, true);
+        }
     }
     
     async function login() {
-        const email = document.getElementById('loginEmail').value.trim();
-        const pwd = document.getElementById('loginPassword').value;
-        if (!email || !pwd) return showToast("Email et mot de passe requis", true);
+        let email = document.getElementById('email').value.trim();
+        let pwd = document.getElementById('password').value;
+        
+        if(!email || !pwd) {
+            document.getElementById('authMessage').innerText = "Email & mot de passe requis";
+            return;
+        }
+        
         try {
             const userCred = await auth.signInWithEmailAndPassword(email, pwd);
             currentUser = userCred.user;
-            await ensureUserDoc();
-            showToast("Connecté !");
+            showToast("Connexion réussie !");
+            document.getElementById('authMessage').innerText = "";
+            await updateDashboardUI();
             showPage('dashboardPage');
-        } catch(e) { showToast(e.message, true); }
+        } catch(e) {
+            let msg = e.message;
+            if(msg.includes('user-not-found')) msg = "Aucun compte trouvé";
+            if(msg.includes('wrong-password')) msg = "Mot de passe incorrect";
+            if(msg.includes('invalid-email')) msg = "Email invalide";
+            document.getElementById('authMessage').innerText = msg;
+            showToast(msg, true);
+        }
     }
     
-    async function logout() { await auth.signOut(); currentUser = null; showPage('loginPage'); showToast("Déconnecté"); }
+    async function logout() {
+        await auth.signOut();
+        currentUser = null;
+        showToast("Déconnecté");
+        showPage('loginPage');
+        document.getElementById('email').value = '';
+        document.getElementById('password').value = '';
+    }
     
+    // État d'authentification
     auth.onAuthStateChanged(async (user) => {
-        if (user) { currentUser = user; await ensureUserDoc(); showPage('dashboardPage'); }
-        else showPage('loginPage');
+        if(user) {
+            currentUser = user;
+            await updateDashboardUI();
+            showPage('dashboardPage');
+        } else {
+            currentUser = null;
+            showPage('loginPage');
+        }
     });
     
+    // Événements UI
+    document.getElementById('signupBtn').onclick = register;
     document.getElementById('signinBtn').onclick = login;
-    document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
-    document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
-    document.getElementById('registerBtn').onclick = register;
-    document.getElementById('logoutBtn').onclick = logout;
-    document.getElementById('saveSalaryBtn').onclick = saveSalary;
-    document.getElementById('backFacturation').onclick = () => showPage('dashboardPage');
-    document.getElementById('backCalendrier').onclick = () => showPage('dashboardPage');
-    document.getElementById('backLocalisation').onclick = () => showPage('dashboardPage');
-    document.getElementById('backProjet').onclick = () => showPage('dashboardPage');
-    document.querySelectorAll('.menu-card').forEach(card => card.onclick = () => showPage(card.dataset.nav + 'Page'));
+    document.getElementById('logoutBtn')?.addEventListener('click', logout);
+    document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>showPage('dashboardPage')));
+    document.querySelectorAll('.dashboard-card').forEach(card=>card.addEventListener('click',()=>showPage(card.dataset.nav+'Page')));
+    if(Notification.permission!=="granted") Notification.requestPermission();
+    
+    // Sync month selector
+    setInterval(()=>{
+        let factSelect = document.getElementById('factMonthSelect');
+        if(factSelect) {
+            factSelect.innerHTML = [...Array(12)].map((_,i)=>`<option value="${i}" ${currentDisplayMonth==i?'selected':''}>${["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][i]}</option>`).join('');
+            factSelect.onchange = (e)=>{ currentDisplayMonth=parseInt(e.target.value); if(document.getElementById('monthSelector')) document.getElementById('monthSelector').value=currentDisplayMonth; updateDashboardUI(); renderExpenses(); updateSuggestions(); };
+        }
+    }, 500);
 </script>
 </body>
 </html>
