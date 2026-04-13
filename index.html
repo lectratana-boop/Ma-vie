@@ -26,7 +26,6 @@
         .link-btn { background: none; border: none; color: #c7b9ff; cursor: pointer; margin-top: 10px; font-size: 14px; text-align: center; width: 100%; }
         h2 { color: white; text-align: center; margin-bottom: 25px; font-size: 24px; }
         p { color: #ccc; text-align: center; margin: 15px 0; }
-        .loading { text-align: center; color: white; padding: 20px; }
     </style>
 </head>
 <body>
@@ -71,9 +70,9 @@
 </div>
 
 <script>
-    // ==================== FIREBASE CONFIGURATION ====================
+    // ==================== VOS VALEURS FIREBASE CORRECTES ====================
     const firebaseConfig = {
-        apiKey: "AIzaSyDL-POFKpcu9JNwdbW_czpAraeFPNaC9Bc",  // ← REMPLACEZ PAR VOTRE NOUVELLE CLÉ
+        apiKey: "AIzaSyDL-POFKpcu9JNwdbW_czpAraeFPNaC9Bc",  // ← VOTRE VRAIE CLÉ API
         authDomain: "aimg-app.firebaseapp.com",
         projectId: "aimg-app",
         storageBucket: "aimg-app.firebasestorage.app",
@@ -106,20 +105,18 @@
         const doc = await userRef.get();
         
         if (!doc.exists) {
-            // Créer le document s'il n'existe pas
             await userRef.set({
                 email: user.email,
-                phoneNumber: phone || user.phoneNumber || '',
+                phoneNumber: phone || '',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                 lastLogin: firebase.firestore.FieldValue.serverTimestamp()
             });
-            console.log("Document utilisateur créé");
+            console.log("Document créé pour:", user.uid);
         } else {
-            // Mettre à jour lastLogin
             await userRef.update({
                 lastLogin: firebase.firestore.FieldValue.serverTimestamp()
             });
-            console.log("Document utilisateur mis à jour");
+            console.log("Document mis à jour pour:", user.uid);
         }
     }
     
@@ -147,13 +144,11 @@
             const userCred = await auth.createUserWithEmailAndPassword(email, password);
             const user = userCred.user;
             
-            // Créer le document Firestore
             await ensureUserDocument(user, phone);
             
             msgDiv.innerHTML = "✅ Compte créé avec succès !";
             showToast("Compte créé ! Vous pouvez vous connecter");
             
-            // Déconnecter et rediriger vers login
             await auth.signOut();
             setTimeout(() => {
                 showPage('loginPage');
@@ -190,7 +185,6 @@
             const userCred = await auth.signInWithEmailAndPassword(email, password);
             const user = userCred.user;
             
-            // S'assurer que le document Firestore existe
             await ensureUserDocument(user);
             
             document.getElementById('userEmailDisplay').textContent = user.email;
@@ -202,6 +196,7 @@
             if (msg.includes('user-not-found')) msg = "Aucun compte trouvé avec cet email";
             else if (msg.includes('wrong-password')) msg = "Mot de passe incorrect";
             else if (msg.includes('invalid-email')) msg = "Email invalide";
+            else if (msg.includes('api-key')) msg = "Erreur de clé API";
             msgDiv.innerHTML = "❌ " + msg;
             showToast(msg, true);
         }
@@ -235,7 +230,6 @@
     auth.onAuthStateChanged(async (user) => {
         console.log("Auth state changed:", user ? user.email : "null");
         if (user) {
-            // Vérifier/créer le document Firestore
             try {
                 await ensureUserDocument(user);
                 showPage('dashboardPage');
@@ -243,7 +237,6 @@
             } catch(e) {
                 console.error("Erreur Firestore:", e);
                 showToast("Erreur de base de données", true);
-                showPage('loginPage');
             }
         } else {
             showPage('loginPage');
@@ -258,7 +251,8 @@
     document.getElementById('forgotPwdBtn').onclick = resetPassword;
     document.getElementById('logoutBtn').onclick = logout;
     
-    console.log("Application chargée - Firebase configuré");
+    console.log("Application chargée - Firebase configuré avec vos valeurs");
+    console.log("Project ID:", firebaseConfig.projectId);
 </script>
 </body>
 </html>
