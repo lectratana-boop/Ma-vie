@@ -6,7 +6,6 @@
     <title>AI.MG - Gestion Personnelle</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -31,13 +30,12 @@
 </head>
 <body>
 <div class="app-container">
-    <!-- PAGE LOGIN -->
     <div id="loginPage" class="page active-page">
         <div class="card">
             <div class="logo">AI.MG</div>
             <h2>Connexion</h2>
-            <input type="email" id="loginEmail" placeholder="Email" autocomplete="email">
-            <input type="password" id="loginPassword" placeholder="Mot de passe" autocomplete="current-password">
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Mot de passe">
             <button id="signinBtn" class="gradient-btn">Se connecter</button>
             <button id="showRegisterBtn" class="gradient-btn gradient-btn-secondary">Créer un compte</button>
             <button id="forgotPwdBtn" class="link-btn">Mot de passe oublié ?</button>
@@ -45,237 +43,142 @@
         </div>
     </div>
 
-    <!-- PAGE INSCRIPTION -->
     <div id="registerPage" class="page">
         <div class="card">
             <div class="logo">AI.MG</div>
             <h2>Inscription</h2>
-            <input type="email" id="regEmail" placeholder="Email" autocomplete="email">
-            <input type="password" id="regPassword" placeholder="Mot de passe (min 6 caractères)" autocomplete="new-password">
-            <input type="tel" id="regPhone" placeholder="Téléphone (+261...)" autocomplete="tel">
+            <input type="email" id="regEmail" placeholder="Email">
+            <input type="password" id="regPassword" placeholder="Mot de passe (min 6)">
+            <input type="tel" id="regPhone" placeholder="Téléphone (+261...)">
             <button id="registerBtn" class="gradient-btn">S'inscrire</button>
-            <button id="showLoginBtn" class="gradient-btn gradient-btn-secondary">Retour à la connexion</button>
+            <button id="showLoginBtn" class="gradient-btn gradient-btn-secondary">Retour</button>
             <div id="registerMessage" style="margin-top: 15px; text-align: center; color: #ffb4a2; font-size: 14px;"></div>
         </div>
     </div>
 
-    <!-- PAGE VÉRIFICATION EMAIL -->
     <div id="verifyPage" class="page">
         <div class="card" style="text-align: center;">
             <i class="fas fa-envelope" style="font-size: 60px; color: #ffd966; margin-bottom: 20px;"></i>
             <h2>Vérifiez votre email</h2>
             <p>Un email a été envoyé à <strong id="verifyEmailSpan"></strong></p>
-            <p>Cliquez sur le lien dans l'email pour activer votre compte.</p>
             <button id="resendVerifyBtn" class="gradient-btn">Renvoyer l'email</button>
-            <button id="logoutFromVerifyBtn" class="gradient-btn gradient-btn-danger">Retour à la connexion</button>
+            <button id="logoutFromVerifyBtn" class="gradient-btn gradient-btn-danger">Retour</button>
         </div>
     </div>
 
-    <!-- DASHBOARD -->
     <div id="dashboardPage" class="page">
         <div class="card">
-            <div class="logo" style="margin-bottom: 20px;">AI.MG</div>
-            <h2>✅ Connexion réussie !</h2>
+            <div class="logo">AI.MG</div>
+            <h2>✅ Connecté !</h2>
             <p>Bienvenue <strong id="userEmailDisplay"></strong></p>
-            <p>Votre compte est vérifié et prêt à être utilisé.</p>
-            <button id="logoutBtn" class="gradient-btn gradient-btn-danger" style="margin-top: 20px;">Déconnexion</button>
+            <button id="logoutBtn" class="gradient-btn gradient-btn-danger">Déconnexion</button>
         </div>
     </div>
 </div>
 
 <script>
-    // ==================== FIREBASE CONFIGURATION ====================
-    // METTEZ VOTRE NOUVELLE CLÉ API ICI
     const firebaseConfig = {
         apiKey: "AIzaSyBgjkrFJjhgt3zFJg90j1NymbG6s2AQRC0",
         authDomain: "aimg-app.firebaseapp.com",
         projectId: "aimg-app",
         storageBucket: "aimg-app.firebasestorage.app",
-        messagingSenderId:  "139623135058",
+        messagingSenderId: "139623135058",
         appId: "1:139623135058:web:407a3a1aabaa5a6780ec8b"
     };
     
-    // Initialisation
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-    
-    // Persistance locale
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     
-    // Fonction toast
-    function showToast(message, isError = false) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.style.background = isError ? 'rgba(220,53,69,0.95)' : 'rgba(0,0,0,0.85)';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3500);
+    function showToast(msg, isErr) {
+        const t = document.createElement('div');
+        t.className = 'toast';
+        t.style.background = isErr ? '#d9534f' : 'rgba(0,0,0,0.9)';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
     }
     
-    // Navigation entre pages
-    function showPage(pageId) {
+    function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(pageId).classList.add('active-page');
+        document.getElementById(id).classList.add('active-page');
     }
     
-    // INSCRIPTION
     async function register() {
         const email = document.getElementById('regEmail').value.trim();
-        const password = document.getElementById('regPassword').value;
+        const pwd = document.getElementById('regPassword').value;
         const phone = document.getElementById('regPhone').value.trim();
-        const msgDiv = document.getElementById('registerMessage');
-        
-        msgDiv.innerHTML = '';
-        
-        if (!email || !password) {
-            msgDiv.innerHTML = "❌ Email et mot de passe requis";
-            return;
-        }
-        if (password.length < 6) {
-            msgDiv.innerHTML = "❌ Mot de passe minimum 6 caractères";
-            return;
-        }
-        
-        msgDiv.innerHTML = "⏳ Création du compte en cours...";
-        
+        const msg = document.getElementById('registerMessage');
+        if (!email || !pwd) { msg.innerHTML = "❌ Email et mot de passe requis"; return; }
+        if (pwd.length < 6) { msg.innerHTML = "❌ 6 caractères minimum"; return; }
+        msg.innerHTML = "⏳...";
         try {
-            const userCred = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCred.user;
-            
-            if (phone) {
-                await user.updateProfile({ phoneNumber: phone });
-            }
-            
-            await user.sendEmailVerification();
-            
-            await db.collection('users').doc(user.uid).set({
-                email: email,
-                phoneNumber: phone,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                emailVerified: false
-            });
-            
-            msgDiv.innerHTML = "✅ Compte créé ! Un email de vérification a été envoyé.";
-            showToast("Compte créé ! Vérifiez votre email");
-            
+            const userCred = await auth.createUserWithEmailAndPassword(email, pwd);
+            await userCred.user.sendEmailVerification();
+            await db.collection('users').doc(userCred.user.uid).set({ email, phone, createdAt: new Date() });
+            msg.innerHTML = "✅ Compte créé ! Vérifiez votre email";
+            showToast("Email de vérification envoyé");
             await auth.signOut();
             document.getElementById('verifyEmailSpan').textContent = email;
             showPage('verifyPage');
-            
         } catch(e) {
-            let msg = e.message;
-            if (msg.includes('email-already-in-use')) msg = "Cet email est déjà utilisé";
-            if (msg.includes('invalid-email')) msg = "Email invalide";
-            if (msg.includes('weak-password')) msg = "Mot de passe trop faible (min 6 caractères)";
-            msgDiv.innerHTML = "❌ " + msg;
-            showToast(msg, true);
+            let m = e.message;
+            if (m.includes('email-already-in-use')) m = "Email déjà utilisé";
+            msg.innerHTML = "❌ " + m;
+            showToast(m, true);
         }
     }
     
-    // CONNEXION
     async function login() {
         const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        const msgDiv = document.getElementById('loginMessage');
-        
-        msgDiv.innerHTML = '';
-        
-        if (!email || !password) {
-            msgDiv.innerHTML = "❌ Email et mot de passe requis";
-            return;
-        }
-        
-        msgDiv.innerHTML = "⏳ Connexion en cours...";
-        
+        const pwd = document.getElementById('loginPassword').value;
+        const msg = document.getElementById('loginMessage');
+        if (!email || !pwd) { msg.innerHTML = "❌ Email et mot de passe requis"; return; }
+        msg.innerHTML = "⏳...";
         try {
-            const userCred = await auth.signInWithEmailAndPassword(email, password);
-            const user = userCred.user;
-            
-            await user.reload();
-            
-            if (!user.emailVerified) {
+            const userCred = await auth.signInWithEmailAndPassword(email, pwd);
+            await userCred.user.reload();
+            if (!userCred.user.emailVerified) {
                 await auth.signOut();
                 document.getElementById('verifyEmailSpan').textContent = email;
                 showPage('verifyPage');
-                msgDiv.innerHTML = "❌ Veuillez vérifier votre email avant de vous connecter";
+                msg.innerHTML = "❌ Vérifiez votre email";
                 return;
             }
-            
-            await db.collection('users').doc(user.uid).update({
-                emailVerified: true,
-                lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            document.getElementById('userEmailDisplay').textContent = user.email;
-            showToast("Connexion réussie !");
+            document.getElementById('userEmailDisplay').textContent = userCred.user.email;
+            showToast("Connecté !");
             showPage('dashboardPage');
-            
         } catch(e) {
-            let msg = e.message;
-            if (msg.includes('user-not-found')) msg = "Aucun compte trouvé avec cet email";
-            else if (msg.includes('wrong-password')) msg = "Mot de passe incorrect";
-            else if (msg.includes('invalid-email')) msg = "Email invalide";
-            msgDiv.innerHTML = "❌ " + msg;
-            showToast(msg, true);
+            let m = e.message;
+            if (m.includes('user-not-found')) m = "Compte inexistant";
+            if (m.includes('wrong-password')) m = "Mot de passe incorrect";
+            msg.innerHTML = "❌ " + m;
+            showToast(m, true);
         }
     }
     
-    // Mot de passe oublié
     async function resetPassword() {
-        const email = prompt("Entrez votre email pour réinitialiser votre mot de passe :");
+        const email = prompt("Email pour réinitialisation :");
         if (email && email.includes('@')) {
-            try {
-                await auth.sendPasswordResetEmail(email);
-                showToast("Email de réinitialisation envoyé !");
-            } catch(e) {
-                showToast("Email non trouvé", true);
-            }
-        } else if (email) {
-            showToast("Email invalide", true);
+            try { await auth.sendPasswordResetEmail(email); showToast("Email envoyé !"); } catch(e) { showToast("Email non trouvé", true); }
         }
     }
     
-    // Renvoyer email vérification
     async function resendVerification() {
-        try {
-            const user = auth.currentUser;
-            if (user) {
-                await user.sendEmailVerification();
-                showToast("Email de vérification renvoyé !");
-            } else {
-                showToast("Aucun utilisateur connecté", true);
-            }
-        } catch(e) {
-            showToast("Erreur: " + e.message, true);
-        }
+        const user = auth.currentUser;
+        if (user) { await user.sendEmailVerification(); showToast("Email renvoyé !"); }
+        else showToast("Aucun utilisateur", true);
     }
     
-    // Déconnexion
-    async function logout() {
-        await auth.signOut();
-        showToast("Déconnecté");
-        showPage('loginPage');
-        document.getElementById('loginEmail').value = '';
-        document.getElementById('loginPassword').value = '';
-    }
+    async function logout() { await auth.signOut(); showToast("Déconnecté"); showPage('loginPage'); }
     
-    // ==================== ÉTAT AUTHENTIFICATION ====================
     auth.onAuthStateChanged(async (user) => {
-        console.log("Auth state changed:", user ? user.email : "null");
-        
-        if (user && user.emailVerified) {
-            showPage('dashboardPage');
-            document.getElementById('userEmailDisplay').textContent = user.email;
-        } else if (user && !user.emailVerified) {
-            document.getElementById('verifyEmailSpan').textContent = user.email;
-            showPage('verifyPage');
-        } else {
-            showPage('loginPage');
-        }
+        if (user && user.emailVerified) showPage('dashboardPage');
+        else if (user && !user.emailVerified) { document.getElementById('verifyEmailSpan').textContent = user.email; showPage('verifyPage'); }
+        else showPage('loginPage');
     });
     
-    // ==================== BOUTONS ====================
     document.getElementById('signinBtn').onclick = login;
     document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
     document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
@@ -284,8 +187,6 @@
     document.getElementById('logoutBtn').onclick = logout;
     document.getElementById('resendVerifyBtn').onclick = resendVerification;
     document.getElementById('logoutFromVerifyBtn').onclick = () => { auth.signOut(); showPage('loginPage'); };
-    
-    console.log("Application chargée - Firebase configuré");
 </script>
 </body>
 </html>
