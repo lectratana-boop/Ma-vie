@@ -43,50 +43,51 @@
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         
         /* ==================== STYLES AIZA 3D ==================== */
-        .aiza-3d { padding: 20px; border-radius: 30px; background: linear-gradient(145deg, #1a1a2e, #0f0f1a); }
-        .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 15px; }
+        .aiza-container { padding: 20px; border-radius: 30px; background: linear-gradient(145deg, #1a1a2e, #0f0f1a); }
+        .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
         .search-3d input { flex: 1; background: none; border: none; color: white; padding: 8px; outline: none; }
         .search-3d input::placeholder { color: rgba(255,255,255,0.5); }
         .search-3d button { background: linear-gradient(135deg, #8c52ff, #6c3eff); border: none; padding: 8px 20px; border-radius: 30px; color: white; cursor: pointer; box-shadow: 0 0 15px rgba(140,82,255,0.5); transition: all 0.2s; }
         .search-3d button:active { transform: scale(0.95); }
         
-        .categories-3d { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-        .cat-3d { padding: 8px 18px; border-radius: 30px; background: rgba(255,255,255,0.1); color: white; cursor: pointer; transition: all 0.3s ease; }
-        .cat-3d.active { background: linear-gradient(135deg, #8c52ff, #6c3eff); box-shadow: 0 0 15px rgba(140,82,255,0.5); }
-        .cat-3d:hover { transform: translateY(-2px); background: rgba(255,255,255,0.2); }
+        .form-3d textarea { width: 100%; margin: 8px 0; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; }
         
-        /* Sous-catégories hover */
-        .subcat-container { position: relative; display: inline-block; }
-        .dropdown-3d { background: rgba(255,255,255,0.08); padding: 12px; border-radius: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; }
-        .dropdown-3d:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
-        .dropdown-selected { color: white; display: flex; justify-content: space-between; align-items: center; }
-        .dropdown-selected:after { content: "▼"; font-size: 12px; }
-        .dropdown-list { display: none; margin-top: 10px; background: rgba(0,0,0,0.8); border-radius: 20px; padding: 8px; }
-        .dropdown-3d:hover .dropdown-list { display: block; }
-        .dropdown-list div { padding: 8px 12px; color: white; border-radius: 15px; cursor: pointer; transition: all 0.2s; }
-        .dropdown-list div:hover { background: #6c3eff; transform: translateX(5px); }
-        
-        .form-3d input, .form-3d textarea, .form-3d select { width: 100%; margin: 8px 0; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; }
-        .form-3d textarea { border-radius: 20px; }
+        /* Dropdown 3D scrollable */
+        .dropdown-3d { position: relative; margin-bottom: 12px; }
+        .dropdown-input { width: 100%; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .dropdown-input span { color: #666; }
+        .dropdown-input i { color: #6c3eff; transition: 0.2s; }
+        .dropdown-menu { position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,40,0.98); backdrop-filter: blur(15px); border-radius: 20px; margin-top: 8px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; border: 1px solid rgba(108,62,255,0.3); max-height: 250px; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-menu::-webkit-scrollbar { width: 4px; }
+        .dropdown-menu::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .dropdown-menu::-webkit-scrollbar-thumb { background: #6c3eff; border-radius: 10px; }
+        .dropdown-item { padding: 12px 16px; color: white; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .dropdown-item:hover { background: linear-gradient(135deg, #8c52ff, #6c3eff); transform: translateX(5px); box-shadow: 0 0 15px rgba(140,82,255,0.5); }
         
         .photo-upload { display: flex; justify-content: space-between; align-items: center; color: white; margin: 10px 0; }
         .plus-btn { background: #8c52ff; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 24px; cursor: pointer; transition: all 0.2s; }
         .plus-btn:active { transform: scale(0.9); }
         
-        .preview-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.2s; }
-        .preview-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
-        .preview-card img { width: 55px; height: 55px; border-radius: 15px; object-fit: cover; }
-        .preview-card div { flex: 1; }
-        .preview-card strong { display: block; }
-        .preview-card small { font-size: 11px; color: #aaa; }
+        .photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .preview-thumb { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; cursor: pointer; transition: 0.2s; }
+        .preview-thumb:hover { transform: scale(1.05); box-shadow: 0 0 15px #6c3eff; }
         
-        .list-title { color: white; font-size: 16px; font-weight: 600; margin: 15px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #6c3eff; display: inline-block; }
+        .list-title { color: white; font-size: 16px; font-weight: 600; margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #6c3eff; display: inline-block; }
+        
+        .product-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
+        .product-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); border-color: #6c3eff; box-shadow: 0 0 15px rgba(108,62,255,0.3); }
+        .product-card img { width: 55px; height: 55px; border-radius: 15px; object-fit: cover; }
+        .product-card div { flex: 1; }
+        .product-card strong { display: block; }
+        .product-card small { font-size: 11px; color: #aaa; display: block; }
         
         .save-btn { width: 100%; padding: 14px; border: none; border-radius: 35px; background: linear-gradient(135deg, #8c52ff, #6c3eff); color: white; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(140,82,255,0.5); transition: all 0.2s; }
         .save-btn:active { transform: scale(0.97); }
         
         .back-btn-bottom { text-align: center; margin-top: 20px; }
-        .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
+        .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; }
+        .back-btn-bottom button:hover { background: rgba(108,62,255,0.5); }
         
         /* Modal */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
@@ -96,7 +97,7 @@
         .modal-desc { color: white; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 20px; }
         .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
         
-        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } .categories-3d { gap: 6px; } .cat-3d { padding: 6px 12px; font-size: 12px; } }
+        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
     </style>
 </head>
 <body>
@@ -179,32 +180,37 @@
         <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 
-    <!-- AIZA - NOUVEAU DESIGN 3D -->
+    <!-- AIZA -->
     <div id="aizaPage" class="page">
-        <div class="aiza-3d">
-            <!-- SEARCH tout en haut -->
+        <div class="aiza-container">
+            <!-- SEARCH -->
             <div class="search-3d">
-                <input type="text" id="searchInput" placeholder="Basique">
+                <input type="text" id="searchInput" placeholder="Rechercher un objet...">
                 <button id="searchBtn">Rechercher</button>
             </div>
 
-            <!-- CATEGORIES -->
-            <div class="categories-3d" id="categoryContainer3d"></div>
-
-            <!-- DROPDOWN sous-catégories (hover) -->
-            <div class="subcat-container" id="subcatContainer"></div>
-
-            <!-- FORMULAIRE -->
             <div class="form-3d">
-                <select id="objCategory">
-                    <option value="👕 Vêtements">👕 Vêtements</option>
-                    <option value="🧸 Jouets">🧸 Jouets</option>
-                    <option value="📎 Bureautique">📎 Bureautique</option>
-                    <option value="🖥️ Informatique">🖥️ Informatique</option>
-                </select>
-                <input type="text" id="objName" placeholder="Nom de l'objet (ex: T-shirt)">
-                <input type="text" id="objLocation" placeholder="Localisation (armoire, bureau, etc.)">
-                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description de l'objet"></textarea>
+                <!-- DROPDOWN CATEGORIE -->
+                <div class="dropdown-3d" id="categoryDropdown">
+                    <div class="dropdown-input">
+                        <span id="selectedCategoryText">Catégorie</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="categoryMenu"></div>
+                </div>
+
+                <!-- DROPDOWN SOUS-CATEGORIE -->
+                <div class="dropdown-3d" id="subcategoryDropdown">
+                    <div class="dropdown-input">
+                        <span id="selectedSubcategoryText">Sous-catégorie</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="dropdown-menu" id="subcategoryMenu"></div>
+                </div>
+
+                <input type="text" id="objName" placeholder="Nom de l'objet (ex: T-shirt bleu)">
+                <input type="text" id="objLocation" placeholder="Localisation (armoire, bureau, étagère)">
+                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description de l'objet (max 250 caractères)"></textarea>
                 <div style="font-size: 11px; color: #aaa; text-align: right; margin-top: -8px; margin-bottom: 12px;" id="charCount">0/250</div>
 
                 <!-- PHOTOS -->
@@ -213,23 +219,22 @@
                     <button type="button" class="plus-btn" id="addPhotoBtn">+</button>
                 </div>
                 <input type="file" id="objPhotos" accept="image/*" multiple style="display: none;">
-                <div id="photoPreview" class="photo-preview" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;"></div>
+                <div id="photoPreview" class="photo-preview"></div>
 
-                <!-- LISTE DES PRODUITS CLASSÉS PAR SOUS-CATÉGORIE -->
+                <!-- LISTE DES PRODUITS -->
                 <div id="productsListContainer"></div>
 
                 <!-- BOUTON SAUVEGARDER -->
                 <button id="saveObjectBtn" class="save-btn">💾 Enregistrer l'objet</button>
             </div>
 
-            <!-- BOUTON RETOUR EN BAS AU CENTRE -->
             <div class="back-btn-bottom">
                 <button data-back="dashboard">← Retour au tableau de bord</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL POUR AFFICHAGE IMAGE -->
+    <!-- MODAL -->
     <div id="productModal" class="modal">
         <span class="close-modal">&times;</span>
         <div class="modal-content">
@@ -255,7 +260,6 @@
 
 <script>
     // ==================== FIREBASE CONFIGURATION ====================
-    // ⚠️ REMPLACEZ PAR VOTRE VRAIE CLÉ API ⚠️
     const firebaseConfig = {
         apiKey: "AIzaSyBqcigoEE0rRNkzfYvIRUtH2Vu-BBaCbVg",
         authDomain: "aimg-app.firebaseapp.com",
@@ -274,15 +278,23 @@
     let currentUser = null;
     let currentDisplayMonth = new Date().getMonth();
     let calendar = null;
-    
-    const categoriesList = ["👕 Vêtements", "🧸 Jouets", "📎 Bureautique", "🖥️ Informatique"];
-    const subCategoriesData = {
-        "👕 Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes"],
-        "🧸 Jouets": ["Voitures miniatures", "Poupées", "Jeux de construction", "Peluches", "Ballons", "Jeux de société"],
-        "📎 Bureautique": ["Papier", "Stylos / crayons", "Classeurs", "Enveloppes", "Agrafeuse", "Post-it", "Calculatrice"],
-        "🖥️ Informatique": ["Clé USB", "Ordinateur", "Souris", "Clavier", "Disque dur", "Câbles", "Imprimante", "Routeur"]
-    };
     let currentSearchTerm = "";
+    
+    // Données pour les dropdowns
+    const categoriesList = ["Vêtements", "Jouets", "Bureautique", "Informatique", "Électronique", "Maison", "Sports", "Autre"];
+    const subcategoriesMap = {
+        "Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes", "Accessoires"],
+        "Jouets": ["Voitures miniatures", "Poupées", "Jeux de construction", "Peluches", "Ballons", "Jeux de société"],
+        "Bureautique": ["Papier", "Stylos", "Classeurs", "Enveloppes", "Agrafeuse", "Post-it", "Calculatrice"],
+        "Informatique": ["Clé USB", "Ordinateur", "Souris", "Clavier", "Disque dur", "Câbles", "Imprimante"],
+        "Électronique": ["Téléphone", "Tablette", "Écouteurs", "Chargeur", "Batterie", "Appareil photo"],
+        "Maison": ["Meubles", "Décoration", "Ustensiles", "Linge", "Électroménager"],
+        "Sports": ["Ballon", "Raquette", "Vélo", "Chaussures", "Vêtements de sport"],
+        "Autre": ["Divers", "Non classé"]
+    };
+    
+    let selectedCategory = "";
+    let selectedSubcategory = "";
     
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -523,63 +535,80 @@
         if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}</small></div>`).join(''));
     }
     
-    // ==================== AIZA 3D ====================
-    function renderCategories3d() {
-        const container = document.getElementById('categoryContainer3d');
-        if(!container) return;
-        container.innerHTML = categoriesList.map(cat => `<div class="cat-3d" data-cat="${cat}">${cat}</div>`).join('');
-        document.querySelectorAll('.cat-3d').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.cat-3d').forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
-                renderSubcatDropdown(btn.dataset.cat);
+    // ==================== AIZA ====================
+    
+    function initDropdowns() {
+        // Catégorie dropdown
+        const categoryContainer = document.getElementById('categoryMenu');
+        categoryContainer.innerHTML = categoriesList.map(cat => `<div class="dropdown-item" data-value="${cat}">${cat}</div>`).join('');
+        categoryContainer.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                selectedCategory = item.dataset.value;
+                document.getElementById('selectedCategoryText').innerHTML = selectedCategory;
+                document.getElementById('selectedCategoryText').style.color = 'white';
+                categoryContainer.classList.remove('show');
+                document.getElementById('categoryDropdown').querySelector('.dropdown-input i').style.transform = 'rotate(0deg)';
+                // Mettre à jour les sous-catégories
+                updateSubcategoryMenu();
             });
         });
-        if(categoriesList.length > 0) {
-            document.querySelector('.cat-3d')?.classList.add('active');
-            renderSubcatDropdown(categoriesList[0]);
-        }
+        
+        // Sous-catégorie dropdown
+        updateSubcategoryMenu();
     }
     
-    function renderSubcatDropdown(category) {
-        const container = document.getElementById('subcatContainer');
-        if(!container) return;
-        const subs = subCategoriesData[category] || [];
-        container.innerHTML = `
-            <div class="dropdown-3d">
-                <div class="dropdown-selected">Choisir une sous-catégorie</div>
-                <div class="dropdown-list">
-                    ${subs.map(sub => `<div data-sub="${sub}">📦 ${sub}</div>`).join('')}
-                </div>
-            </div>
-        `;
-        document.querySelectorAll('.dropdown-list div').forEach(div => {
-            div.addEventListener('click', () => {
-                const subValue = div.dataset.sub;
-                const objSubInput = document.getElementById('objSubCategory');
-                if(objSubInput) objSubInput.value = subValue;
-                else {
-                    let hiddenInput = document.getElementById('hiddenSubCat');
-                    if(!hiddenInput) {
-                        hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.id = 'objSubCategory';
-                        document.querySelector('.form-3d').appendChild(hiddenInput);
-                    }
-                    hiddenInput.value = subValue;
-                }
-                showToast(`Sous-catégorie: ${subValue}`);
+    function updateSubcategoryMenu() {
+        const subMenu = document.getElementById('subcategoryMenu');
+        const subs = selectedCategory ? (subcategoriesMap[selectedCategory] || ["Autre"]) : ["Choisissez d'abord une catégorie"];
+        subMenu.innerHTML = subs.map(sub => `<div class="dropdown-item" data-value="${sub}">${sub}</div>`).join('');
+        subMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', () => {
+                selectedSubcategory = item.dataset.value;
+                document.getElementById('selectedSubcategoryText').innerHTML = selectedSubcategory;
+                document.getElementById('selectedSubcategoryText').style.color = 'white';
+                subMenu.classList.remove('show');
+                document.getElementById('subcategoryDropdown').querySelector('.dropdown-input i').style.transform = 'rotate(0deg)';
             });
         });
+    }
+    
+    function setupDropdownToggle(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        const input = dropdown.querySelector('.dropdown-input');
+        const menu = dropdown.querySelector('.dropdown-menu');
+        const icon = input.querySelector('i');
+        
+        input.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = menu.classList.contains('show');
+            // Fermer tous les autres dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            document.querySelectorAll('.dropdown-input i').forEach(i => i.style.transform = 'rotate(0deg)');
+            if (!isOpen) {
+                menu.classList.add('show');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                menu.classList.remove('show');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        });
+    }
+    
+    function initCharCounter() {
+        const descTextarea = document.getElementById('objDescription');
+        const charCountSpan = document.getElementById('charCount');
+        if(descTextarea && charCountSpan) {
+            descTextarea.addEventListener('input', function() {
+                charCountSpan.innerHTML = `${this.value.length}/250 caractères`;
+            });
+        }
     }
     
     function initPhotoUpload() {
         const addBtn = document.getElementById('addPhotoBtn');
         const fileInput = document.getElementById('objPhotos');
         const previewDiv = document.getElementById('photoPreview');
-        if(addBtn) {
-            addBtn.onclick = () => fileInput.click();
-        }
+        if(addBtn) addBtn.onclick = () => fileInput.click();
         if(fileInput) {
             fileInput.onchange = (e) => {
                 previewDiv.innerHTML = '';
@@ -589,11 +618,7 @@
                     reader.onload = (event) => {
                         const img = document.createElement('img');
                         img.src = event.target.result;
-                        img.style.width = '60px';
-                        img.style.height = '60px';
-                        img.style.borderRadius = '15px';
-                        img.style.objectFit = 'cover';
-                        img.style.border = '2px solid #6c3eff';
+                        img.className = 'preview-thumb';
                         previewDiv.appendChild(img);
                     };
                     reader.readAsDataURL(files[i]);
@@ -623,56 +648,62 @@
         if(currentSearchTerm) {
             const searchLower = currentSearchTerm.toLowerCase();
             filtered = objects.filter(obj => {
-                return obj.name.toLowerCase().includes(searchLower) ||
+                return (obj.name && obj.name.toLowerCase().includes(searchLower)) ||
+                       (obj.category && obj.category.toLowerCase().includes(searchLower)) ||
+                       (obj.subCategory && obj.subCategory.toLowerCase().includes(searchLower)) ||
                        (obj.location && obj.location.toLowerCase().includes(searchLower)) ||
                        (obj.description && obj.description.toLowerCase().includes(searchLower));
             });
         }
         const grouped = {};
         filtered.forEach(obj => {
-            const subCat = obj.subCategory || "Autre";
+            const subCat = obj.subCategory || "Sans catégorie";
             if(!grouped[subCat]) grouped[subCat] = [];
             grouped[subCat].push(obj);
         });
         let html = '';
-        for(const [subCat, items] of Object.entries(grouped)) {
-            html += `<div class="list-title">📁 ${subCat}</div>`;
-            items.forEach(obj => {
-                const thumbUrl = obj.photos && obj.photos.length > 0 ? obj.photos[0] : 'https://via.placeholder.com/55';
-                html += `
-                    <div class="preview-card" data-id="${obj.id}" data-name="${escapeHtml(obj.name)}" data-location="${escapeHtml(obj.location)}" data-description="${escapeHtml(obj.description)}" data-photos='${JSON.stringify(obj.photos || [])}'>
-                        <img src="${thumbUrl}">
-                        <div>
-                            <strong>${escapeHtml(obj.name)}</strong>
-                            <small>📍 ${escapeHtml(obj.location || 'Non spécifié')}</small>
+        if(Object.keys(grouped).length === 0) {
+            html = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet enregistré</div>';
+        } else {
+            for(const [subCat, items] of Object.entries(grouped)) {
+                html += `<div class="list-title">📁 ${escapeHtml(subCat)}</div>`;
+                items.forEach(obj => {
+                    const thumbUrl = obj.photos && obj.photos.length > 0 ? obj.photos[0] : 'https://via.placeholder.com/55';
+                    html += `
+                        <div class="product-card" data-id="${obj.id}" data-name="${escapeHtml(obj.name)}" data-category="${escapeHtml(obj.category || '')}" data-sub="${escapeHtml(obj.subCategory || '')}" data-location="${escapeHtml(obj.location)}" data-description="${escapeHtml(obj.description)}" data-photos='${JSON.stringify(obj.photos || [])}'>
+                            <img src="${thumbUrl}">
+                            <div>
+                                <strong>${escapeHtml(obj.name)}</strong>
+                                <small>📍 ${escapeHtml(obj.location || 'Non spécifié')}</small>
+                                ${obj.category ? `<small> | 📁 ${escapeHtml(obj.category)}</small>` : ''}
+                            </div>
                         </div>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
         }
         const container = document.getElementById('productsListContainer');
-        if(Object.keys(grouped).length === 0) {
-            container.innerHTML = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet enregistré</div>';
-        } else {
-            container.innerHTML = html;
-        }
-        document.querySelectorAll('.preview-card').forEach(card => {
+        if(container) container.innerHTML = html;
+        
+        document.querySelectorAll('.product-card').forEach(card => {
             card.addEventListener('click', () => {
                 const name = card.dataset.name;
+                const category = card.dataset.category;
+                const sub = card.dataset.sub;
                 const location = card.dataset.location;
                 const description = card.dataset.description;
                 const photos = JSON.parse(card.dataset.photos);
-                openModal(name, location, description, photos);
+                openModal(name, category, sub, location, description, photos);
             });
         });
     }
     
-    function openModal(name, location, description, photos) {
+    function openModal(name, category, sub, location, description, photos) {
         const modal = document.getElementById('productModal');
         const modalImage = document.getElementById('modalImage');
         const modalDesc = document.getElementById('modalDescription');
         modalImage.src = photos && photos.length > 0 ? photos[0] : 'https://via.placeholder.com/300';
-        modalDesc.innerHTML = `<strong>${name}</strong><br>📍 ${location}<br><br>📝 ${description || 'Aucune description'}`;
+        modalDesc.innerHTML = `<strong>${escapeHtml(name)}</strong><br>📁 ${escapeHtml(category || 'Non spécifiée')} / ${escapeHtml(sub || 'Non spécifiée')}<br>📍 ${escapeHtml(location || 'Non spécifié')}<br><br>📝 ${escapeHtml(description || 'Aucune description')}`;
         modal.classList.add('active');
     }
     
@@ -684,24 +715,27 @@
     }
     
     async function initAiza() {
-        renderCategories3d();
-        initPhotoUpload();
+        initDropdowns();
+        setupDropdownToggle('categoryDropdown');
+        setupDropdownToggle('subcategoryDropdown');
         initCharCounter();
+        initPhotoUpload();
+        
         document.getElementById('searchBtn').onclick = performSearch;
         document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
         await renderProductsList();
         
         document.getElementById('saveObjectBtn').onclick = async () => {
+            let category = selectedCategory;
+            let subCategory = selectedSubcategory;
             let name = document.getElementById('objName').value.trim();
-            let category = document.getElementById('objCategory').value;
-            let subCategoryInput = document.getElementById('objSubCategory');
-            let subCategory = subCategoryInput ? subCategoryInput.value : '';
             let location = document.getElementById('objLocation').value.trim();
             let description = document.getElementById('objDescription').value.trim();
             const photoFiles = document.getElementById('objPhotos').files;
             
             if(!name) return showToast("Nom de l'objet requis", true);
             if(!location) return showToast("Localisation requise", true);
+            if(!category) return showToast("Catégorie requise", true);
             
             let photoUrls = await uploadPhotos(photoFiles);
             let monthData = await getUserMonthData();
@@ -710,7 +744,7 @@
                 id: Date.now(),
                 name: name,
                 category: category,
-                subCategory: subCategory || "Sans catégorie",
+                subCategory: subCategory || "Sous-catégorie",
                 location: location,
                 description: description,
                 photos: photoUrls,
@@ -724,22 +758,25 @@
             document.getElementById('objPhotos').value = '';
             document.getElementById('photoPreview').innerHTML = '';
             if(document.getElementById('charCount')) document.getElementById('charCount').innerHTML = '0/250';
-            if(subCategoryInput) subCategoryInput.value = '';
+            selectedCategory = "";
+            selectedSubcategory = "";
+            document.getElementById('selectedCategoryText').innerHTML = 'Catégorie';
+            document.getElementById('selectedCategoryText').style.color = '#666';
+            document.getElementById('selectedSubcategoryText').innerHTML = 'Sous-catégorie';
+            document.getElementById('selectedSubcategoryText').style.color = '#666';
             
             await renderProductsList();
             showToast("Objet sauvegardé !");
         };
     }
     
-    function initCharCounter() {
-        const descTextarea = document.getElementById('objDescription');
-        const charCountSpan = document.getElementById('charCount');
-        if(descTextarea && charCountSpan) {
-            descTextarea.addEventListener('input', function() {
-                charCountSpan.innerHTML = `${this.value.length}/250 caractères`;
-            });
+    // Fermeture des dropdowns au clic ailleurs
+    document.addEventListener('click', function(e) {
+        if(!e.target.closest('.dropdown-3d')) {
+            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
+            document.querySelectorAll('.dropdown-input i').forEach(icon => icon.style.transform = 'rotate(0deg)');
         }
-    }
+    });
     
     // ==================== PROJETS ====================
     async function renderProjects() {
