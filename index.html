@@ -28,6 +28,7 @@
         .dashboard-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); transition: all 0.3s; }
         .dashboard-card:active { transform: translateY(3px); }
         .dashboard-card i { font-size: 44px; background: linear-gradient(135deg, #ffd966, #ffb347); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .dashboard-card h3 { color: white; margin-top: 10px; }
         .finance-center { display: flex; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
         .finance-card { flex: 1; background: rgba(0,0,0,0.4); border-radius: 28px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
         .finance-amount { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #f9f3c1, #ffe6a3); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -108,11 +109,11 @@
         <div class="card" style="margin-top: 40px;">
             <div class="logo" style="text-align: center;">AI.MG</div>
             <h2 style="text-align: center; margin: 20px 0; color:white;">Connexion</h2>
-            <input type="email" id="email" placeholder="Email *">
-            <input type="password" id="password" placeholder="Mot de passe *">
+            <input type="email" id="email" placeholder="Email *" autocomplete="email">
+            <input type="password" id="password" placeholder="Mot de passe *" autocomplete="current-password">
             <button id="signinBtn" class="gradient-btn" style="width: 100%; margin-bottom: 12px;">Se connecter</button>
             <button id="showRegisterBtn" class="gradient-btn" style="width: 100%; background:linear-gradient(135deg,#3a86ff,#2666cc);">Créer un compte</button>
-            <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
+            <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2; font-size: 13px;"></div>
         </div>
     </div>
 
@@ -121,12 +122,12 @@
         <div class="card" style="margin-top: 40px;">
             <div class="logo" style="text-align: center;">AI.MG</div>
             <h2 style="text-align: center; margin: 20px 0; color:white;">Inscription</h2>
-            <input type="email" id="regEmail" placeholder="Email *">
-            <input type="password" id="regPassword" placeholder="Mot de passe * (min 6)">
+            <input type="email" id="regEmail" placeholder="Email *" autocomplete="email">
+            <input type="password" id="regPassword" placeholder="Mot de passe * (min 6)" autocomplete="new-password">
             <input type="tel" id="regPhone" placeholder="Téléphone (+261...)">
             <button id="registerBtn" class="gradient-btn" style="width: 100%; margin-bottom: 12px;">S'inscrire</button>
             <button id="showLoginBtn" class="gradient-btn" style="width: 100%; background:linear-gradient(135deg,#3a86ff,#2666cc);">Retour</button>
-            <div id="registerMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
+            <div id="registerMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2; font-size: 13px;"></div>
         </div>
     </div>
 
@@ -146,14 +147,14 @@
         </div>
         <div class="finance-center">
             <div class="finance-card">
-                <i class="fas fa-wallet"></i>
+                <i class="fas fa-wallet" style="font-size: 30px; color: #ffd966;"></i>
                 <h3 style="color:#eee;">Salaire</h3>
                 <div class="finance-amount" id="salaryDisplay">0 Ar</div>
                 <input type="number" id="monthlySalaryInput" placeholder="Montant" style="margin:8px 0;">
                 <button id="saveSalaryBtn" class="gradient-btn" style="padding:6px; width: 100%;">💾 Enregistrer</button>
             </div>
             <div class="finance-card">
-                <i class="fas fa-piggy-bank"></i>
+                <i class="fas fa-piggy-bank" style="font-size: 30px; color: #ffd966;"></i>
                 <h3 style="color:#eee;">Épargne</h3>
                 <div class="finance-amount" id="savingDisplay">0 Ar</div>
                 <div style="font-size:11px; color:#ccc; margin-top: 8px;" id="savingDetail"></div>
@@ -162,19 +163,19 @@
         <div class="grid-2x2">
             <div class="dashboard-card" data-nav="facturation">
                 <i class="fas fa-file-invoice-dollar"></i>
-                <h3 style="color:white; margin-top: 10px;">Factures</h3>
+                <h3>Factures</h3>
             </div>
             <div class="dashboard-card" data-nav="calendrier">
                 <i class="fas fa-calendar-alt"></i>
-                <h3 style="color:white; margin-top: 10px;">Calendrier</h3>
+                <h3>Calendrier</h3>
             </div>
             <div class="dashboard-card" data-nav="aiza">
                 <i class="fas fa-map-marker-alt"></i>
-                <h3 style="color:white; margin-top: 10px;">AIZA</h3>
+                <h3>AIZA</h3>
             </div>
             <div class="dashboard-card" data-nav="projet">
                 <i class="fas fa-tasks"></i>
-                <h3 style="color:white; margin-top: 10px;">Projets</h3>
+                <h3>Projets</h3>
             </div>
         </div>
     </div>
@@ -305,9 +306,9 @@
 </div>
 
 <script>
-    // CONFIGURATION FIREBASE
+    // ==================== CONFIGURATION FIREBASE (CORRIGÉE) ====================
     const firebaseConfig = {
-        apiKey: "AIzaSyBqcigoEE0rRNkzfYvIRUtH2Vu-BBaCbVg",
+        apiKey: "AIzaSyBqcigoEE0rRNkzfYvIRUtH2Vu-BBaCbVg",  // ⚠️ CLÉ INCOMPLÈTE - REMPLACEZ PAR LA VRAIE
         authDomain: "aimg-app.firebaseapp.com",
         projectId: "aimg-app",
         storageBucket: "aimg-app.firebasestorage.app",
@@ -315,7 +316,15 @@
         appId: "1:139623135058:web:407a3a1aabaa5a6780ec8b"
     };
     
-    firebase.initializeApp(firebaseConfig);
+    // Vérification et initialisation Firebase
+    try {
+        firebase.initializeApp(firebaseConfig);
+        console.log("✅ Firebase initialisé avec succès");
+    } catch(e) {
+        console.error("❌ Erreur initialisation Firebase:", e);
+        alert("Erreur de configuration Firebase. Vérifiez votre clé API.");
+    }
+    
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
@@ -343,7 +352,6 @@
     
     // FONCTION TOAST
     function showToast(msg, isErr = false) {
-        // Supprimer les toasts existants
         document.querySelectorAll('.toast').forEach(t => t.remove());
         
         let t = document.createElement('div');
@@ -377,6 +385,126 @@
         })[m]); 
     }
     
+    // ==================== AUTHENTIFICATION ====================
+    
+    // Connexion
+    document.getElementById('signinBtn').onclick = async function() {
+        let email = document.getElementById('email').value.trim();
+        let pwd = document.getElementById('password').value;
+        let msgEl = document.getElementById('authMessage');
+        
+        console.log("Tentative de connexion avec:", email);
+        
+        if(!email || !pwd) {
+            msgEl.textContent = "❌ Email et mot de passe requis";
+            return;
+        }
+        
+        this.disabled = true;
+        this.textContent = "Connexion...";
+        msgEl.textContent = "⏳ Connexion en cours...";
+        
+        try {
+            await auth.signInWithEmailAndPassword(email, pwd);
+            console.log("✅ Connexion réussie");
+            showToast("✅ Connecté avec succès !");
+            msgEl.textContent = "";
+        } catch(e) { 
+            console.error("❌ Erreur connexion:", e);
+            let errorMsg = "❌ Erreur de connexion";
+            
+            if(e.code === 'auth/user-not-found') errorMsg = "❌ Compte inexistant";
+            else if(e.code === 'auth/wrong-password') errorMsg = "❌ Mot de passe incorrect";
+            else if(e.code === 'auth/invalid-email') errorMsg = "❌ Email invalide";
+            else if(e.code === 'auth/too-many-requests') errorMsg = "❌ Trop de tentatives. Réessayez plus tard";
+            else errorMsg = "❌ " + e.message;
+            
+            msgEl.textContent = errorMsg;
+            showToast(errorMsg, true);
+        } finally {
+            this.disabled = false;
+            this.textContent = "Se connecter";
+        }
+    };
+    
+    // Inscription
+    document.getElementById('registerBtn').onclick = async function() {
+        let email = document.getElementById('regEmail').value.trim();
+        let pwd = document.getElementById('regPassword').value;
+        let msgEl = document.getElementById('registerMessage');
+        
+        console.log("Tentative d'inscription avec:", email);
+        
+        if(!email || !pwd) {
+            msgEl.textContent = "❌ Email et mot de passe requis";
+            return;
+        }
+        
+        if(pwd.length < 6) {
+            msgEl.textContent = "❌ Mot de passe trop court (min 6 caractères)";
+            return;
+        }
+        
+        this.disabled = true;
+        this.textContent = "Inscription...";
+        msgEl.textContent = "⏳ Création du compte...";
+        
+        try {
+            await auth.createUserWithEmailAndPassword(email, pwd);
+            console.log("✅ Inscription réussie");
+            showToast("✅ Compte créé ! Connectez-vous maintenant");
+            msgEl.textContent = "✅ Compte créé avec succès !";
+            
+            setTimeout(() => showPage('loginPage'), 1500);
+        } catch(e) { 
+            console.error("❌ Erreur inscription:", e);
+            let errorMsg = "❌ Erreur d'inscription";
+            
+            if(e.code === 'auth/email-already-in-use') errorMsg = "❌ Email déjà utilisé";
+            else if(e.code === 'auth/invalid-email') errorMsg = "❌ Email invalide";
+            else if(e.code === 'auth/weak-password') errorMsg = "❌ Mot de passe trop faible";
+            else errorMsg = "❌ " + e.message;
+            
+            msgEl.textContent = errorMsg;
+            showToast(errorMsg, true);
+        } finally {
+            this.disabled = false;
+            this.textContent = "S'inscrire";
+        }
+    };
+    
+    // Déconnexion
+    document.getElementById('logoutBtn').onclick = async () => { 
+        try {
+            await auth.signOut(); 
+            currentUser = null; 
+            showPage('loginPage'); 
+            showToast("👋 Déconnecté");
+        } catch(e) {
+            console.error("Erreur déconnexion:", e);
+            showToast("Erreur de déconnexion", true);
+        }
+    };
+    
+    // Observer l'état de connexion
+    auth.onAuthStateChanged(async (user) => {
+        console.log("État auth changé:", user ? user.email : "déconnecté");
+        
+        if(user) { 
+            currentUser = user; 
+            console.log("✅ Utilisateur connecté:", user.uid);
+            await loadDashboard(); 
+            showPage('dashboardPage'); 
+        } else {
+            console.log("❌ Aucun utilisateur connecté");
+            currentUser = null;
+            showPage('loginPage');
+        }
+    });
+    
+    document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
+    document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
+    
     // ==================== DASHBOARD ====================
     async function loadDashboard() {
         if(!currentUser) return;
@@ -400,6 +528,28 @@
             showToast("Erreur de chargement", true);
         }
     }
+    
+    // Navigation
+    document.querySelectorAll('[data-back]').forEach(btn => {
+        btn.onclick = () => showPage('dashboardPage');
+    });
+    
+    document.querySelectorAll('.dashboard-card').forEach(card => {
+        card.onclick = () => showPage(card.dataset.nav + 'Page');
+    });
+    
+    // Salaire
+    document.getElementById('saveSalaryBtn').addEventListener('click', async () => {
+        try {
+            let salary = parseFloat(document.getElementById('monthlySalaryInput').value) || 0;
+            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ salary }, { merge: true });
+            showToast("💾 Salaire enregistré");
+            loadDashboard();
+        } catch(e) {
+            console.error("Erreur saveSalary:", e);
+            showToast("Erreur d'enregistrement", true);
+        }
+    });
     
     // ==================== FACTURATION ====================
     const factCats = ["Charges fixes", "Éducation", "Alimentation", "Transport", "Santé", "Shopping", "Imprévus"];
@@ -445,7 +595,6 @@
             }
             document.getElementById('totalMonthly').innerHTML = `💰 Total mensuel: ${total.toLocaleString()} Ar`;
             
-            // Event listeners pour édition/suppression
             document.querySelectorAll('.editExpense').forEach(btn => {
                 btn.onclick = async () => {
                     let idx = parseInt(btn.dataset.idx);
@@ -481,6 +630,33 @@
         }
     }
     
+    document.getElementById('addExpenseBtn').addEventListener('click', async () => {
+        let name = document.getElementById('expenseName').value.trim();
+        let amount = parseFloat(document.getElementById('expenseAmount').value);
+        
+        if(!name || isNaN(amount)) return showToast("Nom et montant valides requis", true);
+        
+        try {
+            let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
+            let expenses = doc.exists ? (doc.data().expenses || {}) : {};
+            
+            if(!expenses[activeFactCat]) expenses[activeFactCat] = [];
+            expenses[activeFactCat].push({ name, amount });
+            
+            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ expenses }, { merge: true });
+            
+            document.getElementById('expenseName').value = '';
+            document.getElementById('expenseAmount').value = '';
+            
+            loadFacturation();
+            loadDashboard();
+            showToast("✅ Dépense ajoutée");
+        } catch(e) {
+            console.error("Erreur addExpense:", e);
+            showToast("Erreur d'ajout", true);
+        }
+    });
+    
     // ==================== CALENDRIER ====================
     async function initCalendar() {
         try {
@@ -502,9 +678,32 @@
         }
     }
     
-    // ==================== AIZA (GESTION OBJETS) ====================
+    document.getElementById('addEventBtn').onclick = async () => {
+        let title = document.getElementById('eventTitle').value.trim();
+        let date = document.getElementById('eventDate').value;
+        
+        if(!title || !date) return showToast("Titre et date requis", true);
+        
+        try {
+            let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
+            let events = doc.exists ? (doc.data().events || []) : [];
+            
+            events.push({ title, date });
+            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ events }, { merge: true });
+            
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            
+            initCalendar();
+            showToast("✅ Événement ajouté");
+        } catch(e) {
+            console.error("Erreur addEvent:", e);
+            showToast("Erreur d'ajout", true);
+        }
+    };
     
-    // Initialisation des dropdowns
+    // ==================== AIZA ====================
+    
     function initDropdowns() {
         let catMenu = document.getElementById('categoryMenu');
         catMenu.innerHTML = categoriesList.map(c => 
@@ -518,7 +717,6 @@
                 document.getElementById('selectedCategoryText').style.color = '#333';
                 document.getElementById('categoryMenu').classList.remove('show');
                 
-                // Mise à jour sous-catégories
                 let subMenu = document.getElementById('subcategoryMenu');
                 let subs = subcategoriesMap[selectedCategory] || ["Autre"];
                 subMenu.innerHTML = subs.map(s => 
@@ -534,7 +732,6 @@
                     };
                 });
                 
-                // Réinitialiser sous-catégorie
                 selectedSubcategory = "";
                 document.getElementById('selectedSubcategoryText').innerHTML = '📂 Sous-catégorie';
                 document.getElementById('selectedSubcategoryText').style.color = '#666';
@@ -542,7 +739,6 @@
         });
     }
     
-    // Setup dropdown interactif
     function setupDropdown(dropdownId) {
         let dd = document.getElementById(dropdownId);
         if(!dd) return;
@@ -555,7 +751,6 @@
             e.stopPropagation();
             let isOpen = menu.classList.contains('show');
             
-            // Fermer tous les dropdowns
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             document.querySelectorAll('.dropdown-input i').forEach(i => i.style.transform = 'rotate(0deg)');
             
@@ -566,7 +761,6 @@
         };
     }
     
-    // Upload photos avec gestion d'erreurs
     async function uploadPhotos(files) {
         if(!files || files.length === 0) return [];
         
@@ -593,7 +787,6 @@
         return urls;
     }
     
-    // Affichage des produits GROUPÉS PAR CATÉGORIE
     async function loadProducts() {
         if(!currentUser) {
             console.log("Pas d'utilisateur connecté");
@@ -614,7 +807,6 @@
                 console.log("Aucun document trouvé");
             }
             
-            // Filtrage par recherche
             let filtered = objects;
             if(currentSearchTerm) {
                 let s = currentSearchTerm.toLowerCase();
@@ -627,7 +819,6 @@
                 console.log("Objets filtrés:", filtered.length);
             }
             
-            // GROUPEMENT PAR CATÉGORIE
             let grouped = {};
             filtered.forEach(o => { 
                 let cat = o.category || "Autre"; 
@@ -667,10 +858,8 @@
             let container = document.getElementById('productsListContainer');
             container.innerHTML = html;
             
-            // EVENT LISTENERS POUR OUVRIR MODAL
             document.querySelectorAll('.product-card').forEach((card, globalIdx) => {
                 card.addEventListener('click', function() {
-                    // Trouver l'objet correspondant
                     let foundObject = null;
                     let count = 0;
                     
@@ -731,7 +920,6 @@
         }
     }
     
-    // Configuration recherche
     function setupSearch() {
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
@@ -745,7 +933,6 @@
             };
         }
         
-        // Recherche avec touche Entrée
         if(searchInput) {
             searchInput.addEventListener('keypress', async (e) => {
                 if(e.key === 'Enter') {
@@ -758,7 +945,6 @@
         }
     }
     
-    // Initialisation AIZA
     async function initAiza() {
         if(!currentUser) {
             console.log("initAiza: Pas d'utilisateur connecté");
@@ -772,6 +958,125 @@
         setupSearch();
         await loadProducts();
     }
+    
+    document.getElementById('addPhotoBtn').addEventListener('click', () => {
+        document.getElementById('objPhotos').click();
+    });
+    
+    document.getElementById('objPhotos').addEventListener('change', function(e) {
+        let preview = document.getElementById('photoPreview');
+        preview.innerHTML = '';
+        let files = Array.from(e.target.files);
+        
+        if(files.length > 5) {
+            showToast("Maximum 5 photos", true);
+            files = files.slice(0, 5);
+        }
+        
+        for(let i = 0; i < files.length; i++) {
+            let reader = new FileReader();
+            reader.onload = (ev) => {
+                let img = document.createElement('img');
+                img.src = ev.target.result;
+                img.className = 'preview-thumb';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(files[i]);
+        }
+    });
+    
+    document.getElementById('saveObjectBtn').addEventListener('click', async function() {
+        let name = document.getElementById('objName').value.trim();
+        let location = document.getElementById('objLocation').value.trim();
+        let description = document.getElementById('objDescription').value.trim();
+        let photosInput = document.getElementById('objPhotos');
+        let photos = photosInput.files;
+        
+        console.log("=== DÉBUT ENREGISTREMENT ===");
+        console.log("Nom:", name);
+        console.log("Localisation:", location);
+        console.log("Catégorie:", selectedCategory);
+        console.log("Sous-catégorie:", selectedSubcategory);
+        console.log("Photos:", photos.length);
+        
+        if(!name) { 
+            showToast("❌ Nom requis", true); 
+            return; 
+        }
+        if(!location) { 
+            showToast("❌ Localisation requise", true); 
+            return; 
+        }
+        if(!selectedCategory) { 
+            showToast("❌ Catégorie requise", true); 
+            return; 
+        }
+        
+        this.disabled = true;
+        this.innerHTML = '⏳ Enregistrement...';
+        
+        try {
+            showToast("⏳ Upload des photos...");
+            
+            let photoUrls = await uploadPhotos(photos);
+            console.log("Photos uploadées:", photoUrls);
+            
+            showToast("💾 Sauvegarde...");
+            
+            let docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
+            let doc = await docRef.get();
+            let objects = doc.exists ? (doc.data().objects || []) : [];
+            
+            let newObject = { 
+                id: Date.now(), 
+                name, 
+                category: selectedCategory, 
+                subCategory: selectedSubcategory || "Non classé", 
+                location, 
+                description: description || "Aucune description", 
+                photos: photoUrls,
+                createdAt: new Date().toISOString()
+            };
+            
+            console.log("Nouvel objet:", newObject);
+            
+            objects.push(newObject);
+            
+            await docRef.set({ objects }, { merge: true });
+            console.log("Objet sauvegardé dans Firestore");
+            
+            let checkDoc = await docRef.get();
+            console.log("Vérification - Objets dans DB:", checkDoc.data()?.objects?.length);
+            
+            document.getElementById('objName').value = '';
+            document.getElementById('objLocation').value = '';
+            document.getElementById('objDescription').value = '';
+            photosInput.value = '';
+            document.getElementById('photoPreview').innerHTML = '';
+            selectedCategory = "";
+            selectedSubcategory = "";
+            document.getElementById('selectedCategoryText').innerHTML = '📁 Catégorie';
+            document.getElementById('selectedCategoryText').style.color = '#666';
+            document.getElementById('selectedSubcategoryText').innerHTML = '📂 Sous-catégorie';
+            document.getElementById('selectedSubcategoryText').style.color = '#666';
+            
+            this.disabled = false;
+            this.innerHTML = '💾 Enregistrer l'objet';
+            
+            await loadProducts();
+            
+            showToast("✅ Objet sauvegardé avec succès !");
+            
+            console.log("=== FIN ENREGISTREMENT ===");
+            
+        } catch(e) {
+            console.error("ERREUR COMPLÈTE:", e);
+            showToast("❌ Erreur: " + e.message, true);
+            
+            this.disabled = false;
+            this.innerHTML = '💾 Enregistrer l'objet';
+        }
+    });
     
     // ==================== PROJETS ====================
     async function loadProjects() {
@@ -807,262 +1112,6 @@
         }
     }
     
-    // ==================== EVENT LISTENERS ====================
-    
-    // Auth
-    document.getElementById('signinBtn').onclick = async () => {
-        let email = document.getElementById('email').value.trim();
-        let pwd = document.getElementById('password').value;
-        if(!email || !pwd) return showToast("Email et mot de passe requis", true);
-        
-        try {
-            await auth.signInWithEmailAndPassword(email, pwd);
-            showToast("✅ Connecté !");
-        } catch(e) { 
-            console.error("Erreur login:", e);
-            showToast(e.message, true); 
-        }
-    };
-    
-    document.getElementById('registerBtn').onclick = async () => {
-        let email = document.getElementById('regEmail').value.trim();
-        let pwd = document.getElementById('regPassword').value;
-        if(!email || !pwd || pwd.length < 6) return showToast("Email et mot de passe (min 6 caractères)", true);
-        
-        try {
-            await auth.createUserWithEmailAndPassword(email, pwd);
-            showToast("✅ Compte créé ! Connectez-vous");
-            showPage('loginPage');
-        } catch(e) { 
-            console.error("Erreur register:", e);
-            showToast(e.message, true); 
-        }
-    };
-    
-    document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
-    document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
-    document.getElementById('logoutBtn').onclick = async () => { 
-        await auth.signOut(); 
-        currentUser = null; 
-        showPage('loginPage'); 
-        showToast("Déconnecté");
-    };
-    
-    auth.onAuthStateChanged(async (user) => {
-        if(user) { 
-            currentUser = user; 
-            console.log("Utilisateur connecté:", user.uid);
-            await loadDashboard(); 
-            showPage('dashboardPage'); 
-        } else {
-            console.log("Aucun utilisateur connecté");
-            showPage('loginPage');
-        }
-    });
-    
-    // Navigation
-    document.querySelectorAll('[data-back]').forEach(btn => {
-        btn.onclick = () => showPage('dashboardPage');
-    });
-    
-    document.querySelectorAll('.dashboard-card').forEach(card => {
-        card.onclick = () => showPage(card.dataset.nav + 'Page');
-    });
-    
-    // Salaire
-    document.getElementById('saveSalaryBtn').addEventListener('click', async () => {
-        try {
-            let salary = parseFloat(document.getElementById('monthlySalaryInput').value) || 0;
-            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ salary }, { merge: true });
-            showToast("💾 Salaire enregistré");
-            loadDashboard();
-        } catch(e) {
-            console.error("Erreur saveSalary:", e);
-            showToast("Erreur d'enregistrement", true);
-        }
-    });
-    
-    // Dépenses
-    document.getElementById('addExpenseBtn').addEventListener('click', async () => {
-        let name = document.getElementById('expenseName').value.trim();
-        let amount = parseFloat(document.getElementById('expenseAmount').value);
-        
-        if(!name || isNaN(amount)) return showToast("Nom et montant valides requis", true);
-        
-        try {
-            let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
-            let expenses = doc.exists ? (doc.data().expenses || {}) : {};
-            
-            if(!expenses[activeFactCat]) expenses[activeFactCat] = [];
-            expenses[activeFactCat].push({ name, amount });
-            
-            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ expenses }, { merge: true });
-            
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseAmount').value = '';
-            
-            loadFacturation();
-            loadDashboard();
-            showToast("✅ Dépense ajoutée");
-        } catch(e) {
-            console.error("Erreur addExpense:", e);
-            showToast("Erreur d'ajout", true);
-        }
-    });
-    
-    // Événements calendrier
-    document.getElementById('addEventBtn').onclick = async () => {
-        let title = document.getElementById('eventTitle').value.trim();
-        let date = document.getElementById('eventDate').value;
-        
-        if(!title || !date) return showToast("Titre et date requis", true);
-        
-        try {
-            let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
-            let events = doc.exists ? (doc.data().events || []) : [];
-            
-            events.push({ title, date });
-            await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ events }, { merge: true });
-            
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            
-            initCalendar();
-            showToast("✅ Événement ajouté");
-        } catch(e) {
-            console.error("Erreur addEvent:", e);
-            showToast("Erreur d'ajout", true);
-        }
-    };
-    
-    // Photos AIZA
-    document.getElementById('addPhotoBtn').addEventListener('click', () => {
-        document.getElementById('objPhotos').click();
-    });
-    
-    document.getElementById('objPhotos').addEventListener('change', function(e) {
-        let preview = document.getElementById('photoPreview');
-        preview.innerHTML = '';
-        let files = Array.from(e.target.files);
-        
-        if(files.length > 5) {
-            showToast("Maximum 5 photos", true);
-            files = files.slice(0, 5);
-        }
-        
-        for(let i = 0; i < files.length; i++) {
-            let reader = new FileReader();
-            reader.onload = (ev) => {
-                let img = document.createElement('img');
-                img.src = ev.target.result;
-                img.className = 'preview-thumb';
-                preview.appendChild(img);
-            };
-            reader.readAsDataURL(files[i]);
-        }
-    });
-    
-    // Enregistrer objet AIZA
-    document.getElementById('saveObjectBtn').addEventListener('click', async function() {
-        let name = document.getElementById('objName').value.trim();
-        let location = document.getElementById('objLocation').value.trim();
-        let description = document.getElementById('objDescription').value.trim();
-        let photosInput = document.getElementById('objPhotos');
-        let photos = photosInput.files;
-        
-        console.log("=== DÉBUT ENREGISTREMENT ===");
-        console.log("Nom:", name);
-        console.log("Localisation:", location);
-        console.log("Catégorie:", selectedCategory);
-        console.log("Sous-catégorie:", selectedSubcategory);
-        console.log("Photos:", photos.length);
-        
-        if(!name) { 
-            showToast("❌ Nom requis", true); 
-            return; 
-        }
-        if(!location) { 
-            showToast("❌ Localisation requise", true); 
-            return; 
-        }
-        if(!selectedCategory) { 
-            showToast("❌ Catégorie requise", true); 
-            return; 
-        }
-        
-        // Désactiver le bouton
-        this.disabled = true;
-        this.innerHTML = '⏳ Enregistrement...';
-        
-        try {
-            showToast("⏳ Upload des photos...");
-            
-            let photoUrls = await uploadPhotos(photos);
-            console.log("Photos uploadées:", photoUrls);
-            
-            showToast("💾 Sauvegarde...");
-            
-            let docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
-            let doc = await docRef.get();
-            let objects = doc.exists ? (doc.data().objects || []) : [];
-            
-            let newObject = { 
-                id: Date.now(), 
-                name, 
-                category: selectedCategory, 
-                subCategory: selectedSubcategory || "Non classé", 
-                location, 
-                description: description || "Aucune description", 
-                photos: photoUrls,
-                createdAt: new Date().toISOString()
-            };
-            
-            console.log("Nouvel objet:", newObject);
-            
-            objects.push(newObject);
-            
-            await docRef.set({ objects }, { merge: true });
-            console.log("Objet sauvegardé dans Firestore");
-            
-            // Vérification
-            let checkDoc = await docRef.get();
-            console.log("Vérification - Objets dans DB:", checkDoc.data()?.objects?.length);
-            
-            // Réinitialisation du formulaire
-            document.getElementById('objName').value = '';
-            document.getElementById('objLocation').value = '';
-            document.getElementById('objDescription').value = '';
-            photosInput.value = '';
-            document.getElementById('photoPreview').innerHTML = '';
-            selectedCategory = "";
-            selectedSubcategory = "";
-            document.getElementById('selectedCategoryText').innerHTML = '📁 Catégorie';
-            document.getElementById('selectedCategoryText').style.color = '#666';
-            document.getElementById('selectedSubcategoryText').innerHTML = '📂 Sous-catégorie';
-            document.getElementById('selectedSubcategoryText').style.color = '#666';
-            
-            // Réactiver le bouton
-            this.disabled = false;
-            this.innerHTML = '💾 Enregistrer l'objet';
-            
-            // Recharger les produits
-            await loadProducts();
-            
-            showToast("✅ Objet sauvegardé avec succès !");
-            
-            console.log("=== FIN ENREGISTREMENT ===");
-            
-        } catch(e) {
-            console.error("ERREUR COMPLÈTE:", e);
-            showToast("❌ Erreur: " + e.message, true);
-            
-            // Réactiver le bouton en cas d'erreur
-            this.disabled = false;
-            this.innerHTML = '💾 Enregistrer l'objet';
-        }
-    });
-    
-    // Projets
     document.getElementById('addProjectBtn').addEventListener('click', async () => {
         let name = document.getElementById('projectName').value.trim();
         let month = parseInt(document.getElementById('projectMonth').value);
@@ -1090,7 +1139,7 @@
         }
     });
     
-    // Modal produit
+    // Modal
     document.querySelector('.close-modal').onclick = () => {
         document.getElementById('productModal').classList.remove('active');
     };
@@ -1100,7 +1149,6 @@
         if(e.target === m) m.classList.remove('active'); 
     };
     
-    // Fermer dropdowns en cliquant ailleurs
     document.onclick = (e) => { 
         if(!e.target.closest('.dropdown-3d')) { 
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); 
@@ -1108,7 +1156,6 @@
         } 
     };
     
-    // Synchronisation sélecteur de mois
     document.getElementById('monthSelector').onchange = (e) => { 
         currentMonth = parseInt(e.target.value); 
         loadDashboard(); 
@@ -1121,7 +1168,6 @@
         }
     };
     
-    // Update facturation month selector
     setInterval(() => { 
         let fs = document.getElementById('factMonthSelect'); 
         if(fs && fs.innerHTML === '') { 
@@ -1140,7 +1186,7 @@
         } 
     }, 500);
     
-    console.log("Script chargé avec succès");
+    console.log("✅ Script chargé avec succès");
 </script>
 </body>
 </html>
