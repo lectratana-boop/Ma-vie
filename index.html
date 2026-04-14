@@ -15,89 +15,59 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background: radial-gradient(circle at 10% 30%, #1a1a2e, #0f0f1a); min-height: 100vh; padding: 16px; }
-        .app-container { max-width: 550px; margin: 0 auto; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 48px; box-shadow: 0 30px 50px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.1); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        .app-container { max-width: 550px; margin: 0 auto; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border-radius: 48px; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
         .page { display: none; padding: 20px 18px; animation: fadeInUp 0.3s ease; }
         .active-page { display: block; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px);} to { opacity: 1; transform: translateY(0);} }
-        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
-        .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 12px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 14px rgba(108,62,255,0.3); }
+        .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 12px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; }
         .gradient-btn:active { transform: scale(0.96); }
-        .gradient-btn-secondary { background: linear-gradient(135deg, #3a86ff, #2666cc); }
         input, select, textarea { background: rgba(255,255,255,0.9); border: none; border-radius: 60px; padding: 12px 18px; width: 100%; margin-bottom: 12px; font-size: 0.9rem; }
         textarea { border-radius: 24px; resize: vertical; }
         .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
-        .dashboard-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); backdrop-filter: blur(8px); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 15px 25px -10px rgba(0,0,0,0.3); transform: translateY(0); transition: 0.1s; }
+        .dashboard-card { background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05)); border-radius: 28px; padding: 20px 10px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.25); }
         .dashboard-card:active { transform: translateY(3px); }
         .dashboard-card i { font-size: 44px; background: linear-gradient(135deg, #ffd966, #ffb347); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .finance-center { display: flex; gap: 12px; margin: 15px 0; flex-wrap: wrap; }
-        .finance-card { flex: 1; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); border-radius: 28px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+        .finance-card { flex: 1; background: rgba(0,0,0,0.4); border-radius: 28px; padding: 14px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
         .finance-amount { font-size: 1.6rem; font-weight: 800; background: linear-gradient(135deg, #f9f3c1, #ffe6a3); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .month-selector { background: rgba(255,255,255,0.15); border-radius: 60px; padding: 6px 12px; display: inline-flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-        .cat-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; }
-        .cat-btn { background: rgba(255,255,255,0.2); border-radius: 60px; padding: 6px 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; transition: 0.2s; }
-        .cat-active { background: linear-gradient(135deg, #a06eff, #6c3eff); color: white; }
-        .expense-item { display: flex; justify-content: space-between; background: rgba(255,255,245,0.9); padding: 10px 16px; border-radius: 40px; margin-bottom: 8px; color: #1e1e2a; font-weight: 500; }
+        .month-selector { background: rgba(255,255,255,0.15); border-radius: 60px; padding: 6px 12px; display: inline-flex; gap: 12px; margin-bottom: 16px; }
         .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, #f0e6ff, #c7b9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 10px 20px; border-radius: 40px; z-index: 1000; animation: fadeOut 3s ease forwards; font-size: 14px; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         
-        /* ==================== STYLES AIZA 3D ==================== */
+        /* Styles AIZA */
         .aiza-container { padding: 20px; border-radius: 30px; background: linear-gradient(145deg, #1a1a2e, #0f0f1a); }
-        .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 20px; }
+        .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; backdrop-filter: blur(10px); margin-bottom: 20px; }
         .search-3d input { flex: 1; background: none; border: none; color: white; padding: 8px; outline: none; }
-        .search-3d input::placeholder { color: rgba(255,255,255,0.5); }
-        .search-3d button { background: linear-gradient(135deg, #8c52ff, #6c3eff); border: none; padding: 8px 20px; border-radius: 30px; color: white; cursor: pointer; box-shadow: 0 0 15px rgba(140,82,255,0.5); transition: all 0.2s; }
-        .search-3d button:active { transform: scale(0.95); }
-        
-        .form-3d textarea { width: 100%; margin: 8px 0; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; }
-        
-        /* Dropdown 3D scrollable */
+        .search-3d button { background: linear-gradient(135deg, #8c52ff, #6c3eff); border: none; padding: 8px 20px; border-radius: 30px; color: white; cursor: pointer; }
         .dropdown-3d { position: relative; margin-bottom: 12px; }
-        .dropdown-input { width: 100%; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .dropdown-input { width: 100%; padding: 12px; border-radius: 25px; background: rgba(255,255,255,0.9); font-size: 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .dropdown-input span { color: #666; }
-        .dropdown-input i { color: #6c3eff; transition: 0.2s; }
-        .dropdown-menu { position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,40,0.98); backdrop-filter: blur(15px); border-radius: 20px; margin-top: 8px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; border: 1px solid rgba(108,62,255,0.3); max-height: 250px; overflow-y: auto; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .dropdown-menu { position: absolute; top: 100%; left: 0; right: 0; background: rgba(20,20,40,0.98); backdrop-filter: blur(15px); border-radius: 20px; margin-top: 8px; z-index: 100; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.3s ease; max-height: 250px; overflow-y: auto; border: 1px solid rgba(108,62,255,0.3); }
         .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-menu::-webkit-scrollbar { width: 4px; }
-        .dropdown-menu::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
-        .dropdown-menu::-webkit-scrollbar-thumb { background: #6c3eff; border-radius: 10px; }
-        .dropdown-item { padding: 12px 16px; color: white; cursor: pointer; transition: all 0.2s; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .dropdown-item:hover { background: linear-gradient(135deg, #8c52ff, #6c3eff); transform: translateX(5px); box-shadow: 0 0 15px rgba(140,82,255,0.5); }
-        
+        .dropdown-item { padding: 12px 16px; color: white; cursor: pointer; transition: all 0.2s; }
+        .dropdown-item:hover { background: #6c3eff; transform: translateX(5px); }
         .photo-upload { display: flex; justify-content: space-between; align-items: center; color: white; margin: 10px 0; }
-        .plus-btn { background: #8c52ff; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 24px; cursor: pointer; transition: all 0.2s; }
-        .plus-btn:active { transform: scale(0.9); }
-        
+        .plus-btn { background: #8c52ff; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 24px; cursor: pointer; }
         .photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .preview-thumb { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; cursor: pointer; transition: 0.2s; }
-        .preview-thumb:hover { transform: scale(1.05); box-shadow: 0 0 15px #6c3eff; }
-        
+        .preview-thumb { width: 60px; height: 60px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; cursor: pointer; }
         .list-title { color: white; font-size: 16px; font-weight: 600; margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #6c3eff; display: inline-block; }
-        
-        .product-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.2s; border: 1px solid transparent; }
-        .product-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); border-color: #6c3eff; box-shadow: 0 0 15px rgba(108,62,255,0.3); }
+        .product-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.2s; }
+        .product-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
         .product-card img { width: 55px; height: 55px; border-radius: 15px; object-fit: cover; }
         .product-card div { flex: 1; }
-        .product-card strong { display: block; }
-        .product-card small { font-size: 11px; color: #aaa; display: block; }
-        
-        .save-btn { width: 100%; padding: 14px; border: none; border-radius: 35px; background: linear-gradient(135deg, #8c52ff, #6c3eff); color: white; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(140,82,255,0.5); transition: all 0.2s; }
-        .save-btn:active { transform: scale(0.97); }
-        
+        .save-btn { width: 100%; padding: 14px; border: none; border-radius: 35px; background: linear-gradient(135deg, #8c52ff, #6c3eff); color: white; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; }
         .back-btn-bottom { text-align: center; margin-top: 20px; }
-        .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; transition: 0.2s; }
-        .back-btn-bottom button:hover { background: rgba(108,62,255,0.5); }
-        
-        /* Modal */
+        .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { max-width: 90%; max-height: 90%; background: #1a1a2e; border-radius: 32px; padding: 20px; text-align: center; border: 1px solid #6c3eff; }
+        .modal-content { max-width: 90%; background: #1a1a2e; border-radius: 32px; padding: 20px; text-align: center; border: 1px solid #6c3eff; }
         .modal-image { max-width: 100%; max-height: 60vh; border-radius: 24px; }
         .modal-desc { color: white; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 20px; }
         .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
-        
-        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
+        @media (max-width: 500px) { .page { padding: 14px; } }
     </style>
 </head>
 <body>
@@ -110,7 +80,7 @@
             <input type="email" id="email" placeholder="Email *">
             <input type="password" id="password" placeholder="Mot de passe *">
             <button id="signinBtn" class="gradient-btn" style="margin-bottom: 12px;">Se connecter</button>
-            <button id="showRegisterBtn" class="gradient-btn gradient-btn-secondary">Créer un compte</button>
+            <button id="showRegisterBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Créer un compte</button>
             <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
         </div>
     </div>
@@ -124,7 +94,7 @@
             <input type="password" id="regPassword" placeholder="Mot de passe * (min 6)">
             <input type="tel" id="regPhone" placeholder="Téléphone (+261...)">
             <button id="registerBtn" class="gradient-btn" style="margin-bottom: 12px;">S'inscrire</button>
-            <button id="showLoginBtn" class="gradient-btn gradient-btn-secondary">Retour à la connexion</button>
+            <button id="showLoginBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Retour</button>
             <div id="registerMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
         </div>
     </div>
@@ -158,11 +128,11 @@
         <div class="card">
             <div class="month-selector" style="justify-content: space-between;"><span>Mois</span><select id="factMonthSelect"></select></div>
             <div class="cat-grid" id="catContainer"></div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;"><input type="text" id="expenseName" placeholder="Nom dépense" style="flex:2"><input type="number" id="expenseAmount" placeholder="Montant" style="flex:1"><button id="addExpenseBtn" class="gradient-btn">+</button></div>
+            <div style="display: flex; gap: 8px;"><input type="text" id="expenseName" placeholder="Nom dépense" style="flex:2"><input type="number" id="expenseAmount" placeholder="Montant" style="flex:1"><button id="addExpenseBtn" class="gradient-btn">+</button></div>
             <div id="suggestionsBar" class="cat-grid" style="margin-top: 5px;"></div>
             <div id="expenseList" style="margin-top: 16px;"></div>
             <div style="margin-top: 16px; text-align:center; font-weight:bold;" id="totalMonthly"></div>
-            <button id="monthlyResetBtn" class="gradient-btn" style="margin-top:12px; background:#ff8c42;">Réinitialiser le mois</button>
+            <button id="monthlyResetBtn" class="gradient-btn" style="margin-top:12px; background:#ff8c42;">Réinitialiser</button>
         </div>
     </div>
 
@@ -171,77 +141,45 @@
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Agenda</span><div></div></div>
         <div class="card" id="calendarContainer" style="padding: 8px;"></div>
         <div class="card" style="margin-top: 16px;">
-            <h3 style="color:white;">➕ Nouvel événement</h3>
             <input type="text" id="eventTitle" placeholder="Titre">
             <input type="datetime-local" id="eventDate">
-            <textarea id="eventDesc" rows="3" placeholder="Description" maxlength="1500"></textarea>
-            <button id="addEventBtn" class="gradient-btn">Ajouter + Notifier</button>
+            <textarea id="eventDesc" rows="3" placeholder="Description"></textarea>
+            <button id="addEventBtn" class="gradient-btn">Ajouter</button>
         </div>
-        <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
+        <div id="eventListPreview" style="margin-top: 12px;"></div>
     </div>
 
     <!-- AIZA -->
     <div id="aizaPage" class="page">
         <div class="aiza-container">
-            <!-- SEARCH -->
             <div class="search-3d">
                 <input type="text" id="searchInput" placeholder="Rechercher un objet...">
                 <button id="searchBtn">Rechercher</button>
             </div>
-
             <div class="form-3d">
-                <!-- DROPDOWN CATEGORIE -->
                 <div class="dropdown-3d" id="categoryDropdown">
-                    <div class="dropdown-input">
-                        <span id="selectedCategoryText">Catégorie</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
+                    <div class="dropdown-input"><span id="selectedCategoryText">Catégorie</span><i class="fas fa-chevron-down"></i></div>
                     <div class="dropdown-menu" id="categoryMenu"></div>
                 </div>
-
-                <!-- DROPDOWN SOUS-CATEGORIE -->
                 <div class="dropdown-3d" id="subcategoryDropdown">
-                    <div class="dropdown-input">
-                        <span id="selectedSubcategoryText">Sous-catégorie</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
+                    <div class="dropdown-input"><span id="selectedSubcategoryText">Sous-catégorie</span><i class="fas fa-chevron-down"></i></div>
                     <div class="dropdown-menu" id="subcategoryMenu"></div>
                 </div>
-
-                <input type="text" id="objName" placeholder="Nom de l'objet (ex: T-shirt bleu)">
-                <input type="text" id="objLocation" placeholder="Localisation (armoire, bureau, étagère)">
-                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description de l'objet (max 250 caractères)"></textarea>
-                <div style="font-size: 11px; color: #aaa; text-align: right; margin-top: -8px; margin-bottom: 12px;" id="charCount">0/250</div>
-
-                <!-- PHOTOS -->
-                <div class="photo-upload">
-                    <span>📸 Photos (max 5)</span>
-                    <button type="button" class="plus-btn" id="addPhotoBtn">+</button>
-                </div>
+                <input type="text" id="objName" placeholder="Nom de l'objet">
+                <input type="text" id="objLocation" placeholder="Localisation">
+                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description"></textarea>
+                <div class="photo-upload"><span>📸 Photos (max 5)</span><button type="button" class="plus-btn" id="addPhotoBtn">+</button></div>
                 <input type="file" id="objPhotos" accept="image/*" multiple style="display: none;">
                 <div id="photoPreview" class="photo-preview"></div>
-
-                <!-- LISTE DES PRODUITS -->
                 <div id="productsListContainer"></div>
-
-                <!-- BOUTON SAUVEGARDER -->
                 <button id="saveObjectBtn" class="save-btn">💾 Enregistrer l'objet</button>
             </div>
-
-            <div class="back-btn-bottom">
-                <button data-back="dashboard">← Retour au tableau de bord</button>
-            </div>
+            <div class="back-btn-bottom"><button data-back="dashboard">← Retour</button></div>
         </div>
     </div>
 
     <!-- MODAL -->
-    <div id="productModal" class="modal">
-        <span class="close-modal">&times;</span>
-        <div class="modal-content">
-            <img id="modalImage" class="modal-image" src="">
-            <div id="modalDescription" class="modal-desc"></div>
-        </div>
-    </div>
+    <div id="productModal" class="modal"><span class="close-modal">&times;</span><div class="modal-content"><img id="modalImage" class="modal-image" src=""><div id="modalDescription" class="modal-desc"></div></div></div>
 
     <!-- PROJET -->
     <div id="projetPage" class="page">
@@ -252,14 +190,14 @@
             <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
             <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
             <select id="projectStatus"><option value="en cours">En cours</option><option value="terminé">Terminé</option></select>
-            <button id="addProjectBtn" class="gradient-btn">Ajouter projet</button>
+            <button id="addProjectBtn" class="gradient-btn">Ajouter</button>
             <div id="projectsList" style="margin-top: 20px;"></div>
         </div>
     </div>
 </div>
 
 <script>
-    // ==================== FIREBASE CONFIGURATION ====================
+    // FIREBASE CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyBqcigoEE0rRNkzfYvIRUtH2Vu-BBaCbVg",
         authDomain: "aimg-app.firebaseapp.com",
@@ -273,627 +211,275 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
     const storage = firebase.storage();
-    auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     
     let currentUser = null;
     let currentDisplayMonth = new Date().getMonth();
     let calendar = null;
     let currentSearchTerm = "";
-    
-    // Données pour les dropdowns
-    const categoriesList = ["Vêtements", "Jouets", "Bureautique", "Informatique", "Électronique", "Maison", "Sports", "Autre"];
-    const subcategoriesMap = {
-        "Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes", "Accessoires"],
-        "Jouets": ["Voitures miniatures", "Poupées", "Jeux de construction", "Peluches", "Ballons", "Jeux de société"],
-        "Bureautique": ["Papier", "Stylos", "Classeurs", "Enveloppes", "Agrafeuse", "Post-it", "Calculatrice"],
-        "Informatique": ["Clé USB", "Ordinateur", "Souris", "Clavier", "Disque dur", "Câbles", "Imprimante"],
-        "Électronique": ["Téléphone", "Tablette", "Écouteurs", "Chargeur", "Batterie", "Appareil photo"],
-        "Maison": ["Meubles", "Décoration", "Ustensiles", "Linge", "Électroménager"],
-        "Sports": ["Ballon", "Raquette", "Vélo", "Chaussures", "Vêtements de sport"],
-        "Autre": ["Divers", "Non classé"]
-    };
-    
     let selectedCategory = "";
     let selectedSubcategory = "";
     
-    function showToast(message, isError = false) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.style.background = isError ? '#d9534f' : 'rgba(0,0,0,0.9)';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 3000);
-    }
-    
-    function showPage(pageId) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-        document.getElementById(pageId).classList.add('active-page');
-        if(pageId === 'facturationPage') initFacturation();
-        if(pageId === 'calendrierPage') initCalendar();
-        if(pageId === 'aizaPage') initAiza();
-        if(pageId === 'projetPage') initProjets();
-        if(pageId === 'dashboardPage') { updateDashboardUI(); document.getElementById('saveSalaryBtn').onclick = saveSalaryForMonth; document.getElementById('monthSelector').onchange = (e) => changeMonth(e.target.value); document.getElementById('monthSelector').value = currentDisplayMonth; }
-    }
-    
-    // ==================== FIRESTORE FUNCTIONS ====================
-    function getMonthKey() { return `2025_${currentDisplayMonth}`; }
-    
-    async function getUserMonthData() {
-        if(!currentUser) return null;
-        const docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
-        const doc = await docRef.get();
-        if(doc.exists) return doc.data();
-        return { salary: 0, expenses: {}, events: [], projects: [], objects: [] };
-    }
-    
-    async function saveUserMonthData(data) {
-        if(!currentUser) return;
-        const docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
-        await docRef.set(data, { merge: true });
-    }
-    
-    async function getTotalExpensesForMonth() {
-        const monthData = await getUserMonthData();
-        let total = 0;
-        for(let cat in monthData.expenses) {
-            (monthData.expenses[cat] || []).forEach(e => total += Number(e.amount) || 0);
-        }
-        return total;
-    }
-    
-    async function updateDashboardUI() {
-        if(!currentUser) return;
-        const monthData = await getUserMonthData();
-        let salary = monthData.salary || 0;
-        let depenses = await getTotalExpensesForMonth();
-        let epargne = salary - depenses;
-        document.getElementById('salaryDisplay').innerHTML = salary.toLocaleString() + ' Ar';
-        document.getElementById('savingDisplay').innerHTML = epargne.toLocaleString() + ' Ar';
-        document.getElementById('savingDetail').innerHTML = `Salaire: ${salary.toLocaleString()} Ar | Dépenses: ${depenses.toLocaleString()} Ar`;
-        let salaryInput = document.getElementById('monthlySalaryInput');
-        if(salaryInput) salaryInput.value = salary;
-    }
-    
-    async function saveSalaryForMonth() {
-        let newSalary = parseFloat(document.getElementById('monthlySalaryInput').value);
-        if(isNaN(newSalary)) newSalary = 0;
-        const monthData = await getUserMonthData();
-        monthData.salary = newSalary;
-        await saveUserMonthData(monthData);
-        await updateDashboardUI();
-        showToast("Salaire enregistré");
-    }
-    
-    async function changeMonth(month) {
-        currentDisplayMonth = parseInt(month);
-        await updateDashboardUI();
-        if(document.getElementById('factMonthSelect')) document.getElementById('factMonthSelect').value = month;
-        if(document.getElementById('expenseList')) await renderExpenses();
-        if(document.getElementById('totalMonthly')) await updateFacturationUI();
-        if(document.getElementById('suggestionsBar')) await updateSuggestions();
-    }
-    
-    // ==================== FACTURATION ====================
-    const categorySpecificItems = {
-        "Charges fixes": ["JIRAMA", "Loyer", "WIFI", "Crédit téléphone"],
-        "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine", "Gouter"],
-        "Alimentation/repas": ["Courses", "Repas quotidien"],
-        "Transport": ["Carburant", "Taxi / taxi-be", "Entretien véhicule"],
-        "Santé": ["Médicaments", "Consultation"],
-        "Shopping": ["Vêtements"],
-        "Imprévus": []
+    const categoriesList = ["Vêtements", "Jouets", "Bureautique", "Informatique", "Électronique", "Maison", "Sports", "Autre"];
+    const subcategoriesMap = {
+        "Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes"],
+        "Jouets": ["Voitures", "Poupées", "Lego", "Peluches", "Ballons", "Jeux"],
+        "Bureautique": ["Papier", "Stylos", "Classeurs", "Enveloppes", "Agrafeuse", "Post-it"],
+        "Informatique": ["Clé USB", "Ordinateur", "Souris", "Clavier", "Disque dur", "Câbles"],
+        "Électronique": ["Téléphone", "Tablette", "Écouteurs", "Chargeur", "Batterie"],
+        "Maison": ["Meubles", "Décoration", "Ustensiles", "Linge", "Électroménager"],
+        "Sports": ["Ballon", "Raquette", "Vélo", "Chaussures", "Vêtements"],
+        "Autre": ["Divers", "Non classé"]
     };
-    for(let cat in categorySpecificItems) {
-        if(cat !== "Imprévus") categorySpecificItems[cat].push("Autre");
-        else categorySpecificItems[cat] = ["Autre"];
-    }
-    let activeCat = "Charges fixes";
     
-    function renderCategories() {
-        let container = document.getElementById('catContainer');
-        if(!container) return;
-        container.innerHTML = Object.keys(categorySpecificItems).map(cat => `<div class="cat-btn ${activeCat===cat?'cat-active':''}" data-cat="${cat}">${cat}</div>`).join('');
-        document.querySelectorAll('.cat-btn').forEach(btn => btn.addEventListener('click', () => {
-            activeCat = btn.dataset.cat;
-            renderCategories();
-            renderExpenses();
-            updateSuggestions();
-        }));
+    function showToast(msg, isErr) {
+        let t = document.createElement('div');
+        t.className = 'toast';
+        t.style.background = isErr ? '#d9534f' : 'rgba(0,0,0,0.9)';
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
     }
     
-    async function updateSuggestions() {
-        let suggestionsDiv = document.getElementById('suggestionsBar');
-        if(!suggestionsDiv) return;
-        let items = categorySpecificItems[activeCat] || [];
-        suggestionsDiv.innerHTML = items.map(item => `<div class="suggestion-chip" data-suggest="${item}">➕ ${item}</div>`).join('');
-        document.querySelectorAll('.suggestion-chip').forEach(chip => {
-            chip.addEventListener('click', async () => {
-                let suggest = chip.dataset.suggest;
-                let finalName = suggest;
-                if(suggest === "Autre") {
-                    finalName = prompt("Nom de la dépense :");
-                    if(!finalName) return;
-                }
-                let montant = prompt(`Montant pour ${finalName} (Ar) :`);
-                if(montant && !isNaN(parseFloat(montant))) {
-                    let monthData = await getUserMonthData();
-                    if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = [];
-                    monthData.expenses[activeCat].push({ name: finalName, amount: parseFloat(montant) });
-                    await saveUserMonthData(monthData);
-                    await renderExpenses();
-                    await updateDashboardUI();
-                    showToast("Dépense ajoutée");
-                }
-            });
-        });
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+        document.getElementById(id).classList.add('active-page');
+        if(id === 'aizaPage') initAiza();
+        if(id === 'dashboardPage') loadDashboard();
     }
     
-    async function renderExpenses() {
-        let monthData = await getUserMonthData();
-        if(!monthData) return;
-        let catExpenses = monthData.expenses[activeCat] || [];
-        let listDiv = document.getElementById('expenseList');
-        if(!listDiv) return;
-        listDiv.innerHTML = catExpenses.map((exp, idx) => `<div class="expense-item"><span><strong>${escapeHtml(exp.name)}</strong> : ${Number(exp.amount).toLocaleString()} Ar</span><div><button class="editExpense" data-idx="${idx}"><i class="fas fa-edit"></i></button><button class="delExpense" data-idx="${idx}"><i class="fas fa-trash"></i></button></div></div>`).join('');
-        
-        document.querySelectorAll('.editExpense').forEach(btn => btn.addEventListener('click', async () => {
-            let idx = btn.dataset.idx;
-            let newName = prompt("Nouveau nom", catExpenses[idx].name);
-            let newAmount = prompt("Montant", catExpenses[idx].amount);
-            if(newName && newAmount && !isNaN(newAmount)) {
-                catExpenses[idx] = { name: newName, amount: Number(newAmount) };
-                monthData.expenses[activeCat] = catExpenses;
-                await saveUserMonthData(monthData);
-                await renderExpenses();
-                await updateDashboardUI();
-            }
-        }));
-        
-        document.querySelectorAll('.delExpense').forEach(btn => btn.addEventListener('click', async () => {
-            let idx = btn.dataset.idx;
-            catExpenses.splice(idx,1);
-            monthData.expenses[activeCat] = catExpenses;
-            await saveUserMonthData(monthData);
-            await renderExpenses();
-            await updateDashboardUI();
-        }));
-        await updateFacturationUI();
+    async function loadDashboard() {
+        if(!currentUser) return;
+        let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(`2025_${currentDisplayMonth}`).get();
+        let salary = doc.exists ? (doc.data().salary || 0) : 0;
+        let expenses = doc.exists ? (doc.data().expenses || {}) : {};
+        let total = 0;
+        for(let cat in expenses) (expenses[cat] || []).forEach(e => total += e.amount || 0);
+        document.getElementById('salaryDisplay').innerHTML = salary.toLocaleString() + ' Ar';
+        document.getElementById('savingDisplay').innerHTML = (salary - total).toLocaleString() + ' Ar';
+        document.getElementById('savingDetail').innerHTML = `Salaire: ${salary.toLocaleString()} Ar | Dépenses: ${total.toLocaleString()} Ar`;
+        document.getElementById('monthlySalaryInput').value = salary;
     }
     
-    async function updateFacturationUI() {
-        let total = await getTotalExpensesForMonth();
-        let totalDiv = document.getElementById('totalMonthly');
-        if(totalDiv) totalDiv.innerHTML = `💰 Total mensuel: ${total.toLocaleString()} Ar`;
-    }
-    
-    async function initFacturation() {
-        renderCategories();
-        await renderExpenses();
-        await updateSuggestions();
-        document.getElementById('addExpenseBtn').onclick = async () => {
-            let name = document.getElementById('expenseName').value.trim();
-            let amount = parseFloat(document.getElementById('expenseAmount').value);
-            if(!name || isNaN(amount)) return showToast("Nom et montant valides", true);
-            let monthData = await getUserMonthData();
-            if(!monthData.expenses[activeCat]) monthData.expenses[activeCat] = [];
-            monthData.expenses[activeCat].push({ name, amount });
-            await saveUserMonthData(monthData);
-            await renderExpenses();
-            await updateDashboardUI();
-            document.getElementById('expenseName').value = '';
-            document.getElementById('expenseAmount').value = '';
-            showToast("Dépense ajoutée");
-        };
-        document.getElementById('monthlyResetBtn').onclick = async () => {
-            if(confirm("⚠️ Réinitialiser toutes les dépenses du mois ?")) {
-                let monthData = await getUserMonthData();
-                monthData.expenses = {};
-                await saveUserMonthData(monthData);
-                await renderExpenses();
-                await updateDashboardUI();
-                showToast("Mois réinitialisé");
-            }
-        };
-    }
-    
-    // ==================== CALENDRIER ====================
-    async function initCalendar() {
-        let monthData = await getUserMonthData();
-        let evts = (monthData.events || []).map(ev => ({ title: ev.title, start: ev.date, description: ev.desc, allDay: false }));
-        const calEl = document.getElementById('calendarContainer');
-        if(calendar) calendar.destroy();
-        calendar = new FullCalendar.Calendar(calEl, {
-            initialView: 'dayGridMonth',
-            events: evts,
-            headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' },
-            height: 'auto',
-            eventClick: (info) => { alert(`📌 ${info.event.title}\n📅 ${info.event.start}\n📝 ${info.event.extendedProps.description || 'Aucune'}`); }
-        });
-        calendar.render();
-        document.getElementById('addEventBtn').onclick = async () => {
-            let title = document.getElementById('eventTitle').value.trim();
-            let date = document.getElementById('eventDate').value;
-            let desc = document.getElementById('eventDesc').value.trim().slice(0, 1500);
-            if(!title || !date) return showToast("Titre et date requis", true);
-            let monthData = await getUserMonthData();
-            monthData.events.push({ title, date, desc: desc || "" });
-            await saveUserMonthData(monthData);
-            await initCalendar();
-            if(Notification.permission === "granted") new Notification("AI.MG", { body: title });
-            showToast(`Événement: ${title}`);
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventDesc').value = '';
-            await displayEventList();
-        };
-        await displayEventList();
-    }
-    
-    async function displayEventList() {
-        let monthData = await getUserMonthData();
-        let listDiv = document.getElementById('eventListPreview');
-        if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}</small></div>`).join(''));
-    }
-    
-    // ==================== AIZA ====================
-    
+    // AIZA FUNCTIONS
     function initDropdowns() {
-        // Catégorie dropdown
-        const categoryContainer = document.getElementById('categoryMenu');
-        categoryContainer.innerHTML = categoriesList.map(cat => `<div class="dropdown-item" data-value="${cat}">${cat}</div>`).join('');
-        categoryContainer.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
+        let catMenu = document.getElementById('categoryMenu');
+        catMenu.innerHTML = categoriesList.map(c => `<div class="dropdown-item" data-value="${c}">${c}</div>`).join('');
+        catMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.onclick = () => {
                 selectedCategory = item.dataset.value;
                 document.getElementById('selectedCategoryText').innerHTML = selectedCategory;
                 document.getElementById('selectedCategoryText').style.color = 'white';
-                categoryContainer.classList.remove('show');
-                document.getElementById('categoryDropdown').querySelector('.dropdown-input i').style.transform = 'rotate(0deg)';
-                // Mettre à jour les sous-catégories
+                document.getElementById('categoryMenu').classList.remove('show');
                 updateSubcategoryMenu();
-            });
+            };
         });
-        
-        // Sous-catégorie dropdown
         updateSubcategoryMenu();
     }
     
     function updateSubcategoryMenu() {
-        const subMenu = document.getElementById('subcategoryMenu');
-        const subs = selectedCategory ? (subcategoriesMap[selectedCategory] || ["Autre"]) : ["Choisissez d'abord une catégorie"];
-        subMenu.innerHTML = subs.map(sub => `<div class="dropdown-item" data-value="${sub}">${sub}</div>`).join('');
+        let subMenu = document.getElementById('subcategoryMenu');
+        let subs = selectedCategory ? (subcategoriesMap[selectedCategory] || ["Autre"]) : ["Choisissez d'abord une catégorie"];
+        subMenu.innerHTML = subs.map(s => `<div class="dropdown-item" data-value="${s}">${s}</div>`).join('');
         subMenu.querySelectorAll('.dropdown-item').forEach(item => {
-            item.addEventListener('click', () => {
+            item.onclick = () => {
                 selectedSubcategory = item.dataset.value;
                 document.getElementById('selectedSubcategoryText').innerHTML = selectedSubcategory;
                 document.getElementById('selectedSubcategoryText').style.color = 'white';
-                subMenu.classList.remove('show');
-                document.getElementById('subcategoryDropdown').querySelector('.dropdown-input i').style.transform = 'rotate(0deg)';
-            });
+                document.getElementById('subcategoryMenu').classList.remove('show');
+            };
         });
     }
     
-    function setupDropdownToggle(dropdownId) {
-        const dropdown = document.getElementById(dropdownId);
-        const input = dropdown.querySelector('.dropdown-input');
-        const menu = dropdown.querySelector('.dropdown-menu');
-        const icon = input.querySelector('i');
-        
-        input.addEventListener('click', (e) => {
+    function setupDropdown(dropdownId) {
+        let dd = document.getElementById(dropdownId);
+        let input = dd.querySelector('.dropdown-input');
+        let menu = dd.querySelector('.dropdown-menu');
+        let icon = input.querySelector('i');
+        input.onclick = (e) => {
             e.stopPropagation();
-            const isOpen = menu.classList.contains('show');
-            // Fermer tous les autres dropdowns
+            let isOpen = menu.classList.contains('show');
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             document.querySelectorAll('.dropdown-input i').forEach(i => i.style.transform = 'rotate(0deg)');
             if (!isOpen) {
                 menu.classList.add('show');
                 icon.style.transform = 'rotate(180deg)';
-            } else {
-                menu.classList.remove('show');
-                icon.style.transform = 'rotate(0deg)';
             }
-        });
-    }
-    
-    function initCharCounter() {
-        const descTextarea = document.getElementById('objDescription');
-        const charCountSpan = document.getElementById('charCount');
-        if(descTextarea && charCountSpan) {
-            descTextarea.addEventListener('input', function() {
-                charCountSpan.innerHTML = `${this.value.length}/250 caractères`;
-            });
-        }
-    }
-    
-    function initPhotoUpload() {
-        const addBtn = document.getElementById('addPhotoBtn');
-        const fileInput = document.getElementById('objPhotos');
-        const previewDiv = document.getElementById('photoPreview');
-        if(addBtn) addBtn.onclick = () => fileInput.click();
-        if(fileInput) {
-            fileInput.onchange = (e) => {
-                previewDiv.innerHTML = '';
-                const files = Array.from(e.target.files);
-                for(let i = 0; i < Math.min(files.length, 5); i++) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        const img = document.createElement('img');
-                        img.src = event.target.result;
-                        img.className = 'preview-thumb';
-                        previewDiv.appendChild(img);
-                    };
-                    reader.readAsDataURL(files[i]);
-                }
-            };
-        }
+        };
     }
     
     async function uploadPhotos(files) {
         if(!files || files.length === 0) return [];
-        const photoUrls = [];
+        let urls = [];
         for(let i = 0; i < Math.min(files.length, 5); i++) {
-            const file = files[i];
-            const fileName = `${Date.now()}_${i}_${file.name}`;
-            const storageRef = storage.ref().child(`users/${currentUser.uid}/objects/${fileName}`);
-            await storageRef.put(file);
-            const url = await storageRef.getDownloadURL();
-            photoUrls.push(url);
+            let file = files[i];
+            let ref = storage.ref().child(`users/${currentUser.uid}/objects/${Date.now()}_${i}_${file.name}`);
+            await ref.put(file);
+            urls.push(await ref.getDownloadURL());
         }
-        return photoUrls;
+        return urls;
     }
     
-    async function renderProductsList() {
-        let monthData = await getUserMonthData();
-        let objects = monthData.objects || [];
+    async function renderProducts() {
+        let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(`2025_${currentDisplayMonth}`).get();
+        let objects = doc.exists ? (doc.data().objects || []) : [];
         let filtered = objects;
         if(currentSearchTerm) {
-            const searchLower = currentSearchTerm.toLowerCase();
-            filtered = objects.filter(obj => {
-                return (obj.name && obj.name.toLowerCase().includes(searchLower)) ||
-                       (obj.category && obj.category.toLowerCase().includes(searchLower)) ||
-                       (obj.subCategory && obj.subCategory.toLowerCase().includes(searchLower)) ||
-                       (obj.location && obj.location.toLowerCase().includes(searchLower)) ||
-                       (obj.description && obj.description.toLowerCase().includes(searchLower));
-            });
+            let s = currentSearchTerm.toLowerCase();
+            filtered = objects.filter(o => (o.name || '').toLowerCase().includes(s) || (o.category || '').toLowerCase().includes(s) || (o.subCategory || '').toLowerCase().includes(s) || (o.location || '').toLowerCase().includes(s));
         }
-        const grouped = {};
-        filtered.forEach(obj => {
-            const subCat = obj.subCategory || "Sans catégorie";
-            if(!grouped[subCat]) grouped[subCat] = [];
-            grouped[subCat].push(obj);
-        });
+        let grouped = {};
+        filtered.forEach(o => { let sub = o.subCategory || "Autre"; if(!grouped[sub]) grouped[sub] = []; grouped[sub].push(o); });
         let html = '';
-        if(Object.keys(grouped).length === 0) {
-            html = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet enregistré</div>';
-        } else {
-            for(const [subCat, items] of Object.entries(grouped)) {
-                html += `<div class="list-title">📁 ${escapeHtml(subCat)}</div>`;
-                items.forEach(obj => {
-                    const thumbUrl = obj.photos && obj.photos.length > 0 ? obj.photos[0] : 'https://via.placeholder.com/55';
-                    html += `
-                        <div class="product-card" data-id="${obj.id}" data-name="${escapeHtml(obj.name)}" data-category="${escapeHtml(obj.category || '')}" data-sub="${escapeHtml(obj.subCategory || '')}" data-location="${escapeHtml(obj.location)}" data-description="${escapeHtml(obj.description)}" data-photos='${JSON.stringify(obj.photos || [])}'>
-                            <img src="${thumbUrl}">
-                            <div>
-                                <strong>${escapeHtml(obj.name)}</strong>
-                                <small>📍 ${escapeHtml(obj.location || 'Non spécifié')}</small>
-                                ${obj.category ? `<small> | 📁 ${escapeHtml(obj.category)}</small>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-            }
-        }
-        const container = document.getElementById('productsListContainer');
-        if(container) container.innerHTML = html;
-        
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const name = card.dataset.name;
-                const category = card.dataset.category;
-                const sub = card.dataset.sub;
-                const location = card.dataset.location;
-                const description = card.dataset.description;
-                const photos = JSON.parse(card.dataset.photos);
-                openModal(name, category, sub, location, description, photos);
+        if(Object.keys(grouped).length === 0) html = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet</div>';
+        else for(let [sub, items] of Object.entries(grouped)) {
+            html += `<div class="list-title">📁 ${escapeHtml(sub)}</div>`;
+            items.forEach(o => {
+                let thumb = (o.photos && o.photos[0]) || 'https://via.placeholder.com/55';
+                html += `<div class="product-card" data-name="${escapeHtml(o.name)}" data-cat="${escapeHtml(o.category || '')}" data-sub="${escapeHtml(o.subCategory || '')}" data-loc="${escapeHtml(o.location)}" data-desc="${escapeHtml(o.description || '')}" data-photos='${JSON.stringify(o.photos || [])}'><img src="${thumb}"><div><strong>${escapeHtml(o.name)}</strong><small>📍 ${escapeHtml(o.location)}</small></div></div>`;
             });
+        }
+        document.getElementById('productsListContainer').innerHTML = html;
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.onclick = () => {
+                let modal = document.getElementById('productModal');
+                document.getElementById('modalImage').src = (JSON.parse(card.dataset.photos)[0]) || 'https://via.placeholder.com/300';
+                document.getElementById('modalDescription').innerHTML = `<strong>${card.dataset.name}</strong><br>📁 ${card.dataset.cat} / ${card.dataset.sub}<br>📍 ${card.dataset.loc}<br><br>📝 ${card.dataset.desc}`;
+                modal.classList.add('active');
+            };
         });
     }
     
-    function openModal(name, category, sub, location, description, photos) {
-        const modal = document.getElementById('productModal');
-        const modalImage = document.getElementById('modalImage');
-        const modalDesc = document.getElementById('modalDescription');
-        modalImage.src = photos && photos.length > 0 ? photos[0] : 'https://via.placeholder.com/300';
-        modalDesc.innerHTML = `<strong>${escapeHtml(name)}</strong><br>📁 ${escapeHtml(category || 'Non spécifiée')} / ${escapeHtml(sub || 'Non spécifiée')}<br>📍 ${escapeHtml(location || 'Non spécifié')}<br><br>📝 ${escapeHtml(description || 'Aucune description')}`;
-        modal.classList.add('active');
+    async function saveObject() {
+        let name = document.getElementById('objName').value.trim();
+        let location = document.getElementById('objLocation').value.trim();
+        let description = document.getElementById('objDescription').value.trim();
+        let photos = document.getElementById('objPhotos').files;
+        if(!name) { showToast("Nom requis", true); return; }
+        if(!location) { showToast("Localisation requise", true); return; }
+        if(!selectedCategory) { showToast("Catégorie requise", true); return; }
+        let photoUrls = await uploadPhotos(photos);
+        let docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(`2025_${currentDisplayMonth}`);
+        let doc = await docRef.get();
+        let objects = doc.exists ? (doc.data().objects || []) : [];
+        objects.push({ id: Date.now(), name, category: selectedCategory, subCategory: selectedSubcategory || "Sous-catégorie", location, description, photos: photoUrls, timestamp: Date.now() });
+        await docRef.set({ objects }, { merge: true });
+        document.getElementById('objName').value = '';
+        document.getElementById('objLocation').value = '';
+        document.getElementById('objDescription').value = '';
+        document.getElementById('objPhotos').value = '';
+        document.getElementById('photoPreview').innerHTML = '';
+        selectedCategory = "";
+        selectedSubcategory = "";
+        document.getElementById('selectedCategoryText').innerHTML = 'Catégorie';
+        document.getElementById('selectedCategoryText').style.color = '#666';
+        document.getElementById('selectedSubcategoryText').innerHTML = 'Sous-catégorie';
+        document.getElementById('selectedSubcategoryText').style.color = '#666';
+        await renderProducts();
+        showToast("Objet sauvegardé !");
     }
     
-    async function performSearch() {
-        const searchInput = document.getElementById('searchInput');
-        currentSearchTerm = searchInput ? searchInput.value : '';
-        await renderProductsList();
+    async function searchProducts() {
+        currentSearchTerm = document.getElementById('searchInput').value;
+        await renderProducts();
         showToast(`Recherche: "${currentSearchTerm || 'tous'}"`);
     }
     
+    function initPhotoPreview() {
+        let fileInput = document.getElementById('objPhotos');
+        let preview = document.getElementById('photoPreview');
+        fileInput.onchange = () => {
+            preview.innerHTML = '';
+            let files = Array.from(fileInput.files);
+            for(let i = 0; i < Math.min(files.length, 5); i++) {
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    let img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'preview-thumb';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        };
+    }
+    
     async function initAiza() {
+        if(!currentUser) return;
         initDropdowns();
-        setupDropdownToggle('categoryDropdown');
-        setupDropdownToggle('subcategoryDropdown');
-        initCharCounter();
-        initPhotoUpload();
-        
-        document.getElementById('searchBtn').onclick = performSearch;
-        document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
-        await renderProductsList();
-        
-        document.getElementById('saveObjectBtn').onclick = async () => {
-            let category = selectedCategory;
-            let subCategory = selectedSubcategory;
-            let name = document.getElementById('objName').value.trim();
-            let location = document.getElementById('objLocation').value.trim();
-            let description = document.getElementById('objDescription').value.trim();
-            const photoFiles = document.getElementById('objPhotos').files;
-            
-            if(!name) return showToast("Nom de l'objet requis", true);
-            if(!location) return showToast("Localisation requise", true);
-            if(!category) return showToast("Catégorie requise", true);
-            
-            let photoUrls = await uploadPhotos(photoFiles);
-            let monthData = await getUserMonthData();
-            if(!monthData.objects) monthData.objects = [];
-            monthData.objects.push({
-                id: Date.now(),
-                name: name,
-                category: category,
-                subCategory: subCategory || "Sous-catégorie",
-                location: location,
-                description: description,
-                photos: photoUrls,
-                timestamp: Date.now()
-            });
-            await saveUserMonthData(monthData);
-            
-            document.getElementById('objName').value = '';
-            document.getElementById('objLocation').value = '';
-            document.getElementById('objDescription').value = '';
-            document.getElementById('objPhotos').value = '';
-            document.getElementById('photoPreview').innerHTML = '';
-            if(document.getElementById('charCount')) document.getElementById('charCount').innerHTML = '0/250';
-            selectedCategory = "";
-            selectedSubcategory = "";
-            document.getElementById('selectedCategoryText').innerHTML = 'Catégorie';
-            document.getElementById('selectedCategoryText').style.color = '#666';
-            document.getElementById('selectedSubcategoryText').innerHTML = 'Sous-catégorie';
-            document.getElementById('selectedSubcategoryText').style.color = '#666';
-            
-            await renderProductsList();
-            showToast("Objet sauvegardé !");
-        };
+        setupDropdown('categoryDropdown');
+        setupDropdown('subcategoryDropdown');
+        initPhotoPreview();
+        document.getElementById('addPhotoBtn').onclick = () => document.getElementById('objPhotos').click();
+        document.getElementById('searchBtn').onclick = searchProducts;
+        document.getElementById('saveObjectBtn').onclick = saveObject;
+        await renderProducts();
     }
     
-    // Fermeture des dropdowns au clic ailleurs
-    document.addEventListener('click', function(e) {
-        if(!e.target.closest('.dropdown-3d')) {
-            document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
-            document.querySelectorAll('.dropdown-input i').forEach(icon => icon.style.transform = 'rotate(0deg)');
-        }
-    });
+    // FACTURATION simplifiée
+    let activeFactCat = "Charges fixes";
+    const factCategories = {
+        "Charges fixes": ["JIRAMA", "Loyer", "WIFI", "Crédit téléphone", "Autre"],
+        "Éducation": ["Écolage", "Transport scolaire", "Fournitures", "Cantine", "Gouter", "Autre"],
+        "Alimentation": ["Courses", "Repas quotidien", "Autre"],
+        "Transport": ["Carburant", "Taxi", "Entretien", "Autre"],
+        "Santé": ["Médicaments", "Consultation", "Autre"],
+        "Shopping": ["Vêtements", "Autre"],
+        "Imprévus": ["Autre"]
+    };
     
-    // ==================== PROJETS ====================
-    async function renderProjects() {
-        let monthData = await getUserMonthData();
-        let projs = monthData.projects || [];
-        let groups = Array(12).fill().map(()=>[]);
-        projs.forEach(p=>groups[p.month].push(p));
-        let html='';
-        for(let m=0;m<12;m++){ let monthName=["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Aoû","Sep","Oct","Nov","Déc"][m];
-            html+=`<div><h4 style="color:white;">${monthName} (${groups[m].length}/10)</h4>`;
-            groups[m].forEach(p=>{ html+=`<div class="expense-item"><span>📌 ${escapeHtml(p.name)} - ${p.status}</span><div><button class="toggleStatus" data-id="${p.id}">🔄</button><button class="delProj" data-id="${p.id}">🗑️</button></div></div>`; });
-            html+=`</div>`;
-        }
-        document.getElementById('projectsList').innerHTML = html;
-        document.querySelectorAll('.toggleStatus').forEach(btn=>btn.addEventListener('click', async ()=>{ let id=Number(btn.dataset.id); let monthData = await getUserMonthData(); let p=monthData.projects.find(pr=>pr.id===id); if(p){ p.status=p.status==="en cours"?"terminé":"en cours"; await saveUserMonthData(monthData); await renderProjects(); showToast("Statut mis à jour"); } }));
-        document.querySelectorAll('.delProj').forEach(btn=>btn.addEventListener('click', async ()=>{ let id=Number(btn.dataset.id); let monthData = await getUserMonthData(); monthData.projects=monthData.projects.filter(p=>p.id!==id); await saveUserMonthData(monthData); await renderProjects(); showToast("Projet supprimé"); }));
+    async function renderFacturation() {
+        let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(`2025_${currentDisplayMonth}`).get();
+        let expenses = doc.exists ? (doc.data().expenses || {}) : {};
+        let list = expenses[activeFactCat] || [];
+        document.getElementById('expenseList').innerHTML = list.map((e, i) => `<div class="expense-item"><span>${e.name}: ${e.amount} Ar</span><div><button class="editExpense" data-idx="${i}">✏️</button><button class="delExpense" data-idx="${i}">🗑️</button></div></div>`).join('');
+        let total = 0;
+        for(let cat in expenses) (expenses[cat] || []).forEach(e => total += e.amount);
+        document.getElementById('totalMonthly').innerHTML = `💰 Total: ${total.toLocaleString()} Ar`;
     }
     
-    async function initProjets() {
-        await renderProjects();
-        document.getElementById('addProjectBtn').onclick = async () => {
-            let name = document.getElementById('projectName').value.trim();
-            let month = parseInt(document.getElementById('projectMonth').value);
-            let status = document.getElementById('projectStatus').value;
-            if(!name) return showToast("Nom projet requis", true);
-            let monthData = await getUserMonthData();
-            let count = (monthData.projects || []).filter(p=>p.month===month).length;
-            if(count>=10){ showToast("Max 10 projets ce mois", true); return; }
-            if(!monthData.projects) monthData.projects = [];
-            monthData.projects.push({ id: Date.now(), name, month, status });
-            await saveUserMonthData(monthData);
-            await renderProjects();
-            document.getElementById('projectName').value='';
-            showToast("Projet ajouté");
-        };
-    }
-    
-    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    
-    // ==================== AUTHENTIFICATION ====================
+    // AUTH
     async function register() {
         let email = document.getElementById('regEmail').value.trim();
         let pwd = document.getElementById('regPassword').value;
-        let phone = document.getElementById('regPhone').value.trim();
-        if(!email || !pwd) { document.getElementById('registerMessage').innerText = "Email & mot de passe requis"; return; }
-        if(pwd.length < 6) { document.getElementById('registerMessage').innerText = "Mot de passe minimum 6 caractères"; return; }
+        if(!email || !pwd || pwd.length < 6) { showToast("Email et mot de passe (min 6)", true); return; }
         try {
-            const userCred = await auth.createUserWithEmailAndPassword(email, pwd);
-            await db.collection('users').doc(userCred.user.uid).set({ email: email, phoneNumber: phone, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-            showToast("Compte créé ! Veuillez vous connecter");
-            document.getElementById('registerMessage').innerText = "";
+            await auth.createUserWithEmailAndPassword(email, pwd);
+            showToast("Compte créé !");
             showPage('loginPage');
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = '';
-        } catch(e) {
-            let msg = e.message;
-            if(msg.includes('email-already-in-use')) msg = "Cet email est déjà utilisé";
-            document.getElementById('registerMessage').innerText = msg;
-            showToast(msg, true);
-        }
+        } catch(e) { showToast(e.message, true); }
     }
     
     async function login() {
         let email = document.getElementById('email').value.trim();
         let pwd = document.getElementById('password').value;
-        if(!email || !pwd) { document.getElementById('authMessage').innerText = "Email & mot de passe requis"; return; }
+        if(!email || !pwd) { showToast("Email et mot de passe requis", true); return; }
         try {
-            const userCred = await auth.signInWithEmailAndPassword(email, pwd);
-            currentUser = userCred.user;
-            showToast("Connexion réussie !");
-            document.getElementById('authMessage').innerText = "";
-            await updateDashboardUI();
+            await auth.signInWithEmailAndPassword(email, pwd);
+            showToast("Connecté !");
             showPage('dashboardPage');
-        } catch(e) {
-            let msg = e.message;
-            if(msg.includes('user-not-found')) msg = "Aucun compte trouvé";
-            if(msg.includes('wrong-password')) msg = "Mot de passe incorrect";
-            document.getElementById('authMessage').innerText = msg;
-            showToast(msg, true);
-        }
+        } catch(e) { showToast(e.message, true); }
     }
     
-    async function logout() {
-        await auth.signOut();
-        currentUser = null;
-        showToast("Déconnecté");
-        showPage('loginPage');
-        document.getElementById('email').value = '';
-        document.getElementById('password').value = '';
-    }
+    async function logout() { await auth.signOut(); currentUser = null; showPage('loginPage'); }
     
     auth.onAuthStateChanged(async (user) => {
-        if(user) { currentUser = user; await updateDashboardUI(); showPage('dashboardPage'); }
-        else { currentUser = null; showPage('loginPage'); }
+        if(user) { currentUser = user; await loadDashboard(); showPage('dashboardPage'); }
+        else showPage('loginPage');
     });
     
-    // Fermeture modal
-    document.querySelector('.close-modal')?.addEventListener('click', () => document.getElementById('productModal').classList.remove('active'));
-    window.addEventListener('click', (e) => { const modal = document.getElementById('productModal'); if(e.target === modal) modal.classList.remove('active'); });
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){ return m==='&'?'&amp;':m==='<'?'&lt;':'&gt;';}); }
     
-    // Événements UI
+    // Event listeners
     document.getElementById('signinBtn').onclick = login;
     document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
     document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
     document.getElementById('registerBtn').onclick = register;
-    document.getElementById('logoutBtn')?.addEventListener('click', logout);
-    document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>showPage('dashboardPage')));
-    document.querySelectorAll('.dashboard-card').forEach(card=>card.addEventListener('click',()=>showPage(card.dataset.nav+'Page')));
-    if(Notification.permission!=="granted") Notification.requestPermission();
-    
-    setInterval(()=>{
-        let factSelect = document.getElementById('factMonthSelect');
-        if(factSelect) {
-            factSelect.innerHTML = [...Array(12)].map((_,i)=>`<option value="${i}" ${currentDisplayMonth==i?'selected':''}>${["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][i]}</option>`).join('');
-            factSelect.onchange = (e)=>{ currentDisplayMonth=parseInt(e.target.value); if(document.getElementById('monthSelector')) document.getElementById('monthSelector').value=currentDisplayMonth; updateDashboardUI(); renderExpenses(); updateSuggestions(); };
-        }
-    }, 500);
+    document.getElementById('logoutBtn').onclick = logout;
+    document.querySelectorAll('[data-back]').forEach(btn => btn.onclick = () => showPage('dashboardPage'));
+    document.querySelectorAll('.dashboard-card').forEach(card => card.onclick = () => showPage(card.dataset.nav + 'Page'));
+    document.querySelector('.close-modal').onclick = () => document.getElementById('productModal').classList.remove('active');
+    window.onclick = (e) => { let m = document.getElementById('productModal'); if(e.target === m) m.classList.remove('active'); };
+    document.onclick = (e) => { if(!e.target.closest('.dropdown-3d')) { document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); document.querySelectorAll('.dropdown-input i').forEach(i => i.style.transform = 'rotate(0deg)'); } };
 </script>
 </body>
 </html>
