@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
-    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -22,6 +21,7 @@
         .card { background: rgba(255,255,255,0.1); backdrop-filter: blur(12px); border-radius: 32px; padding: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); }
         .gradient-btn { background: linear-gradient(135deg, #a06eff, #6c3eff); border: none; color: white; padding: 12px 20px; border-radius: 60px; font-weight: 600; cursor: pointer; transition: 0.2s; box-shadow: 0 6px 14px rgba(108,62,255,0.3); }
         .gradient-btn:active { transform: scale(0.96); }
+        .gradient-btn-secondary { background: linear-gradient(135deg, #3a86ff, #2666cc); }
         input, select, textarea { background: rgba(255,255,255,0.9); border: none; border-radius: 60px; padding: 12px 18px; width: 100%; margin-bottom: 12px; font-size: 0.9rem; }
         textarea { border-radius: 24px; resize: vertical; }
         .grid-2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 20px 0; }
@@ -46,7 +46,19 @@
         .suggestion-chip:active { background: #6c3eff; color:white; }
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 10px 20px; border-radius: 40px; z-index: 1000; animation: fadeOut 3s ease forwards; font-size: 14px; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
-        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
+        .category-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; margin-bottom: 15px; scrollbar-width: thin; }
+        .category-scroll::-webkit-scrollbar { height: 4px; }
+        .category-scroll::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); border-radius: 10px; }
+        .category-scroll::-webkit-scrollbar-thumb { background: #6c3eff; border-radius: 10px; }
+        .cat-scroll-btn { background: rgba(255,255,255,0.15); border-radius: 40px; padding: 8px 20px; font-size: 0.8rem; white-space: nowrap; cursor: pointer; transition: 0.2s; color: white; }
+        .cat-scroll-btn.active { background: linear-gradient(135deg, #a06eff, #6c3eff); }
+        .subcategory-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; max-height: 200px; overflow-y: auto; padding: 5px; }
+        .subcat-btn { background: rgba(255,255,255,0.2); border-radius: 40px; padding: 6px 14px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; color: white; }
+        .subcat-btn:active { background: #6c3eff; }
+        .field-row { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; flex-wrap: wrap; background: rgba(255,255,255,0.15); border-radius: 60px; padding: 8px; }
+        .field-row select, .field-row input { margin: 0; flex: 1; }
+        .field-row .delete-field { background: #d9534f; color: white; border: none; border-radius: 40px; padding: 8px 12px; cursor: pointer; font-size: 12px; }
+        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } .field-row { flex-direction: column; align-items: stretch; } }
     </style>
 </head>
 <body>
@@ -55,15 +67,26 @@
     <div id="loginPage" class="page active-page">
         <div class="card" style="margin-top: 40px;">
             <div class="logo" style="text-align: center;">AI.MG</div>
-            <h2 style="text-align: center; margin: 20px 0; color:white;">Bienvenue</h2>
+            <h2 style="text-align: center; margin: 20px 0; color:white;">Connexion</h2>
             <input type="email" id="email" placeholder="Email *">
             <input type="password" id="password" placeholder="Mot de passe *">
-            <input type="tel" id="phone" placeholder="Téléphone">
-            <div style="display: flex; gap: 12px;">
-                <button id="signupBtn" class="gradient-btn">S'inscrire</button>
-                <button id="signinBtn" class="gradient-btn" style="background:linear-gradient(135deg,#3a86ff,#2666cc);">Connexion</button>
-            </div>
+            <button id="signinBtn" class="gradient-btn" style="margin-bottom: 12px;">Se connecter</button>
+            <button id="showRegisterBtn" class="gradient-btn gradient-btn-secondary">Créer un compte</button>
             <div id="authMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
+        </div>
+    </div>
+
+    <!-- INSCRIPTION -->
+    <div id="registerPage" class="page">
+        <div class="card" style="margin-top: 40px;">
+            <div class="logo" style="text-align: center;">AI.MG</div>
+            <h2 style="text-align: center; margin: 20px 0; color:white;">Inscription</h2>
+            <input type="email" id="regEmail" placeholder="Email *">
+            <input type="password" id="regPassword" placeholder="Mot de passe * (min 6)">
+            <input type="tel" id="regPhone" placeholder="Téléphone (+261...)">
+            <button id="registerBtn" class="gradient-btn" style="margin-bottom: 12px;">S'inscrire</button>
+            <button id="showLoginBtn" class="gradient-btn gradient-btn-secondary">Retour à la connexion</button>
+            <div id="registerMessage" style="margin-top: 12px; text-align: center; color:#ffb4a2;"></div>
         </div>
     </div>
 
@@ -85,7 +108,7 @@
         <div class="grid-2x2">
             <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Factures</h3></div>
             <div class="dashboard-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3></div>
-            <div class="dashboard-card" data-nav="localisation"><i class="fas fa-map-marker-alt"></i><h3>Localisation</h3></div>
+            <div class="dashboard-card" data-nav="aiza"><i class="fas fa-map-marker-alt"></i><h3>AIZA</h3></div>
             <div class="dashboard-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projets</h3></div>
         </div>
     </div>
@@ -118,17 +141,30 @@
         <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 
-    <!-- LOCALISATION -->
-    <div id="localisationPage" class="page">
-        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Objets & lieux</span><div></div></div>
+    <!-- AIZA (ex-localisation) -->
+    <div id="aizaPage" class="page">
+        <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">AIZA</span><div></div></div>
         <div class="card">
-            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchObjectInput" placeholder="Rechercher (nom, champ, valeur...)"></div>
-            <h3 style="color:white;">➕ Ajouter un objet / lieu</h3>
-            <input type="text" id="objName" placeholder="Nom (ex: Clés, Sac, Portefeuille)">
+            <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchObjectInput" placeholder="Rechercher un objet..."></div>
+            
+            <!-- Catégories avec scroll -->
+            <div class="category-scroll" id="categoryScroll"></div>
+            
+            <!-- Sous-catégories -->
+            <div id="subcategoryContainer" class="subcategory-grid"></div>
+            
+            <!-- Champ pour ajouter un produit personnalisé -->
+            <div style="display: flex; gap: 8px; margin: 10px 0;">
+                <input type="text" id="customProductInput" placeholder="Ajouter un nouveau produit..." style="flex: 2;">
+                <button id="addCustomProductBtn" class="gradient-btn" style="padding: 8px 16px; width: auto;">➕</button>
+            </div>
+            
+            <input type="text" id="objName" placeholder="Nom de l'objet / lieu (ex: Clés, Sac, Bureau)" style="margin-bottom: 15px;">
+            
+            <h3 style="color:white; font-size: 14px; margin-bottom: 10px;">📋 Champs personnalisés</h3>
             <div id="dynamicFieldsContainer"></div>
-            <button id="addCustomFieldBtn" class="gradient-btn" style="background:#9c27b0; margin-bottom:8px;">+ Ajouter champ personnalisé</button>
-            <input type="file" id="objPhotos" accept="image/*" multiple>
-            <button id="saveObjectBtn" class="gradient-btn" style="margin-top:12px;">💾 Sauvegarder</button>
+            
+            <button id="saveObjectBtn" class="gradient-btn" style="margin-top:12px;">➕ Ajouter un objet / lieu</button>
             <div id="objectsList" style="margin-top: 20px;"></div>
         </div>
     </div>
@@ -138,7 +174,9 @@
         <div class="header-app"><button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button><span class="logo">Projets</span><div></div></div>
         <div class="card">
             <input type="text" id="projectName" placeholder="Nom du projet">
-            <select id="projectMonth"><option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option><option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option><option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
+            <select id="projectMonth"><option value="0">Janvier</option><option value="1">Février</option><option value="2">Mars</option><option value="3">Avril</option>
+            <option value="4">Mai</option><option value="5">Juin</option><option value="6">Juillet</option><option value="7">Août</option>
+            <option value="8">Septembre</option><option value="9">Octobre</option><option value="10">Novembre</option><option value="11">Décembre</option></select>
             <select id="projectStatus"><option value="en cours">En cours</option><option value="terminé">Terminé</option></select>
             <button id="addProjectBtn" class="gradient-btn">Ajouter projet</button>
             <div id="projectsList" style="margin-top: 20px;"></div>
@@ -148,7 +186,6 @@
 
 <script>
     // ==================== FIREBASE CONFIGURATION ====================
-    // METTEZ VOS VALEURS FIREBASE ICI
     const firebaseConfig = {
         apiKey: "AIzaSyBqcigoEE0rRNkzfYvIRUtH2Vu-BBaCbVg",
         authDomain: "aimg-app.firebaseapp.com",
@@ -166,7 +203,28 @@
     let currentUser = null;
     let currentDisplayMonth = new Date().getMonth();
     let calendar = null;
-    let customFields = [];
+    
+    // Catégories et sous-catégories pour AIZA
+    const categoriesData = {
+        "👕 Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes"],
+        "🧸 Jouets": ["Voitures miniatures", "Poupées", "Jeux de construction (Lego)", "Peluches", "Ballons", "Jeux de société"],
+        "📎 Bureautique": ["Papier (feuilles, cahiers)", "Stylos / crayons", "Classeurs / chemises", "Enveloppes", "Agrafeuse", "Post-it", "Calculatrice"],
+        "🖥️ Informatique": ["Clé USB", "Ordinateur portable / fixe", "Souris", "Clavier", "Disque dur externe", "Câbles (USB, HDMI)", "Imprimante", "Routeur / modem"]
+    };
+    
+    let currentCategory = "👕 Vêtements";
+    let customFields = [
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" },
+        { label: "", value: "", valueType: "text" }
+    ];
+    
+    const fieldNameSuggestions = ["Customer", "Lieu", "Couleur", "Marque", "Taille", "Prix", "Date", "Description", "Style", "Modèle"];
     
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
@@ -182,7 +240,7 @@
         document.getElementById(pageId).classList.add('active-page');
         if(pageId === 'facturationPage') initFacturation();
         if(pageId === 'calendrierPage') initCalendar();
-        if(pageId === 'localisationPage') initLocalisation();
+        if(pageId === 'aizaPage') initAiza();
         if(pageId === 'projetPage') initProjets();
         if(pageId === 'dashboardPage') { updateDashboardUI(); document.getElementById('saveSalaryBtn').onclick = saveSalaryForMonth; document.getElementById('monthSelector').onchange = (e) => changeMonth(e.target.value); document.getElementById('monthSelector').value = currentDisplayMonth; }
     }
@@ -379,7 +437,7 @@
             events: evts,
             headerToolbar: { left: 'prev,next', center: 'title', right: 'dayGridMonth' },
             height: 'auto',
-            eventClick: (info) => { alert(`📌 ${info.event.title}\n📅 ${info.event.start}\n📝 Description: ${info.event.extendedProps.description || 'Aucune'}`); }
+            eventClick: (info) => { alert(`📌 ${info.event.title}\n📅 ${info.event.start}\n📝 ${info.event.extendedProps.description || 'Aucune'}`); }
         });
         calendar.render();
         document.getElementById('addEventBtn').onclick = async () => {
@@ -407,12 +465,104 @@
         if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}${ev.desc?.length>80?'...':''}</small></div>`).join(''));
     }
     
-    // ==================== LOCALISATION ====================
+    // ==================== AIZA ====================
+    function renderCategoryScroll() {
+        const container = document.getElementById('categoryScroll');
+        if(!container) return;
+        container.innerHTML = Object.keys(categoriesData).map(cat => `<div class="cat-scroll-btn ${currentCategory === cat ? 'active' : ''}" data-cat="${cat}">${cat}</div>`).join('');
+        document.querySelectorAll('.cat-scroll-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentCategory = btn.dataset.cat;
+                renderCategoryScroll();
+                renderSubcategories();
+            });
+        });
+    }
+    
+    function renderSubcategories() {
+        const container = document.getElementById('subcategoryContainer');
+        if(!container) return;
+        const subcats = categoriesData[currentCategory] || [];
+        container.innerHTML = subcats.map(sub => `<div class="subcat-btn" data-sub="${sub}">📦 ${sub}</div>`).join('');
+        document.querySelectorAll('.subcat-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const objNameInput = document.getElementById('objName');
+                if(objNameInput) objNameInput.value = btn.dataset.sub;
+                showToast(`Produit sélectionné: ${btn.dataset.sub}`);
+            });
+        });
+    }
+    
     function renderDynamicFields() {
         let container = document.getElementById('dynamicFieldsContainer');
         if(!container) return;
-        container.innerHTML = customFields.map((field, idx) => `<div style="display:flex; gap:6px; margin-bottom:8px;"><input type="text" placeholder="Nom champ (ex: Customer)" value="${escapeHtml(field.label)}" id="fieldLabel_${idx}"><input type="text" placeholder="Valeur (ex: JCREW)" value="${escapeHtml(field.value)}" id="fieldValue_${idx}"><button class="removeFieldBtn" data-idx="${idx}">❌</button></div>`).join('');
-        document.querySelectorAll('.removeFieldBtn').forEach(btn => btn.addEventListener('click', (e) => { let idx = btn.dataset.idx; customFields.splice(idx,1); renderDynamicFields(); }));
+        
+        container.innerHTML = customFields.map((field, idx) => `
+            <div class="field-row" data-idx="${idx}">
+                <select id="fieldName_${idx}" style="flex: 2;" onchange="updateFieldLabel(${idx})">
+                    <option value="">-- Sélectionner --</option>
+                    ${fieldNameSuggestions.map(s => `<option value="${s}" ${field.label === s ? 'selected' : ''}>${s}</option>`).join('')}
+                    <option value="custom">Autre (écrire ci-dessous)</option>
+                </select>
+                <input type="text" id="fieldLabelCustom_${idx}" placeholder="Nom personnalisé" value="${field.label && !fieldNameSuggestions.includes(field.label) ? escapeHtml(field.label) : ''}" style="flex: 2; display: ${field.label && !fieldNameSuggestions.includes(field.label) ? 'block' : 'none'}">
+                <select id="fieldType_${idx}" style="flex: 1;" onchange="updateFieldValueType(${idx})">
+                    <option value="text" ${field.valueType === 'text' ? 'selected' : ''}>Texte</option>
+                    <option value="number" ${field.valueType === 'number' ? 'selected' : ''}>Nombre</option>
+                    <option value="currency" ${field.valueType === 'currency' ? 'selected' : ''}>Montant (Ar)</option>
+                </select>
+                <input type="${field.valueType === 'number' || field.valueType === 'currency' ? 'number' : 'text'}" id="fieldValue_${idx}" placeholder="Valeur" value="${escapeHtml(field.value)}" style="flex: 2;">
+                <button class="delete-field" data-idx="${idx}">🗑️</button>
+            </div>
+        `).join('');
+        
+        document.querySelectorAll('.delete-field').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                let idx = parseInt(btn.dataset.idx);
+                if(customFields.length > 1) {
+                    customFields.splice(idx, 1);
+                    renderDynamicFields();
+                } else {
+                    showToast("Gardez au moins un champ", true);
+                }
+            });
+        });
+    }
+    
+    window.updateFieldLabel = function(idx) {
+        const select = document.getElementById(`fieldName_${idx}`);
+        const customInput = document.getElementById(`fieldLabelCustom_${idx}`);
+        if(select.value === "custom") {
+            customInput.style.display = "block";
+            customInput.focus();
+        } else {
+            customInput.style.display = "none";
+            customFields[idx].label = select.value;
+        }
+    }
+    
+    window.updateFieldValueType = function(idx) {
+        const typeSelect = document.getElementById(`fieldType_${idx}`);
+        const valueInput = document.getElementById(`fieldValue_${idx}`);
+        customFields[idx].valueType = typeSelect.value;
+        valueInput.type = (typeSelect.value === 'number' || typeSelect.value === 'currency') ? 'number' : 'text';
+    }
+    
+    function collectFieldsFromUI() {
+        for(let i = 0; i < customFields.length; i++) {
+            const select = document.getElementById(`fieldName_${i}`);
+            const customInput = document.getElementById(`fieldLabelCustom_${i}`);
+            const typeSelect = document.getElementById(`fieldType_${i}`);
+            const valueInput = document.getElementById(`fieldValue_${i}`);
+            
+            if(select && select.value === "custom" && customInput) {
+                customFields[i].label = customInput.value;
+            } else if(select && select.value && select.value !== "") {
+                customFields[i].label = select.value;
+            }
+            
+            if(typeSelect) customFields[i].valueType = typeSelect.value;
+            if(valueInput) customFields[i].value = valueInput.value;
+        }
     }
     
     async function renderObjectsList() {
@@ -423,31 +573,64 @@
             return searchText.includes(searchTerm);
         });
         let container = document.getElementById('objectsList');
-        container.innerHTML = filtered.map(obj => `<div class="object-card"><div><strong>${escapeHtml(obj.name)}</strong></div>${obj.customFields.map(f=>`<div>📌 ${escapeHtml(f.label)}: ${escapeHtml(f.value)}</div>`).join('')}<div>🖼️ ${obj.photos.map(p=>`<img src="${p}" class="photo-thumb" onclick="window.open('${p}','_blank')">`).join('') || 'aucune photo'}</div><button class="deleteObj" data-id="${obj.id}">🗑️ Supprimer</button></div>`).join('');
+        container.innerHTML = filtered.map(obj => `<div class="object-card"><div><strong>${escapeHtml(obj.name)}</strong></div>${obj.customFields.map(f=>`<div>📌 ${escapeHtml(f.label)}: ${escapeHtml(f.value)} (${f.valueType})</div>`).join('')}<button class="deleteObj" data-id="${obj.id}">🗑️ Supprimer</button></div>`).join('');
         document.querySelectorAll('.deleteObj').forEach(btn => btn.addEventListener('click', async (e) => { let id = Number(btn.dataset.id); let monthData = await getUserMonthData(); monthData.objects = monthData.objects.filter(o=>o.id!==id); await saveUserMonthData(monthData); await renderObjectsList(); showToast("Objet supprimé"); }));
     }
     
-    function initLocalisation() {
-        customFields = []; renderDynamicFields();
-        document.getElementById('addCustomFieldBtn').onclick = () => { if(customFields.length < 8) { customFields.push({label:"", value:""}); renderDynamicFields(); } else showToast("Max 8 champs", true); };
+    async function initAiza() {
+        renderCategoryScroll();
+        renderSubcategories();
+        
+        customFields = [
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" },
+            { label: "", value: "", valueType: "text" }
+        ];
+        renderDynamicFields();
+        
+        document.getElementById('addCustomProductBtn').onclick = () => {
+            const newProduct = document.getElementById('customProductInput').value.trim();
+            if(newProduct) {
+                const objNameInput = document.getElementById('objName');
+                objNameInput.value = newProduct;
+                document.getElementById('customProductInput').value = '';
+                showToast(`Produit ajouté: ${newProduct}`);
+            } else {
+                showToast("Entrez un nom de produit", true);
+            }
+        };
+        
         document.getElementById('saveObjectBtn').onclick = async () => {
             let name = document.getElementById('objName').value.trim();
-            if(!name) return showToast("Nom requis", true);
-            let fields = [];
-            for(let i=0;i<customFields.length;i++) {
-                let lbl = document.getElementById(`fieldLabel_${i}`)?.value || "";
-                let val = document.getElementById(`fieldValue_${i}`)?.value || "";
-                if(lbl) fields.push({label: lbl, value: val});
-            }
-            let photos = [];
-            let files = document.getElementById('objPhotos').files;
-            for(let i=0;i<Math.min(files.length,5);i++) photos.push(URL.createObjectURL(files[i]));
+            if(!name) return showToast("Nom de l'objet requis", true);
+            
+            collectFieldsFromUI();
+            
+            let fields = customFields.filter(f => f.label && f.label.trim() !== "");
+            if(fields.length === 0) return showToast("Ajoutez au moins un champ personnalisé", true);
+            
             let monthData = await getUserMonthData();
             if(!monthData.objects) monthData.objects = [];
-            monthData.objects.push({ id: Date.now(), name, customFields: fields, photos, timestamp: Date.now() });
+            monthData.objects.push({ id: Date.now(), name, customFields: fields, timestamp: Date.now() });
             await saveUserMonthData(monthData);
             await renderObjectsList();
-            document.getElementById('objName').value = ''; customFields = []; renderDynamicFields(); document.getElementById('objPhotos').value = '';
+            document.getElementById('objName').value = '';
+            customFields = [
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" },
+                { label: "", value: "", valueType: "text" }
+            ];
+            renderDynamicFields();
             showToast("Objet sauvegardé");
         };
         renderObjectsList();
@@ -492,43 +675,35 @@
     
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     
-    // ==================== AUTHENTIFICATION FIREBASE ====================
+    // ==================== AUTHENTIFICATION ====================
     async function register() {
-        let email = document.getElementById('email').value.trim();
-        let pwd = document.getElementById('password').value;
-        let phone = document.getElementById('phone').value.trim();
+        let email = document.getElementById('regEmail').value.trim();
+        let pwd = document.getElementById('regPassword').value;
+        let phone = document.getElementById('regPhone').value.trim();
         
         if(!email || !pwd) {
-            document.getElementById('authMessage').innerText = "Email & mot de passe requis";
+            document.getElementById('registerMessage').innerText = "Email & mot de passe requis";
             return;
         }
         if(pwd.length < 6) {
-            document.getElementById('authMessage').innerText = "Mot de passe minimum 6 caractères";
+            document.getElementById('registerMessage').innerText = "Mot de passe minimum 6 caractères";
             return;
         }
         
         try {
             const userCred = await auth.createUserWithEmailAndPassword(email, pwd);
-            const user = userCred.user;
-            
-            // Créer le document utilisateur dans Firestore
-            await db.collection('users').doc(user.uid).set({
-                email: email,
-                phoneNumber: phone,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            await db.collection('users').doc(userCred.user.uid).set({
+                email: email, phoneNumber: phone, createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            
-            showToast("Compte créé avec succès !");
-            document.getElementById('authMessage').innerText = "";
-            // Connexion automatique
-            currentUser = user;
-            await updateDashboardUI();
-            showPage('dashboardPage');
+            showToast("Compte créé ! Veuillez vous connecter");
+            document.getElementById('registerMessage').innerText = "";
+            showPage('loginPage');
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = '';
         } catch(e) {
             let msg = e.message;
             if(msg.includes('email-already-in-use')) msg = "Cet email est déjà utilisé";
-            if(msg.includes('invalid-email')) msg = "Email invalide";
-            document.getElementById('authMessage').innerText = msg;
+            document.getElementById('registerMessage').innerText = msg;
             showToast(msg, true);
         }
     }
@@ -553,7 +728,6 @@
             let msg = e.message;
             if(msg.includes('user-not-found')) msg = "Aucun compte trouvé";
             if(msg.includes('wrong-password')) msg = "Mot de passe incorrect";
-            if(msg.includes('invalid-email')) msg = "Email invalide";
             document.getElementById('authMessage').innerText = msg;
             showToast(msg, true);
         }
@@ -568,7 +742,6 @@
         document.getElementById('password').value = '';
     }
     
-    // État d'authentification
     auth.onAuthStateChanged(async (user) => {
         if(user) {
             currentUser = user;
@@ -581,14 +754,15 @@
     });
     
     // Événements UI
-    document.getElementById('signupBtn').onclick = register;
     document.getElementById('signinBtn').onclick = login;
+    document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
+    document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
+    document.getElementById('registerBtn').onclick = register;
     document.getElementById('logoutBtn')?.addEventListener('click', logout);
     document.querySelectorAll('[data-back]').forEach(btn=>btn.addEventListener('click',()=>showPage('dashboardPage')));
     document.querySelectorAll('.dashboard-card').forEach(card=>card.addEventListener('click',()=>showPage(card.dataset.nav+'Page')));
     if(Notification.permission!=="granted") Notification.requestPermission();
     
-    // Sync month selector
     setInterval(()=>{
         let factSelect = document.getElementById('factMonthSelect');
         if(factSelect) {
