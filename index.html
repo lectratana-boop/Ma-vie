@@ -42,50 +42,61 @@
         .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 10px 20px; border-radius: 40px; z-index: 1000; animation: fadeOut 3s ease forwards; font-size: 14px; }
         @keyframes fadeOut { 0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; visibility: hidden; } }
         
-        /* Styles pour AIZA */
-        .search-header { margin-bottom: 20px; }
-        .search-box { background: white; border-radius: 60px; padding: 8px 16px; display: flex; gap: 8px; }
-        .search-box input { margin: 0; padding: 8px; flex: 1; }
-        .search-box button { margin: 0; padding: 8px 16px; width: auto; }
+        /* ==================== STYLES AIZA 3D ==================== */
+        .aiza-3d { padding: 20px; border-radius: 30px; background: linear-gradient(145deg, #1a1a2e, #0f0f1a); }
+        .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); margin-bottom: 15px; }
+        .search-3d input { flex: 1; background: none; border: none; color: white; padding: 8px; outline: none; }
+        .search-3d input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-3d button { background: linear-gradient(135deg, #8c52ff, #6c3eff); border: none; padding: 8px 20px; border-radius: 30px; color: white; cursor: pointer; box-shadow: 0 0 15px rgba(140,82,255,0.5); transition: all 0.2s; }
+        .search-3d button:active { transform: scale(0.95); }
         
-        .category-scroll { display: flex; overflow-x: auto; gap: 10px; padding: 10px 0; margin-bottom: 15px; scrollbar-width: thin; }
-        .category-scroll::-webkit-scrollbar { height: 4px; }
+        .categories-3d { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
+        .cat-3d { padding: 8px 18px; border-radius: 30px; background: rgba(255,255,255,0.1); color: white; cursor: pointer; transition: all 0.3s ease; }
+        .cat-3d.active { background: linear-gradient(135deg, #8c52ff, #6c3eff); box-shadow: 0 0 15px rgba(140,82,255,0.5); }
+        .cat-3d:hover { transform: translateY(-2px); background: rgba(255,255,255,0.2); }
         
-        .cat-item { position: relative; display: inline-block; }
-        .cat-btn-main { background: rgba(255,255,255,0.15); border-radius: 40px; padding: 8px 20px; font-size: 0.8rem; white-space: nowrap; cursor: pointer; transition: all 0.3s ease; color: white; border: none; }
-        .cat-btn-main:hover { background: linear-gradient(135deg, #a06eff, #6c3eff); transform: scale(1.02); }
+        /* Sous-catégories hover */
+        .subcat-container { position: relative; display: inline-block; }
+        .dropdown-3d { background: rgba(255,255,255,0.08); padding: 12px; border-radius: 20px; margin-bottom: 15px; cursor: pointer; transition: all 0.3s; }
+        .dropdown-3d:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
+        .dropdown-selected { color: white; display: flex; justify-content: space-between; align-items: center; }
+        .dropdown-selected:after { content: "▼"; font-size: 12px; }
+        .dropdown-list { display: none; margin-top: 10px; background: rgba(0,0,0,0.8); border-radius: 20px; padding: 8px; }
+        .dropdown-3d:hover .dropdown-list { display: block; }
+        .dropdown-list div { padding: 8px 12px; color: white; border-radius: 15px; cursor: pointer; transition: all 0.2s; }
+        .dropdown-list div:hover { background: #6c3eff; transform: translateX(5px); }
         
-        .subcat-dropdown { position: absolute; top: 100%; left: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); border-radius: 20px; min-width: 160px; z-index: 100; padding: 8px 0; margin-top: 5px; opacity: 0; visibility: hidden; transition: all 0.3s ease; transform: translateY(-10px); }
-        .cat-item:hover .subcat-dropdown { opacity: 1; visibility: visible; transform: translateY(0); }
-        .subcat-item { color: white; padding: 10px 16px; cursor: pointer; border-radius: 16px; transition: all 0.2s ease; }
-        .subcat-item:hover { background: #6c3eff; transform: translateX(5px); }
+        .form-3d input, .form-3d textarea, .form-3d select { width: 100%; margin: 8px 0; padding: 12px; border-radius: 25px; border: none; background: rgba(255,255,255,0.9); font-size: 14px; }
+        .form-3d textarea { border-radius: 20px; }
         
-        .photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .photo-thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 16px; cursor: pointer; border: 2px solid #6c3eff; transition: transform 0.2s; }
-        .photo-thumb:hover { transform: scale(1.05); }
+        .photo-upload { display: flex; justify-content: space-between; align-items: center; color: white; margin: 10px 0; }
+        .plus-btn { background: #8c52ff; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 24px; cursor: pointer; transition: all 0.2s; }
+        .plus-btn:active { transform: scale(0.9); }
         
-        .result-count { color: white; font-size: 12px; margin-bottom: 10px; }
+        .preview-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.2s; }
+        .preview-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
+        .preview-card img { width: 55px; height: 55px; border-radius: 15px; object-fit: cover; }
+        .preview-card div { flex: 1; }
+        .preview-card strong { display: block; }
+        .preview-card small { font-size: 11px; color: #aaa; }
         
-        /* Liste des produits */
-        .products-list { margin-top: 20px; max-height: 400px; overflow-y: auto; }
-        .category-group { margin-bottom: 20px; }
-        .category-title { color: white; font-size: 14px; font-weight: 600; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 2px solid #6c3eff; display: inline-block; }
-        .product-item { background: rgba(255,255,255,0.1); border-radius: 20px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: all 0.2s ease; display: flex; gap: 12px; align-items: center; }
-        .product-item:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); }
-        .product-thumb { width: 50px; height: 50px; border-radius: 12px; object-fit: cover; }
-        .product-info { flex: 1; }
-        .product-name { color: white; font-weight: 600; }
-        .product-location { color: #aaa; font-size: 11px; }
+        .list-title { color: white; font-size: 16px; font-weight: 600; margin: 15px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #6c3eff; display: inline-block; }
         
-        /* Modal pour affichage agrandi */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .save-btn { width: 100%; padding: 14px; border: none; border-radius: 35px; background: linear-gradient(135deg, #8c52ff, #6c3eff); color: white; font-weight: bold; font-size: 16px; margin-top: 20px; cursor: pointer; box-shadow: 0 10px 30px rgba(140,82,255,0.5); transition: all 0.2s; }
+        .save-btn:active { transform: scale(0.97); }
+        
+        .back-btn-bottom { text-align: center; margin-top: 20px; }
+        .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; }
+        
+        /* Modal */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; }
         .modal.active { display: flex; }
-        .modal-content { max-width: 90%; max-height: 90%; background: #1a1a2e; border-radius: 32px; padding: 20px; text-align: center; }
+        .modal-content { max-width: 90%; max-height: 90%; background: #1a1a2e; border-radius: 32px; padding: 20px; text-align: center; border: 1px solid #6c3eff; }
         .modal-image { max-width: 100%; max-height: 60vh; border-radius: 24px; }
         .modal-desc { color: white; margin-top: 15px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 20px; }
         .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
         
-        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } }
+        @media (max-width: 500px) { .page { padding: 14px; } .finance-amount { font-size: 1.3rem; } .categories-3d { gap: 6px; } .cat-3d { padding: 6px 12px; font-size: 12px; } }
     </style>
 </head>
 <body>
@@ -168,59 +179,57 @@
         <div id="eventListPreview" style="margin-top: 12px; max-height: 200px; overflow-y: auto;"></div>
     </div>
 
-    <!-- AIZA - PAGE CORRIGÉE -->
+    <!-- AIZA - NOUVEAU DESIGN 3D -->
     <div id="aizaPage" class="page">
-        <div class="header-app">
-            <button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button>
-            <div style="width: 50px;"></div>
-        </div>
-        
-        <div class="card">
-            <!-- Barre de recherche tout en haut -->
-            <div class="search-header">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Rechercher un objet...">
-                    <button id="searchBtn" class="gradient-btn" style="padding: 8px 16px; width: auto;">Rechercher</button>
-                </div>
+        <div class="aiza-3d">
+            <!-- SEARCH tout en haut -->
+            <div class="search-3d">
+                <input type="text" id="searchInput" placeholder="Basique">
+                <button id="searchBtn">Rechercher</button>
             </div>
-            
-            <!-- Catégories avec sous-catégories au hover -->
-            <div class="category-scroll" id="categoryScroll"></div>
-            
-            <!-- Formulaire d'ajout -->
-            <div class="form-card">
-                <h3 style="color:white; font-size: 16px; margin-bottom: 12px;">📦 Nouvel objet</h3>
-                <input type="text" id="objName" placeholder="Nom de l'objet *">
-                <select id="objCategory" style="margin-bottom: 12px;">
+
+            <!-- CATEGORIES -->
+            <div class="categories-3d" id="categoryContainer3d"></div>
+
+            <!-- DROPDOWN sous-catégories (hover) -->
+            <div class="subcat-container" id="subcatContainer"></div>
+
+            <!-- FORMULAIRE -->
+            <div class="form-3d">
+                <select id="objCategory">
                     <option value="👕 Vêtements">👕 Vêtements</option>
                     <option value="🧸 Jouets">🧸 Jouets</option>
                     <option value="📎 Bureautique">📎 Bureautique</option>
                     <option value="🖥️ Informatique">🖥️ Informatique</option>
                 </select>
-                <input type="text" id="objSubCategory" placeholder="Sous-catégorie (ex: T-shirts)">
-                <input type="text" id="objLocation" placeholder="Localisation (où se trouve l'objet) *">
-                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description de l'objet (max 250 caractères)"></textarea>
+                <input type="text" id="objName" placeholder="Nom de l'objet (ex: T-shirt)">
+                <input type="text" id="objLocation" placeholder="Localisation (armoire, bureau, etc.)">
+                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description de l'objet"></textarea>
                 <div style="font-size: 11px; color: #aaa; text-align: right; margin-top: -8px; margin-bottom: 12px;" id="charCount">0/250</div>
-                <input type="text" id="objKeywords" placeholder="Mots-clés (séparés par des virgules)">
-                
-                <!-- Upload de photos -->
-                <label style="color:white; margin-bottom: 5px; display: block;">📸 Photos (max 5)</label>
-                <input type="file" id="objPhotos" accept="image/*" multiple style="margin-bottom: 10px;">
-                <div id="photoPreview" class="photo-preview"></div>
-                
-                <button id="saveObjectBtn" class="gradient-btn">💾 Enregistrer l'objet</button>
+
+                <!-- PHOTOS -->
+                <div class="photo-upload">
+                    <span>📸 Photos (max 5)</span>
+                    <button type="button" class="plus-btn" id="addPhotoBtn">+</button>
+                </div>
+                <input type="file" id="objPhotos" accept="image/*" multiple style="display: none;">
+                <div id="photoPreview" class="photo-preview" style="display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0;"></div>
+
+                <!-- LISTE DES PRODUITS CLASSÉS PAR SOUS-CATÉGORIE -->
+                <div id="productsListContainer"></div>
+
+                <!-- BOUTON SAUVEGARDER -->
+                <button id="saveObjectBtn" class="save-btn">💾 Enregistrer l'objet</button>
             </div>
-            
-            <!-- Résultats de recherche -->
-            <div id="resultsCount" class="result-count"></div>
-            
-            <!-- Liste des produits classés par sous-catégorie -->
-            <div id="productsList" class="products-list"></div>
+
+            <!-- BOUTON RETOUR EN BAS AU CENTRE -->
+            <div class="back-btn-bottom">
+                <button data-back="dashboard">← Retour au tableau de bord</button>
+            </div>
         </div>
     </div>
-    
-    <!-- Modal pour affichage agrandi -->
+
+    <!-- MODAL POUR AFFICHAGE IMAGE -->
     <div id="productModal" class="modal">
         <span class="close-modal">&times;</span>
         <div class="modal-content">
@@ -266,14 +275,13 @@
     let currentDisplayMonth = new Date().getMonth();
     let calendar = null;
     
-    // Catégories et sous-catégories
-    const categoriesData = {
+    const categoriesList = ["👕 Vêtements", "🧸 Jouets", "📎 Bureautique", "🖥️ Informatique"];
+    const subCategoriesData = {
         "👕 Vêtements": ["T-shirts", "Pantalons", "Robes", "Vestes", "Chaussures", "Chaussettes"],
         "🧸 Jouets": ["Voitures miniatures", "Poupées", "Jeux de construction", "Peluches", "Ballons", "Jeux de société"],
         "📎 Bureautique": ["Papier", "Stylos / crayons", "Classeurs", "Enveloppes", "Agrafeuse", "Post-it", "Calculatrice"],
         "🖥️ Informatique": ["Clé USB", "Ordinateur", "Souris", "Clavier", "Disque dur", "Câbles", "Imprimante", "Routeur"]
     };
-    
     let currentSearchTerm = "";
     
     function showToast(message, isError = false) {
@@ -515,58 +523,82 @@
         if(listDiv) listDiv.innerHTML = `<div style="color:white;">📋 Événements récents:</div>` + (monthData.events.slice(-5).reverse().map(ev => `<div style="background:rgba(255,255,255,0.2); border-radius:20px; padding:8px; margin:5px 0;"><b>${escapeHtml(ev.title)}</b> - ${ev.date}<br><small>${escapeHtml(ev.desc?.substring(0,80))}</small></div>`).join(''));
     }
     
-    // ==================== AIZA ====================
-    
-    function initCharCounter() {
-        const descTextarea = document.getElementById('objDescription');
-        const charCountSpan = document.getElementById('charCount');
-        if(descTextarea && charCountSpan) {
-            descTextarea.addEventListener('input', function() {
-                charCountSpan.innerHTML = `${this.value.length}/250 caractères`;
+    // ==================== AIZA 3D ====================
+    function renderCategories3d() {
+        const container = document.getElementById('categoryContainer3d');
+        if(!container) return;
+        container.innerHTML = categoriesList.map(cat => `<div class="cat-3d" data-cat="${cat}">${cat}</div>`).join('');
+        document.querySelectorAll('.cat-3d').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.cat-3d').forEach(c => c.classList.remove('active'));
+                btn.classList.add('active');
+                renderSubcatDropdown(btn.dataset.cat);
             });
+        });
+        if(categoriesList.length > 0) {
+            document.querySelector('.cat-3d')?.classList.add('active');
+            renderSubcatDropdown(categoriesList[0]);
         }
     }
     
-    function renderCategoryScroll() {
-        const container = document.getElementById('categoryScroll');
+    function renderSubcatDropdown(category) {
+        const container = document.getElementById('subcatContainer');
         if(!container) return;
-        container.innerHTML = Object.keys(categoriesData).map(cat => `
-            <div class="cat-item">
-                <button class="cat-btn-main">${cat}</button>
-                <div class="subcat-dropdown">
-                    ${categoriesData[cat].map(sub => `<div class="subcat-item" data-sub="${sub}">📦 ${sub}</div>`).join('')}
+        const subs = subCategoriesData[category] || [];
+        container.innerHTML = `
+            <div class="dropdown-3d">
+                <div class="dropdown-selected">Choisir une sous-catégorie</div>
+                <div class="dropdown-list">
+                    ${subs.map(sub => `<div data-sub="${sub}">📦 ${sub}</div>`).join('')}
                 </div>
             </div>
-        `).join('');
-        
-        document.querySelectorAll('.subcat-item').forEach(div => {
+        `;
+        document.querySelectorAll('.dropdown-list div').forEach(div => {
             div.addEventListener('click', () => {
                 const subValue = div.dataset.sub;
                 const objSubInput = document.getElementById('objSubCategory');
                 if(objSubInput) objSubInput.value = subValue;
+                else {
+                    let hiddenInput = document.getElementById('hiddenSubCat');
+                    if(!hiddenInput) {
+                        hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.id = 'objSubCategory';
+                        document.querySelector('.form-3d').appendChild(hiddenInput);
+                    }
+                    hiddenInput.value = subValue;
+                }
                 showToast(`Sous-catégorie: ${subValue}`);
             });
         });
     }
     
-    function initPhotoPreview() {
-        const photoInput = document.getElementById('objPhotos');
-        const previewContainer = document.getElementById('photoPreview');
-        if(photoInput) {
-            photoInput.addEventListener('change', function(e) {
-                previewContainer.innerHTML = '';
+    function initPhotoUpload() {
+        const addBtn = document.getElementById('addPhotoBtn');
+        const fileInput = document.getElementById('objPhotos');
+        const previewDiv = document.getElementById('photoPreview');
+        if(addBtn) {
+            addBtn.onclick = () => fileInput.click();
+        }
+        if(fileInput) {
+            fileInput.onchange = (e) => {
+                previewDiv.innerHTML = '';
                 const files = Array.from(e.target.files);
                 for(let i = 0; i < Math.min(files.length, 5); i++) {
                     const reader = new FileReader();
-                    reader.onload = function(event) {
+                    reader.onload = (event) => {
                         const img = document.createElement('img');
                         img.src = event.target.result;
-                        img.className = 'photo-thumb';
-                        previewContainer.appendChild(img);
+                        img.style.width = '60px';
+                        img.style.height = '60px';
+                        img.style.borderRadius = '15px';
+                        img.style.objectFit = 'cover';
+                        img.style.border = '2px solid #6c3eff';
+                        previewDiv.appendChild(img);
                     };
                     reader.readAsDataURL(files[i]);
                 }
-            });
+            };
         }
     }
     
@@ -587,75 +619,60 @@
     async function renderProductsList() {
         let monthData = await getUserMonthData();
         let objects = monthData.objects || [];
-        
-        // Filtrer par recherche
         let filtered = objects;
         if(currentSearchTerm) {
             const searchLower = currentSearchTerm.toLowerCase();
             filtered = objects.filter(obj => {
                 return obj.name.toLowerCase().includes(searchLower) ||
                        (obj.location && obj.location.toLowerCase().includes(searchLower)) ||
-                       (obj.description && obj.description.toLowerCase().includes(searchLower)) ||
-                       (obj.keywords && obj.keywords.toLowerCase().includes(searchLower));
+                       (obj.description && obj.description.toLowerCase().includes(searchLower));
             });
         }
-        
-        const countDiv = document.getElementById('resultsCount');
-        if(countDiv) countDiv.innerHTML = filtered.length > 0 ? `${filtered.length} objet(s) trouvé(s)` : '';
-        
-        // Classer par sous-catégorie
         const grouped = {};
         filtered.forEach(obj => {
             const subCat = obj.subCategory || "Autre";
             if(!grouped[subCat]) grouped[subCat] = [];
             grouped[subCat].push(obj);
         });
-        
-        let container = document.getElementById('productsList');
-        if(Object.keys(grouped).length === 0) {
-            container.innerHTML = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet enregistré</div>';
-            return;
-        }
-        
         let html = '';
         for(const [subCat, items] of Object.entries(grouped)) {
-            html += `<div class="category-group"><div class="category-title">📁 ${subCat}</div>`;
+            html += `<div class="list-title">📁 ${subCat}</div>`;
             items.forEach(obj => {
-                const thumbUrl = obj.photos && obj.photos.length > 0 ? obj.photos[0] : 'https://via.placeholder.com/50';
+                const thumbUrl = obj.photos && obj.photos.length > 0 ? obj.photos[0] : 'https://via.placeholder.com/55';
                 html += `
-                    <div class="product-item" data-id="${obj.id}" data-name="${escapeHtml(obj.name)}" data-location="${escapeHtml(obj.location)}" data-description="${escapeHtml(obj.description)}" data-photos='${JSON.stringify(obj.photos || [])}'>
-                        <img src="${thumbUrl}" class="product-thumb">
-                        <div class="product-info">
-                            <div class="product-name">${escapeHtml(obj.name)}</div>
-                            <div class="product-location">📍 ${escapeHtml(obj.location || 'Non spécifié')}</div>
+                    <div class="preview-card" data-id="${obj.id}" data-name="${escapeHtml(obj.name)}" data-location="${escapeHtml(obj.location)}" data-description="${escapeHtml(obj.description)}" data-photos='${JSON.stringify(obj.photos || [])}'>
+                        <img src="${thumbUrl}">
+                        <div>
+                            <strong>${escapeHtml(obj.name)}</strong>
+                            <small>📍 ${escapeHtml(obj.location || 'Non spécifié')}</small>
                         </div>
                     </div>
                 `;
             });
-            html += `</div>`;
         }
-        container.innerHTML = html;
-        
-        // Ajouter les événements de clic sur les produits
-        document.querySelectorAll('.product-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const name = item.dataset.name;
-                const location = item.dataset.location;
-                const description = item.dataset.description;
-                const photos = JSON.parse(item.dataset.photos);
-                openProductModal(name, location, description, photos);
+        const container = document.getElementById('productsListContainer');
+        if(Object.keys(grouped).length === 0) {
+            container.innerHTML = '<div style="color:#aaa; text-align:center; padding:20px;">Aucun objet enregistré</div>';
+        } else {
+            container.innerHTML = html;
+        }
+        document.querySelectorAll('.preview-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const name = card.dataset.name;
+                const location = card.dataset.location;
+                const description = card.dataset.description;
+                const photos = JSON.parse(card.dataset.photos);
+                openModal(name, location, description, photos);
             });
         });
     }
     
-    function openProductModal(name, location, description, photos) {
+    function openModal(name, location, description, photos) {
         const modal = document.getElementById('productModal');
         const modalImage = document.getElementById('modalImage');
-        const modalDescription = document.getElementById('modalDescription');
-        
+        const modalDesc = document.getElementById('modalDescription');
         modalImage.src = photos && photos.length > 0 ? photos[0] : 'https://via.placeholder.com/300';
-        modalDescription.innerHTML = `<strong>${name}</strong><br>📍 ${location}<br><br>📝 ${description || 'Aucune description'}`;
-        
+        modalDesc.innerHTML = `<strong>${name}</strong><br>📍 ${location}<br><br>📝 ${description || 'Aucune description'}`;
         modal.classList.add('active');
     }
     
@@ -663,70 +680,66 @@
         const searchInput = document.getElementById('searchInput');
         currentSearchTerm = searchInput ? searchInput.value : '';
         await renderProductsList();
-        showToast(`Recherche: "${currentSearchTerm || 'tous les objets'}"`);
+        showToast(`Recherche: "${currentSearchTerm || 'tous'}"`);
     }
     
     async function initAiza() {
-        renderCategoryScroll();
+        renderCategories3d();
+        initPhotoUpload();
         initCharCounter();
-        initPhotoPreview();
-        
         document.getElementById('searchBtn').onclick = performSearch;
         document.getElementById('searchInput').onkeypress = (e) => { if(e.key === 'Enter') performSearch(); };
+        await renderProductsList();
         
         document.getElementById('saveObjectBtn').onclick = async () => {
             let name = document.getElementById('objName').value.trim();
             let category = document.getElementById('objCategory').value;
-            let subCategory = document.getElementById('objSubCategory').value.trim();
+            let subCategoryInput = document.getElementById('objSubCategory');
+            let subCategory = subCategoryInput ? subCategoryInput.value : '';
             let location = document.getElementById('objLocation').value.trim();
             let description = document.getElementById('objDescription').value.trim();
-            let keywords = document.getElementById('objKeywords').value.trim();
             const photoFiles = document.getElementById('objPhotos').files;
             
             if(!name) return showToast("Nom de l'objet requis", true);
             if(!location) return showToast("Localisation requise", true);
             
             let photoUrls = await uploadPhotos(photoFiles);
-            
             let monthData = await getUserMonthData();
             if(!monthData.objects) monthData.objects = [];
-            monthData.objects.push({ 
-                id: Date.now(), 
+            monthData.objects.push({
+                id: Date.now(),
                 name: name,
                 category: category,
                 subCategory: subCategory || "Sans catégorie",
                 location: location,
                 description: description,
-                keywords: keywords,
                 photos: photoUrls,
-                timestamp: Date.now() 
+                timestamp: Date.now()
             });
             await saveUserMonthData(monthData);
             
             document.getElementById('objName').value = '';
-            document.getElementById('objSubCategory').value = '';
             document.getElementById('objLocation').value = '';
             document.getElementById('objDescription').value = '';
-            document.getElementById('objKeywords').value = '';
             document.getElementById('objPhotos').value = '';
             document.getElementById('photoPreview').innerHTML = '';
             if(document.getElementById('charCount')) document.getElementById('charCount').innerHTML = '0/250';
+            if(subCategoryInput) subCategoryInput.value = '';
             
             await renderProductsList();
             showToast("Objet sauvegardé !");
         };
-        
-        await renderProductsList();
     }
     
-    // Fermeture du modal
-    document.querySelector('.close-modal')?.addEventListener('click', () => {
-        document.getElementById('productModal').classList.remove('active');
-    });
-    window.addEventListener('click', (e) => {
-        const modal = document.getElementById('productModal');
-        if(e.target === modal) modal.classList.remove('active');
-    });
+    function initCharCounter() {
+        const descTextarea = document.getElementById('objDescription');
+        const charCountSpan = document.getElementById('charCount');
+        if(descTextarea && charCountSpan) {
+            descTextarea.addEventListener('input', function() {
+                charCountSpan.innerHTML = `${this.value.length}/250 caractères`;
+            });
+        }
+    }
     
     // ==================== PROJETS ====================
     async function renderProjects() {
@@ -771,21 +784,11 @@
         let email = document.getElementById('regEmail').value.trim();
         let pwd = document.getElementById('regPassword').value;
         let phone = document.getElementById('regPhone').value.trim();
-        
-        if(!email || !pwd) {
-            document.getElementById('registerMessage').innerText = "Email & mot de passe requis";
-            return;
-        }
-        if(pwd.length < 6) {
-            document.getElementById('registerMessage').innerText = "Mot de passe minimum 6 caractères";
-            return;
-        }
-        
+        if(!email || !pwd) { document.getElementById('registerMessage').innerText = "Email & mot de passe requis"; return; }
+        if(pwd.length < 6) { document.getElementById('registerMessage').innerText = "Mot de passe minimum 6 caractères"; return; }
         try {
             const userCred = await auth.createUserWithEmailAndPassword(email, pwd);
-            await db.collection('users').doc(userCred.user.uid).set({
-                email: email, phoneNumber: phone, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            await db.collection('users').doc(userCred.user.uid).set({ email: email, phoneNumber: phone, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
             showToast("Compte créé ! Veuillez vous connecter");
             document.getElementById('registerMessage').innerText = "";
             showPage('loginPage');
@@ -802,12 +805,7 @@
     async function login() {
         let email = document.getElementById('email').value.trim();
         let pwd = document.getElementById('password').value;
-        
-        if(!email || !pwd) {
-            document.getElementById('authMessage').innerText = "Email & mot de passe requis";
-            return;
-        }
-        
+        if(!email || !pwd) { document.getElementById('authMessage').innerText = "Email & mot de passe requis"; return; }
         try {
             const userCred = await auth.signInWithEmailAndPassword(email, pwd);
             currentUser = userCred.user;
@@ -834,15 +832,13 @@
     }
     
     auth.onAuthStateChanged(async (user) => {
-        if(user) {
-            currentUser = user;
-            await updateDashboardUI();
-            showPage('dashboardPage');
-        } else {
-            currentUser = null;
-            showPage('loginPage');
-        }
+        if(user) { currentUser = user; await updateDashboardUI(); showPage('dashboardPage'); }
+        else { currentUser = null; showPage('loginPage'); }
     });
+    
+    // Fermeture modal
+    document.querySelector('.close-modal')?.addEventListener('click', () => document.getElementById('productModal').classList.remove('active'));
+    window.addEventListener('click', (e) => { const modal = document.getElementById('productModal'); if(e.target === modal) modal.classList.remove('active'); });
     
     // Événements UI
     document.getElementById('signinBtn').onclick = login;
