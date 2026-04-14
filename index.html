@@ -35,7 +35,7 @@
         .month-selector { background: rgba(255,255,255,0.15); border-radius: 60px; padding: 6px 12px; display: inline-flex; gap: 12px; margin-bottom: 16px; }
         .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .logo { font-weight: 800; font-size: 1.7rem; background: linear-gradient(135deg, #f0e6ff, #c7b9ff); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 12px 24px; border-radius: 40px; z-index: 1000; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.9); color: white; padding: 12px 24px; border-radius: 40px; z-index: 2000; font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         
         .aiza-container { padding: 20px; border-radius: 30px; background: linear-gradient(145deg, #1a1a2e, #0f0f1a); }
         .search-3d { display: flex; gap: 10px; background: rgba(255,255,255,0.08); padding: 10px; border-radius: 40px; margin-bottom: 20px; }
@@ -53,11 +53,14 @@
         .plus-btn { background: #8c52ff; border: none; border-radius: 50%; width: 40px; height: 40px; color: white; font-size: 24px; cursor: pointer; transition: all 0.3s; }
         .plus-btn:active { transform: scale(0.9); }
         .photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .preview-thumb { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; }
+        .preview-thumb { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; position: relative; }
+        .preview-thumb-container { position: relative; }
+        .remove-photo { position: absolute; top: -5px; right: -5px; background: #d9534f; color: white; border-radius: 50%; width: 25px; height: 25px; border: none; cursor: pointer; font-size: 16px; line-height: 1; }
+        
         .list-title { color: white; font-size: 18px; font-weight: 700; margin: 20px 0 10px 0; padding: 10px 15px; background: linear-gradient(135deg, rgba(140,82,255,0.3), rgba(108,62,255,0.2)); border-left: 4px solid #8c52ff; border-radius: 10px; display: block; }
         .product-card { display: flex; gap: 12px; background: rgba(255,255,255,0.1); padding: 12px; border-radius: 20px; margin: 10px 0; color: white; cursor: pointer; transition: all 0.3s; border: 1px solid rgba(255,255,255,0.1); }
         .product-card:hover { background: rgba(108,62,255,0.3); transform: translateX(5px); box-shadow: 0 4px 15px rgba(140,82,255,0.4); }
-        .product-card img { width: 70px; height: 70px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; flex-shrink: 0; }
+        .product-card img { width: 80px; height: 80px; border-radius: 15px; object-fit: cover; border: 2px solid #6c3eff; flex-shrink: 0; }
         .product-card-info { flex: 1; }
         .product-card strong { font-size: 16px; display: block; margin-bottom: 5px; color: #fff; }
         .product-card small { color: #aaa; font-size: 12px; display: block; margin-top: 3px; }
@@ -68,17 +71,17 @@
         .back-btn-bottom button { background: rgba(255,255,255,0.2); border: none; padding: 10px 20px; border-radius: 40px; color: white; cursor: pointer; transition: all 0.3s; }
         .back-btn-bottom button:hover { background: rgba(255,255,255,0.3); }
         
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; justify-content: center; align-items: center; animation: fadeIn 0.3s ease; }
+        /* MODAL AMÉLIORÉ - SANS FLOU */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1500; justify-content: center; align-items: center; padding: 20px; }
         .modal.active { display: flex; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content { max-width: 95%; max-height: 95vh; background: #1a1a2e; border-radius: 32px; padding: 25px; text-align: center; border: 2px solid #6c3eff; overflow-y: auto; position: relative; animation: scaleIn 0.3s ease; }
-        @keyframes scaleIn { from { transform: scale(0.8); } to { transform: scale(1); } }
-        .modal-image { max-width: 100%; max-height: 70vh; border-radius: 24px; margin-bottom: 15px; object-fit: contain; box-shadow: 0 8px 30px rgba(140,82,255,0.5); cursor: pointer; transition: all 0.3s; }
-        .modal-image:hover { transform: scale(1.02); }
-        .modal-desc { color: white; margin-top: 15px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 20px; text-align: left; line-height: 1.8; }
+        .modal-content { max-width: 90%; max-height: 90vh; background: #1a1a2e; border-radius: 32px; padding: 30px; text-align: center; border: 2px solid #6c3eff; overflow-y: auto; position: relative; }
+        .modal-image { max-width: 100%; height: auto; max-height: 65vh; border-radius: 24px; margin-bottom: 20px; object-fit: contain; box-shadow: 0 8px 30px rgba(140,82,255,0.5); cursor: pointer; transition: all 0.3s; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
+        .modal-image:hover { transform: scale(1.01); }
+        .modal-desc { color: white; margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 20px; text-align: left; line-height: 1.8; }
         .modal-desc strong { font-size: 22px; color: #c7b9ff; display: block; margin-bottom: 15px; }
-        .modal-info-line { margin: 8px 0; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 35px; cursor: pointer; background: rgba(217,83,79,0.8); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10; }
+        .modal-info-line { margin: 10px 0; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 15px; }
+        .modal-info-line:last-child { border-bottom: none; }
+        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 35px; cursor: pointer; background: rgba(217,83,79,0.9); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; z-index: 10; font-weight: bold; }
         .close-modal:hover { background: #d9534f; transform: rotate(90deg); }
         
         .expense-item { display: flex; justify-content: space-between; background: rgba(255,255,245,0.9); padding: 10px 16px; border-radius: 40px; margin-bottom: 8px; }
@@ -90,11 +93,15 @@
         .empty-state { text-align: center; padding: 40px 20px; color: #aaa; }
         .empty-state i { font-size: 60px; margin-bottom: 15px; opacity: 0.3; }
         
+        .upload-progress { margin: 15px 0; background: rgba(255,255,255,0.1); border-radius: 20px; padding: 15px; color: white; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.2); border-radius: 10px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #8c52ff, #6c3eff); width: 0%; transition: width 0.3s; }
+        
         @media (max-width: 500px) { 
             .page { padding: 14px; } 
             .modal-content { max-width: 95%; padding: 20px; }
             .list-title { font-size: 16px; }
-            .product-card img { width: 60px; height: 60px; }
+            .product-card img { width: 70px; height: 70px; }
         }
     </style>
 </head>
@@ -157,22 +164,10 @@
             </div>
         </div>
         <div class="grid-2x2">
-            <div class="dashboard-card" data-nav="facturation">
-                <i class="fas fa-file-invoice-dollar"></i>
-                <h3>Factures</h3>
-            </div>
-            <div class="dashboard-card" data-nav="calendrier">
-                <i class="fas fa-calendar-alt"></i>
-                <h3>Calendrier</h3>
-            </div>
-            <div class="dashboard-card" data-nav="aiza">
-                <i class="fas fa-map-marker-alt"></i>
-                <h3>AIZA</h3>
-            </div>
-            <div class="dashboard-card" data-nav="projet">
-                <i class="fas fa-tasks"></i>
-                <h3>Projets</h3>
-            </div>
+            <div class="dashboard-card" data-nav="facturation"><i class="fas fa-file-invoice-dollar"></i><h3>Factures</h3></div>
+            <div class="dashboard-card" data-nav="calendrier"><i class="fas fa-calendar-alt"></i><h3>Calendrier</h3></div>
+            <div class="dashboard-card" data-nav="aiza"><i class="fas fa-map-marker-alt"></i><h3>AIZA</h3></div>
+            <div class="dashboard-card" data-nav="projet"><i class="fas fa-tasks"></i><h3>Projets</h3></div>
         </div>
     </div>
 
@@ -180,8 +175,7 @@
     <div id="facturationPage" class="page">
         <div class="header-app">
             <button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button>
-            <span class="logo">Factures</span>
-            <div></div>
+            <span class="logo">Factures</span><div></div>
         </div>
         <div class="card">
             <div class="month-selector" style="justify-content: space-between;">
@@ -203,8 +197,7 @@
     <div id="calendrierPage" class="page">
         <div class="header-app">
             <button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button>
-            <span class="logo">Agenda</span>
-            <div></div>
+            <span class="logo">Agenda</span><div></div>
         </div>
         <div class="card" id="calendarContainer" style="padding: 8px;"></div>
         <div class="card" style="margin-top: 16px;">
@@ -220,11 +213,11 @@
         <div class="aiza-container">
             <div style="text-align: center; margin-bottom: 20px;">
                 <h2 style="color: white; font-size: 24px;">Gestion des Objets</h2>
-                <p style="color: #aaa; font-size: 13px;">Organisez et retrouvez vos objets facilement</p>
+                <p style="color: #aaa; font-size: 13px;">Max 3 photos par objet pour rapidité</p>
             </div>
             
             <div class="search-3d">
-                <input type="text" id="searchInput" placeholder="Rechercher un objet">
+                <input type="text" id="searchInput" placeholder="Rechercher">
                 <button id="searchBtn">Rechercher</button>
             </div>
             
@@ -245,16 +238,22 @@
                     <div class="dropdown-menu" id="subcategoryMenu"></div>
                 </div>
                 
-                <input type="text" id="objName" placeholder="Nom de l'objet">
+                <input type="text" id="objName" placeholder="Nom">
                 <input type="text" id="objLocation" placeholder="Localisation">
-                <textarea id="objDescription" rows="3" maxlength="250" placeholder="Description"></textarea>
+                <textarea id="objDescription" rows="2" maxlength="150" placeholder="Description courte"></textarea>
                 
                 <div class="photo-upload">
-                    <span>Photos (max 5)</span>
+                    <span>Photos (max 3)</span>
                     <button type="button" class="plus-btn" id="addPhotoBtn">+</button>
                 </div>
                 <input type="file" id="objPhotos" accept="image/*" multiple style="display: none;">
                 <div id="photoPreview" class="photo-preview"></div>
+                
+                <div id="uploadProgress" class="upload-progress" style="display:none;">
+                    <div>Upload en cours...</div>
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                    <div id="progressText" style="margin-top:8px; font-size:13px;">0%</div>
+                </div>
                 
                 <button id="saveObjectBtn" class="save-btn">Enregistrer</button>
                 
@@ -271,7 +270,7 @@
     <div id="productModal" class="modal">
         <span class="close-modal">&times;</span>
         <div class="modal-content">
-            <img id="modalImage" class="modal-image" src="" alt="Image produit">
+            <img id="modalImage" class="modal-image" src="" alt="Image">
             <div id="modalDescription" class="modal-desc"></div>
         </div>
     </div>
@@ -280,8 +279,7 @@
     <div id="projetPage" class="page">
         <div class="header-app">
             <button class="gradient-btn" data-back="dashboard"><i class="fas fa-arrow-left"></i> Retour</button>
-            <span class="logo">Projets</span>
-            <div></div>
+            <span class="logo">Projets</span><div></div>
         </div>
         <div class="card">
             <input type="text" id="projectName" placeholder="Nom du projet">
@@ -321,6 +319,7 @@
     let selectedCategory = "";
     let selectedSubcategory = "";
     let calendar = null;
+    let selectedFiles = [];
     
     const categoriesList = ["Vêtements", "Jouets", "Bureautique", "Informatique", "Électronique", "Maison", "Sports", "Autre"];
     const subcategoriesMap = {
@@ -364,6 +363,50 @@
         }); 
     }
     
+    // COMPRESSION D'IMAGE
+    function compressImage(file, maxWidth, maxHeight, quality) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = (e) => {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width;
+                    let height = img.height;
+                    
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    canvas.toBlob((blob) => {
+                        resolve(new File([blob], file.name, {
+                            type: 'image/jpeg',
+                            lastModified: Date.now()
+                        }));
+                    }, 'image/jpeg', quality);
+                };
+                img.onerror = reject;
+            };
+            reader.onerror = reject;
+        });
+    }
+    
+    // AUTH
     document.getElementById('signinBtn').onclick = async function() {
         let email = document.getElementById('email').value.trim();
         let pwd = document.getElementById('password').value;
@@ -417,7 +460,6 @@
     
     document.getElementById('showRegisterBtn').onclick = () => showPage('registerPage');
     document.getElementById('showLoginBtn').onclick = () => showPage('loginPage');
-    
     document.getElementById('logoutBtn').onclick = async () => { 
         await auth.signOut(); 
         currentUser = null; 
@@ -438,17 +480,14 @@
     
     async function loadDashboard() {
         if(!currentUser) return;
-        
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let salary = doc.exists ? (doc.data().salary || 0) : 0;
             let expenses = doc.exists ? (doc.data().expenses || {}) : {};
             let total = 0;
-            
             for(let cat in expenses) {
                 (expenses[cat] || []).forEach(e => total += e.amount || 0);
             }
-            
             document.getElementById('salaryDisplay').innerHTML = salary.toLocaleString() + ' Ar';
             document.getElementById('savingDisplay').innerHTML = (salary - total).toLocaleString() + ' Ar';
             document.getElementById('savingDetail').innerHTML = 'Salaire: ' + salary.toLocaleString() + ' Ar<br>Dépenses: ' + total.toLocaleString() + ' Ar';
@@ -477,49 +516,36 @@
         }
     });
     
+    // FACTURATION
     const factCats = ["Charges fixes", "Éducation", "Alimentation", "Transport", "Santé", "Shopping", "Imprévus"];
     let activeFactCat = "Charges fixes";
     
     function renderFactCats() {
         let container = document.getElementById('catContainer');
-        container.innerHTML = factCats.map(cat => 
-            '<div class="cat-btn ' + (activeFactCat===cat?'cat-active':'') + '" data-cat="' + cat + '">' + cat + '</div>'
-        ).join('');
-        
+        container.innerHTML = factCats.map(cat => '<div class="cat-btn ' + (activeFactCat===cat?'cat-active':'') + '" data-cat="' + cat + '">' + cat + '</div>').join('');
         document.querySelectorAll('.cat-btn').forEach(btn => {
-            btn.onclick = () => { 
-                activeFactCat = btn.dataset.cat; 
-                renderFactCats(); 
-                loadFacturation(); 
-            };
+            btn.onclick = () => { activeFactCat = btn.dataset.cat; renderFactCats(); loadFacturation(); };
         });
     }
     
     async function loadFacturation() {
         if(!currentUser) return;
         renderFactCats();
-        
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let expenses = doc.exists ? (doc.data().expenses || {}) : {};
             let list = expenses[activeFactCat] || [];
-            
-            document.getElementById('expenseList').innerHTML = list.map((e, i) => 
-                '<div class="expense-item"><span><strong>' + escapeHtml(e.name) + '</strong>: ' + e.amount.toLocaleString() + ' Ar</span><div><button class="editExpense" data-idx="' + i + '" style="background:none; border:none; cursor:pointer; font-size:18px;">✏️</button><button class="delExpense" data-idx="' + i + '" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button></div></div>'
-            ).join('');
-            
+            document.getElementById('expenseList').innerHTML = list.map((e, i) => '<div class="expense-item"><span><strong>' + escapeHtml(e.name) + '</strong>: ' + e.amount.toLocaleString() + ' Ar</span><div><button class="editExpense" data-idx="' + i + '" style="background:none; border:none; cursor:pointer; font-size:18px;">✏️</button><button class="delExpense" data-idx="' + i + '" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button></div></div>').join('');
             let total = 0;
             for(let cat in expenses) {
                 (expenses[cat] || []).forEach(e => total += e.amount);
             }
             document.getElementById('totalMonthly').innerHTML = 'Total: ' + total.toLocaleString() + ' Ar';
-            
             document.querySelectorAll('.editExpense').forEach(btn => {
                 btn.onclick = async () => {
                     let idx = parseInt(btn.dataset.idx);
                     let newName = prompt("Nouveau nom:", list[idx].name);
                     let newAmount = prompt("Montant:", list[idx].amount);
-                    
                     if(newName && newAmount) {
                         list[idx] = { name: newName, amount: parseFloat(newAmount) };
                         expenses[activeFactCat] = list;
@@ -530,7 +556,6 @@
                     }
                 };
             });
-            
             document.querySelectorAll('.delExpense').forEach(btn => {
                 btn.onclick = async () => {
                     if(confirm("Supprimer ?")) {
@@ -551,21 +576,15 @@
     document.getElementById('addExpenseBtn').addEventListener('click', async () => {
         let name = document.getElementById('expenseName').value.trim();
         let amount = parseFloat(document.getElementById('expenseAmount').value);
-        
         if(!name || isNaN(amount)) return showToast("Nom et montant requis", true);
-        
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let expenses = doc.exists ? (doc.data().expenses || {}) : {};
-            
             if(!expenses[activeFactCat]) expenses[activeFactCat] = [];
             expenses[activeFactCat].push({ name: name, amount: amount });
-            
             await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ expenses: expenses }, { merge: true });
-            
             document.getElementById('expenseName').value = '';
             document.getElementById('expenseAmount').value = '';
-            
             loadFacturation();
             loadDashboard();
             showToast("Ajouté");
@@ -574,14 +593,13 @@
         }
     });
     
+    // CALENDRIER
     async function initCalendar() {
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let events = doc.exists ? (doc.data().events || []) : [];
             let calEl = document.getElementById('calendarContainer');
-            
             if(calendar) calendar.destroy();
-            
             calendar = new FullCalendar.Calendar(calEl, {
                 initialView: 'dayGridMonth',
                 events: events.map(e => ({ title: e.title, start: e.date })),
@@ -595,19 +613,14 @@
     document.getElementById('addEventBtn').onclick = async () => {
         let title = document.getElementById('eventTitle').value.trim();
         let date = document.getElementById('eventDate').value;
-        
         if(!title || !date) return showToast("Titre et date requis", true);
-        
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let events = doc.exists ? (doc.data().events || []) : [];
-            
             events.push({ title: title, date: date });
             await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ events: events }, { merge: true });
-            
             document.getElementById('eventTitle').value = '';
             document.getElementById('eventDate').value = '';
-            
             initCalendar();
             showToast("Ajouté");
         } catch(e) {
@@ -615,21 +628,19 @@
         }
     };
     
+    // AIZA
     function initDropdowns() {
         let catMenu = document.getElementById('categoryMenu');
         catMenu.innerHTML = categoriesList.map(c => '<div class="dropdown-item" data-value="' + c + '">' + c + '</div>').join('');
-        
         catMenu.querySelectorAll('.dropdown-item').forEach(item => {
             item.onclick = () => {
                 selectedCategory = item.dataset.value;
                 document.getElementById('selectedCategoryText').innerHTML = selectedCategory;
                 document.getElementById('selectedCategoryText').style.color = '#333';
                 document.getElementById('categoryMenu').classList.remove('show');
-                
                 let subMenu = document.getElementById('subcategoryMenu');
                 let subs = subcategoriesMap[selectedCategory] || ["Autre"];
                 subMenu.innerHTML = subs.map(s => '<div class="dropdown-item" data-value="' + s + '">' + s + '</div>').join('');
-                
                 subMenu.querySelectorAll('.dropdown-item').forEach(sub => {
                     sub.onclick = () => {
                         selectedSubcategory = sub.dataset.value;
@@ -638,7 +649,6 @@
                         document.getElementById('subcategoryMenu').classList.remove('show');
                     };
                 });
-                
                 selectedSubcategory = "";
                 document.getElementById('selectedSubcategoryText').innerHTML = 'Sous-catégorie';
                 document.getElementById('selectedSubcategoryText').style.color = '#666';
@@ -649,18 +659,14 @@
     function setupDropdown(dropdownId) {
         let dd = document.getElementById(dropdownId);
         if(!dd) return;
-        
         let input = dd.querySelector('.dropdown-input');
         let menu = dd.querySelector('.dropdown-menu');
         let icon = input.querySelector('i');
-        
         input.onclick = (e) => {
             e.stopPropagation();
             let isOpen = menu.classList.contains('show');
-            
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             document.querySelectorAll('.dropdown-input i').forEach(i => i.style.transform = 'rotate(0deg)');
-            
             if (!isOpen) {
                 menu.classList.add('show');
                 icon.style.transform = 'rotate(180deg)';
@@ -668,23 +674,53 @@
         };
     }
     
+    // UPLOAD PHOTOS OPTIMISÉ
     async function uploadPhotos(files) {
         if(!files || files.length === 0) return [];
-        
         let urls = [];
+        let progressBar = document.getElementById('uploadProgress');
+        let progressFill = document.getElementById('progressFill');
+        let progressText = document.getElementById('progressText');
+        progressBar.style.display = 'block';
         
         try {
-            for(let i = 0; i < Math.min(files.length, 5); i++) {
+            let maxFiles = Math.min(files.length, 3);
+            for(let i = 0; i < maxFiles; i++) {
                 let file = files[i];
-                let fileName = Date.now() + '_' + i + '_' + file.name;
+                
+                // Compression de l'image
+                let compressedFile = await compressImage(file, 800, 800, 0.7);
+                
+                let fileName = Date.now() + '_' + i + '.jpg';
                 let ref = storage.ref().child('users/' + currentUser.uid + '/objects/' + fileName);
                 
-                await ref.put(file);
-                let url = await ref.getDownloadURL();
-                urls.push(url);
+                // Upload avec suivi de progression
+                let uploadTask = ref.put(compressedFile);
+                
+                await new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            let progress = ((i + (snapshot.bytesTransferred / snapshot.totalBytes)) / maxFiles) * 100;
+                            progressFill.style.width = progress + '%';
+                            progressText.textContent = Math.round(progress) + '%';
+                        },
+                        reject,
+                        async () => {
+                            let url = await uploadTask.snapshot.ref.getDownloadURL();
+                            urls.push(url);
+                            resolve();
+                        }
+                    );
+                });
             }
         } catch(e) {
-            showToast("Erreur upload", true);
+            showToast("Erreur upload: " + e.message, true);
+        } finally {
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+                progressFill.style.width = '0%';
+                progressText.textContent = '0%';
+            }, 1000);
         }
         
         return urls;
@@ -692,59 +728,43 @@
     
     async function loadProducts() {
         if(!currentUser) return;
-        
         try {
             let docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
             let doc = await docRef.get();
-            
             let objects = [];
             if(doc.exists) {
                 objects = doc.data().objects || [];
             }
-            
             let filtered = objects;
             if(currentSearchTerm) {
                 let s = currentSearchTerm.toLowerCase();
-                filtered = objects.filter(o => 
-                    (o.name || '').toLowerCase().includes(s) || 
-                    (o.category || '').toLowerCase().includes(s) || 
-                    (o.subCategory || '').toLowerCase().includes(s) || 
-                    (o.location || '').toLowerCase().includes(s)
-                );
+                filtered = objects.filter(o => (o.name || '').toLowerCase().includes(s) || (o.category || '').toLowerCase().includes(s) || (o.subCategory || '').toLowerCase().includes(s) || (o.location || '').toLowerCase().includes(s));
             }
-            
             let grouped = {};
             filtered.forEach(o => { 
                 let cat = o.category || "Autre"; 
                 if(!grouped[cat]) grouped[cat] = []; 
                 grouped[cat].push(o); 
             });
-            
             let html = '';
-            
             if(Object.keys(grouped).length === 0) {
                 html = '<div class="empty-state"><i class="fas fa-box-open"></i><p>Aucun objet</p></div>';
             } else {
                 for(let cat in grouped) {
                     let items = grouped[cat];
                     html += '<div class="list-title">' + escapeHtml(cat) + ' (' + items.length + ')</div>';
-                    
                     items.forEach((o, idx) => {
-                        let thumb = (o.photos && o.photos.length > 0 && o.photos[0]) ? o.photos[0] : 'https://via.placeholder.com/70/6c3eff/ffffff?text=No';
-                        
-                        html += '<div class="product-card" data-index="' + idx + '"><img src="' + thumb + '" alt="' + escapeHtml(o.name) + '" onerror="this.src=\'https://via.placeholder.com/70/6c3eff/ffffff?text=Err\'"><div class="product-card-info"><strong>' + escapeHtml(o.name) + '</strong><small>' + escapeHtml(o.subCategory || 'Non classé') + '</small><small>' + escapeHtml(o.location) + '</small></div></div>';
+                        let thumb = (o.photos && o.photos.length > 0 && o.photos[0]) ? o.photos[0] : 'https://via.placeholder.com/80/6c3eff/ffffff?text=No';
+                        html += '<div class="product-card" data-index="' + idx + '"><img src="' + thumb + '" alt="' + escapeHtml(o.name) + '" loading="lazy"><div class="product-card-info"><strong>' + escapeHtml(o.name) + '</strong><small>' + escapeHtml(o.subCategory || '') + '</small><small>' + escapeHtml(o.location) + '</small></div></div>';
                     });
                 }
             }
-            
             let container = document.getElementById('productsListContainer');
             container.innerHTML = html;
-            
             document.querySelectorAll('.product-card').forEach((card, globalIdx) => {
                 card.addEventListener('click', function() {
                     let foundObject = null;
                     let count = 0;
-                    
                     for(let cat in grouped) {
                         for(let obj of grouped[cat]) {
                             if(count === globalIdx) {
@@ -755,23 +775,14 @@
                         }
                         if(foundObject) break;
                     }
-                    
                     if(!foundObject) return;
-                    
                     let modal = document.getElementById('productModal');
                     let imgSrc = (foundObject.photos && foundObject.photos.length > 0 && foundObject.photos[0]) ? foundObject.photos[0] : 'https://via.placeholder.com/400';
-                    
                     document.getElementById('modalImage').src = imgSrc;
-                    document.getElementById('modalImage').onerror = function() {
-                        this.src = 'https://via.placeholder.com/400';
-                    };
-                    
-                    document.getElementById('modalDescription').innerHTML = '<strong>' + escapeHtml(foundObject.name) + '</strong><div style="margin-top: 15px; font-size: 14px;"><div class="modal-info-line"><strong>Catégorie:</strong> ' + escapeHtml(foundObject.category || 'Non défini') + '</div><div class="modal-info-line"><strong>Sous-catégorie:</strong> ' + escapeHtml(foundObject.subCategory || 'Non défini') + '</div><div class="modal-info-line"><strong>Localisation:</strong> ' + escapeHtml(foundObject.location) + '</div><div class="modal-info-line" style="border:none;"><strong>Description:</strong><br><span style="color:#ccc;">' + escapeHtml(foundObject.description || 'Aucune description') + '</span></div></div>';
-                    
+                    document.getElementById('modalDescription').innerHTML = '<strong>' + escapeHtml(foundObject.name) + '</strong><div style="margin-top: 15px;"><div class="modal-info-line"><strong>Catégorie:</strong> ' + escapeHtml(foundObject.category || '') + '</div><div class="modal-info-line"><strong>Sous-catégorie:</strong> ' + escapeHtml(foundObject.subCategory || '') + '</div><div class="modal-info-line"><strong>Localisation:</strong> ' + escapeHtml(foundObject.location) + '</div><div class="modal-info-line"><strong>Description:</strong><br>' + escapeHtml(foundObject.description || 'Aucune') + '</div></div>';
                     modal.classList.add('active');
                 });
             });
-            
         } catch(e) {
             showToast("Erreur chargement", true);
         }
@@ -780,21 +791,19 @@
     function setupSearch() {
         const searchBtn = document.getElementById('searchBtn');
         const searchInput = document.getElementById('searchInput');
-        
         if(searchBtn) {
             searchBtn.onclick = async () => {
                 currentSearchTerm = searchInput.value.trim();
                 await loadProducts();
-                showToast(currentSearchTerm ? 'Recherche: ' + currentSearchTerm : "Tous les objets");
+                showToast(currentSearchTerm ? 'Recherche: ' + currentSearchTerm : "Tous");
             };
         }
-        
         if(searchInput) {
             searchInput.addEventListener('keypress', async (e) => {
                 if(e.key === 'Enter') {
                     currentSearchTerm = searchInput.value.trim();
                     await loadProducts();
-                    showToast(currentSearchTerm ? 'Recherche: ' + currentSearchTerm : "Tous les objets");
+                    showToast(currentSearchTerm ? 'Recherche: ' + currentSearchTerm : "Tous");
                 }
             });
         }
@@ -802,7 +811,6 @@
     
     async function initAiza() {
         if(!currentUser) return;
-        
         initDropdowns();
         setupDropdown('categoryDropdown');
         setupDropdown('subcategoryDropdown');
@@ -815,22 +823,32 @@
     });
     
     document.getElementById('objPhotos').addEventListener('change', function(e) {
+        let files = Array.from(e.target.files);
+        if(files.length > 3) {
+            showToast("Max 3 photos", true);
+            files = files.slice(0, 3);
+        }
+        selectedFiles = files;
         let preview = document.getElementById('photoPreview');
         preview.innerHTML = '';
-        let files = Array.from(e.target.files);
-        
-        if(files.length > 5) {
-            showToast("Max 5 photos", true);
-            files = files.slice(0, 5);
-        }
-        
         for(let i = 0; i < files.length; i++) {
             let reader = new FileReader();
             reader.onload = (ev) => {
+                let container = document.createElement('div');
+                container.className = 'preview-thumb-container';
                 let img = document.createElement('img');
                 img.src = ev.target.result;
                 img.className = 'preview-thumb';
-                preview.appendChild(img);
+                let removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-photo';
+                removeBtn.textContent = '×';
+                removeBtn.onclick = () => {
+                    selectedFiles.splice(i, 1);
+                    container.remove();
+                };
+                container.appendChild(img);
+                container.appendChild(removeBtn);
+                preview.appendChild(container);
             };
             reader.readAsDataURL(files[i]);
         }
@@ -840,56 +858,39 @@
         let name = document.getElementById('objName').value.trim();
         let location = document.getElementById('objLocation').value.trim();
         let description = document.getElementById('objDescription').value.trim();
-        let photosInput = document.getElementById('objPhotos');
-        let photos = photosInput.files;
         
-        if(!name) { 
-            showToast("Nom requis", true); 
-            return; 
-        }
-        if(!location) { 
-            showToast("Localisation requise", true); 
-            return; 
-        }
-        if(!selectedCategory) { 
-            showToast("Catégorie requise", true); 
-            return; 
-        }
+        if(!name) { showToast("Nom requis", true); return; }
+        if(!location) { showToast("Localisation requise", true); return; }
+        if(!selectedCategory) { showToast("Catégorie requise", true); return; }
         
         this.disabled = true;
         this.innerHTML = 'Enregistrement...';
         
         try {
-            showToast("Upload photos...");
-            
-            let photoUrls = await uploadPhotos(photos);
-            
-            showToast("Sauvegarde...");
-            
+            let photoUrls = await uploadPhotos(selectedFiles);
             let docRef = db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey());
             let doc = await docRef.get();
             let objects = doc.exists ? (doc.data().objects || []) : [];
-            
             let newObject = { 
                 id: Date.now(), 
                 name: name, 
                 category: selectedCategory, 
                 subCategory: selectedSubcategory || "Non classé", 
                 location: location, 
-                description: description || "Aucune description", 
+                description: description || "", 
                 photos: photoUrls,
                 createdAt: new Date().toISOString()
             };
-            
             objects.push(newObject);
-            
             await docRef.set({ objects: objects }, { merge: true });
             
+            // Réinitialisation
             document.getElementById('objName').value = '';
             document.getElementById('objLocation').value = '';
             document.getElementById('objDescription').value = '';
-            photosInput.value = '';
+            document.getElementById('objPhotos').value = '';
             document.getElementById('photoPreview').innerHTML = '';
+            selectedFiles = [];
             selectedCategory = "";
             selectedSubcategory = "";
             document.getElementById('selectedCategoryText').innerHTML = 'Catégorie';
@@ -897,40 +898,32 @@
             document.getElementById('selectedSubcategoryText').innerHTML = 'Sous-catégorie';
             document.getElementById('selectedSubcategoryText').style.color = '#666';
             
-            this.disabled = false;
-            this.innerHTML = 'Enregistrer';
-            
             await loadProducts();
-            
             showToast("Objet sauvegardé !");
-            
         } catch(e) {
             showToast("Erreur: " + e.message, true);
+        } finally {
             this.disabled = false;
             this.innerHTML = 'Enregistrer';
         }
     });
     
+    // PROJETS
     async function loadProjects() {
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let projects = doc.exists ? (doc.data().projects || []) : [];
-            
             let groups = Array(12).fill().map(()=>[]);
             projects.forEach(p => groups[p.month].push(p));
-            
             let html = '';
             for(let m=0; m<12; m++) {
                 let monthName = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][m];
                 html += '<div style="margin-bottom: 20px;"><h4 style="color:white; margin-bottom: 10px;">' + monthName + ' (' + groups[m].length + '/10)</h4>';
-                
                 groups[m].forEach(p => {
                     html += '<div class="expense-item"><span><strong>' + escapeHtml(p.name) + '</strong> - ' + p.status + '</span><div><button class="toggleProj" data-id="' + p.id + '" style="background:none; border:none; cursor:pointer; font-size:18px;">🔄</button><button class="delProj" data-id="' + p.id + '" style="background:none; border:none; cursor:pointer; font-size:18px;">🗑️</button></div></div>';
                 });
-                
                 html += '</div>';
             }
-            
             document.getElementById('projectsList').innerHTML = html;
         } catch(e) {}
     }
@@ -939,20 +932,15 @@
         let name = document.getElementById('projectName').value.trim();
         let month = parseInt(document.getElementById('projectMonth').value);
         let status = document.getElementById('projectStatus').value;
-        
         if(!name) return showToast("Nom requis", true);
-        
         try {
             let doc = await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).get();
             let projects = doc.exists ? (doc.data().projects || []) : [];
-            
             if(projects.filter(p => p.month === month).length >= 10) {
                 return showToast("Max 10 projets", true);
             }
-            
             projects.push({ id: Date.now(), name: name, month: month, status: status });
             await db.collection('users').doc(currentUser.uid).collection('months').doc(getMonthKey()).set({ projects: projects }, { merge: true });
-            
             document.getElementById('projectName').value = '';
             loadProjects();
             showToast("Ajouté");
@@ -961,15 +949,14 @@
         }
     });
     
+    // MODAL
     document.querySelector('.close-modal').onclick = () => {
         document.getElementById('productModal').classList.remove('active');
     };
-    
     window.onclick = (e) => { 
         let m = document.getElementById('productModal'); 
         if(e.target === m) m.classList.remove('active'); 
     };
-    
     document.onclick = (e) => { 
         if(!e.target.closest('.dropdown-3d')) { 
             document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show')); 
@@ -977,23 +964,20 @@
         } 
     };
     
+    // MOIS
     document.getElementById('monthSelector').onchange = (e) => { 
         currentMonth = parseInt(e.target.value); 
         loadDashboard(); 
-        
         let fs = document.getElementById('factMonthSelect');
         if(fs) fs.value = currentMonth;
-        
         if(document.getElementById('facturationPage').classList.contains('active-page')) {
             loadFacturation();
         }
     };
-    
     setInterval(() => { 
         let fs = document.getElementById('factMonthSelect'); 
         if(fs && fs.innerHTML === '') { 
             fs.innerHTML = [...Array(12)].map((_,i)=>'<option value="' + i + '" ' + (currentMonth==i?'selected':'') + '>' + ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"][i] + '</option>').join(''); 
-            
             fs.onchange = (e) => { 
                 currentMonth = parseInt(e.target.value); 
                 document.getElementById('monthSelector').value = currentMonth; 
